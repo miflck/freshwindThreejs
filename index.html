@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - trails</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+	<body>
+
+
+
+
+		<script src="build/three.js"></script>
+
+		<script src="js/libs/stats.min.js"></script>
+		<script src='js/lines/LineMaterial.js'></script>
+
+
+		<script>
+
+	var winds=[];
+let latestAngle=0;
+
+				var vanegeometry = new THREE.BufferGeometry();
+				    vanegeometry.dynamic = true;
+
+
+var line;
+
+			var SCREEN_WIDTH = window.innerWidth,
+				SCREEN_HEIGHT = window.innerHeight,
+
+				r = 100,
+				mouseY = 0,
+				windowHalfY = window.innerHeight / 2,
+				camera, scene, renderer;
+
+
+			var container, stats;
+
+
+					var angle = Math.PI/10;//Math.random()*Math.PI;
+
+  // Create shortcuts for window size.
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  var material;
+
+			
+			init();
+			animate();
+
+			function init() {
+  window.addEventListener("mousedown", onMouseDown, false);
+
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				//camera = new THREE.PerspectiveCamera( 60, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 3000 );
+				//camera.position.z = 3000;
+
+				   camera = new THREE.OrthographicCamera(-width/2, width/2, height/2, -height/2, 0, 3000 );
+
+				camera.position.z = 3000;
+
+
+				//camera = new THREE.OrthographicCamera(-SCREEN_WIDTH/2, SCREEN_WIDTH/2,SCREEN_HEIGHT/2, -SCREEN_HEIGHT/2,100, 300);
+//camera.position.z = 3000;
+				scene = new THREE.Scene();
+
+
+				var i, p,
+					parameters = [[ 0.25, 0xff7700, 1 ], [ 0.5, 0xff9900, 1 ], [ 0.75, 0xffaa00, 0.75 ], [ 1, 0xffaa00, 0.5 ], [ 1.25, 0x000833, 0.8 ],
+							       [ 3.0, 0xaaaaaa, 0.75 ], [ 3.5, 0xffffff, 0.5 ], [ 4.5, 0xffffff, 0.25 ], [ 5.5, 0xffffff, 0.125 ]];
+
+				var geometry = createGeometry();
+
+				for ( i = 0; i < 1; ++ i ) {
+				//for ( i = 0; i < parameters.length; ++ i ) {
+
+
+					p = parameters[ i ];
+
+					material = new THREE.LineBasicMaterial({ 
+						color: p[ 1 ], 
+						//opacity: p[ 2 ],
+						linewidth: 1, 
+
+					} );
+
+
+			
+
+					line = new THREE.LineSegments( geometry, material );
+					//line.scale.x = line.scale.y = line.scale.z = p[ 0 ];
+					//line.userData.originalScale = p[ 0 ];
+					//line.rotation.z = Math.random() * Math.PI;
+					line.updateMatrix();
+					scene.add( line );
+					
+				}
+
+				renderer = new THREE.WebGLRenderer( { antialias: true,alpha: true });
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
+				renderer.setClearColor( 0xffff00, 0);
+
+				document.body.appendChild( renderer.domElement );
+
+				//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+				//document.addEventListener( 'touchstart', onDocumentTouchStart, false );
+				//document.addEventListener( 'touchmove', onDocumentTouchMove, false );
+
+				//
+				stats = new Stats();
+				container.appendChild( stats.dom );
+				window.addEventListener( 'resize', onWindowResize, false );
+
+				// test geometry swapability
+
+				//setInterval( function () {
+
+					//var geometry = createGeometry();
+					//updateGeometry();
+					//scene.traverse( function ( object ) {
+
+					/*	if ( object.isLine ) {
+
+							object.geometry.dispose();
+							object.geometry = geometry;
+
+						}*/
+
+					//} );
+
+				//}, 1 );
+
+			}
+
+
+			function updateGeometry(){
+				angle+=0.1;
+				var vertex = new THREE.Vector3(0,0,0);
+				var vertex2 = new THREE.Vector3();
+				var axis = new THREE.Vector3( 0, 0, 1 );
+				var vanel=10;
+
+				var p = vanegeometry.attributes.position.array;
+
+				    var vector = new THREE.Vector3( vanel, 0, 0 );
+					vector.applyAxisAngle( axis, angle );
+
+
+
+  				for (let i = 0; i < p.length-6; i+=6) {
+  					vertex.x=p[i];
+  					vertex.y=p[i+1];
+  					vertex.z=p[i+2]
+
+  					vertex2.x=p[i+3];
+  					vertex2.y=p[i+4];
+  					vertex2.z=p[i+5];
+
+
+					//var vector = new THREE.Vector3( vanel, 0, 0 );
+					//vector.applyAxisAngle( axis, angle );
+
+  					/*vertex=p[i-1];
+  					 vertex2=p[i];
+					var vector = new THREE.Vector3( vanel, 0, 0 );
+					var vector2 = new THREE.Vector3(vertex.x,vertex.y,vertex.z);
+
+					vector.applyAxisAngle( axis, angle );
+					vector2.add(vector);
+*/
+				   // vanegeometry.attributes.position.setXYZ(i,vertex.x,vertex.y,0);
+
+				    //vertex.x=vertex2.x;
+  					//vertex.y=vertex2.y;
+  					//vertex.z=vertex2.z;
+				    	//vertex.add(vector);
+
+				  //  var vector = new THREE.Vector3( vanel, 0, 0 );
+				    var vertexX = new THREE.Vector3( vertex.x,vertex.y,vertex.z);
+
+					vertexX.add(vector);
+
+				 /*   vanegeometry.attributes.position[i]=vertex.x;
+				   vanegeometry.attributes.position[i+1]=vertex.y;
+				    vanegeometry.attributes.position[i+2]=vertex.z;
+
+
+				    vanegeometry.attributes.position[i+3]=vertex2.x+100;
+				    vanegeometry.attributes.position[i+4]=vertex2.y;
+				    vanegeometry.attributes.position[i+5]=vertex2.z;*/
+
+				     //vanegeometry.attributes.position.setY(i,vertex.y);
+				  //vanegeometry.attributes.position.setY(i,vertex.z);
+
+//				    vanegeometry.attributes.position.setXYZ(i,vertex2.x,vertex2.y,0);
+
+			
+
+  					p[i+3]=vertexX.x;//p[i+3];
+  					p[i+4]=vertexX.y;
+  					//p[i+5]=vertexX.z;
+
+
+				}
+  				vanegeometry.attributes.position.needsUpdate = true;
+
+				}
+
+			function createGeometry() {
+				//vanegeometry= new THREE.BufferGeometry();
+				var vertices = [];
+				var vertex = new THREE.Vector3();
+				var vertex3 = new THREE.Vector3();
+				var xpos=-SCREEN_WIDTH/2
+				var ypos=SCREEN_HEIGHT/2
+				var vanel=10;
+				var axis = new THREE.Vector3( 0, 0, 1 );
+
+				angle+=0.05;
+
+				for ( var i = 0; i <60000; i ++ ) {
+
+					vertex.x = xpos;
+					vertex.y = ypos;
+					vertex.z = 0;
+
+					//var angle = Math.PI/10;//Math.random()*Math.PI;
+					var vector = new THREE.Vector3( vanel, 0, 0 );
+					vector.applyAxisAngle( axis, angle );
+
+					//vertex.normalize();
+					//vertex.multiplyScalar( r );
+					xpos+=vanel;
+					if(xpos>SCREEN_WIDTH/2){
+						xpos=-SCREEN_WIDTH/2
+						ypos-=vanel;
+					}
+
+					vertices.push( vertex.x, vertex.y, vertex.z );
+					vertex.add(vector);
+					vertices.push( vertex.x, vertex.y, vertex.z );
+
+				}
+
+				vanegeometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+				return vanegeometry;
+
+			}
+
+			function onWindowResize() {
+
+				windowHalfY = window.innerHeight / 2;
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			function onDocumentMouseMove( event ) {
+
+				mouseY = event.clientY - windowHalfY;
+
+			}
+
+				function onDocumentMouseDown( event ) {
+
+			  		winds.push(new Wind(event.clientX - windowHalfX,event.clientY - windowHalfY));
+
+			}
+
+			function onDocumentTouchStart( event ) {
+
+				if ( event.touches.length > 1 ) {
+
+					event.preventDefault();
+
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+				}
+
+			}
+
+			function onDocumentTouchMove( event ) {
+
+				if ( event.touches.length == 1 ) {
+
+					event.preventDefault();
+
+					mouseY = event.touches[ 0 ].pageY - windowHalfY;
+
+				}
+
+			}
+
+			//
+
+			function animate() {
+				updateGeometry();
+
+				winds.map((wind,i) =>{
+    				wind.move();
+    		//		wind.display();
+    				if(wind.getDeleteMe()){
+      				//console.log("delete "+i);
+      					removeEntity(wind);
+      						   // scene.remove( wind );
+
+      				winds.splice(i,1);
+    				}
+  				})
+
+				requestAnimationFrame( animate );
+				render();
+				stats.update();
+
+
+			}
+
+			function render() {
+
+				//camera.position.y += ( - mouseY + 200 - camera.position.y ) * .05;
+				//camera.lookAt( scene.position );
+				//material.resolution.set( window.innerWidth, window.innerHeight ); // resolution of the viewport
+
+				renderer.render( scene, camera );
+
+				var time = Date.now() * 0.0001;
+
+
+					for ( var i = 0; i < scene.children.length; i ++ ) {
+
+					var object = scene.children[ i ];
+
+					if ( object.isLine ) {
+
+						//object.rotation.x = time * ( i < 4 ? ( i + 1 ) : - ( i + 1 ) );
+
+
+						}
+
+						}
+				/*for ( var i = 0; i < scene.children.length; i ++ ) {
+
+					var object = scene.children[ i ];
+
+					if ( object.isLine ) {
+
+						object.rotation.y = time * ( i < 4 ? ( i + 1 ) : - ( i + 1 ) );
+
+						if ( i < 5 ) {
+
+							var scale = object.userData.originalScale * ( i / 5 + 1 ) * ( 1 + 0.5 * Math.sin( 7 * time ) );
+
+							object.scale.x = object.scale.y = object.scale.z = scale;
+
+						}
+
+					}
+
+				}*/
+
+			}
+
+			
+
+
+		class Wind {
+		  	constructor(iX,iY,isMasked) {
+				this.x = iX;
+				this.y =iY;
+				this.radius = 0;
+				this.velocity=randomIntFromInterval(10,20);
+				this.maxRadius=500;
+				this.innerradius=10;
+				this.currentInnerRadius=0;
+				this.isMasked=isMasked;
+				this.deleteMe=false;
+				//var rand=int(random(3,10));
+				let rand=randomIntFromInterval(3,5);
+
+				if(rand%4==0)rand+=Math.PI/2;
+				this.angle=latestAngle+(rand*Math.PI/2);//random(2*PI);
+				latestAngle=this.angle;
+				this.duration=scale(rand,3,5,1000,2000);//random(500,3000);
+				//const rn= randomIntFromInterval(0,colors.length);
+				// this.color=color(colors[rn]);
+				this.flutterDistance=randomIntFromInterval(200,500);
+				this.flutterRadius=randomIntFromInterval(50,200);
+				this.flutterSpeed=randomFloatFromInterval(0.1,0.5);
+				this.rotMax=randomFloatFromInterval(0,5*Math.PI);//*int(random(5));
+				this.easingType='easeInOutSine';
+
+				this.geometry = new THREE.CircleGeometry( 5, 32 );
+				this.material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+				this.circle = new THREE.Mesh( this.geometry, this.material );
+				this.circle.position.x=iX-SCREEN_WIDTH/2;
+								this.circle.position.y=iY-SCREEN_HEIGHT/2;
+
+				this.name=this.circle.id;
+				
+				scene.add( this.circle );
+
+		  }
+
+		  move(){
+		  	//console.log(this.radius);
+		    this.radius+=this.velocity;
+		    if(this.radius>this.maxRadius)this.deleteMe=true;
+		    this.currentInnerRadius=this.radius-this.innerradius;
+		    if(this.currentInnerRadius<0)this.currentInnerRadius=0;
+		    this.geometry = new THREE.CircleGeometry( this.radius, 32 );
+		    var selectedObject = scene.getObjectById(this.name);
+    		scene.remove( selectedObject );
+
+
+			this.circle = new THREE.Mesh( this.geometry, this.material );
+			this.name=this.circle.id;
+
+			this.circle.position.x=this.x-SCREEN_WIDTH/2;
+			this.circle.position.y=-this.y+SCREEN_HEIGHT/2;
+			scene.add( this.circle );
+
+
+		  }
+
+		  display(){
+		   /* push();
+		    strokeWeight(1);
+		    stroke(255,0,0,50);
+		    noFill();
+		    translate(this.x,this.y);
+		    //ellipse(0,0, this.radius*2,this.radius*2);
+		    //ellipse(0,0, this.currentInnerRadius*2,this.currentInnerRadius*2);
+		    pop();*/
+		  }
+
+		  getDeleteMe(){
+		    return this.deleteMe;
+
+
+		  }
+
+		}
+
+
+		function removeEntity(object) {
+    		var selectedObject = scene.getObjectById(object.name);
+    		scene.remove( selectedObject );
+		}
+
+
+		function onMouseDown(event) {
+		  //mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+  		//mouse.y = -((event.clientY) / renderer.domElement.clientHeight) * 2 + 1;
+
+			  		winds.push(new Wind(event.clientX ,event.clientY ));
+
+		}
+
+		function randomIntFromInterval(min, max){
+			return Math.floor(Math.random()*(max-min+1)+min);
+		}
+		
+		function randomFloatFromInterval(min, max){
+			return (Math.random()*(max-min+1)+min);
+		}
+
+		const scale = (num, in_min, in_max, out_min, out_max) => {
+  			return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+		}
+		
+		</script>
+
+	</body>
+</html>
