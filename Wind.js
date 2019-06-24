@@ -1,7 +1,7 @@
 
 
 		class Wind {
-		  	constructor(iX,iY,isMasked) {
+		  	constructor(iX,iY,isMasked,color) {
 				this.x = iX-windowWidth/2;
 				this.y =-iY+windowHeight/2;
 				this.radius = 0;
@@ -10,23 +10,29 @@
 				this.innerradius=100;
 				this.currentInnerRadius=0;
 				this.isMasked=isMasked;
+								this.color=color;
+
 				this.deleteMe=false;
 				//var rand=int(random(3,10));
-				let rand=randomIntFromInterval(3,5);
+				this.rand=randomIntFromInterval(5,10);
 
-				if(rand%4==0)rand+=Math.PI/2;
-				this.angle=latestAngle+(rand*Math.PI/2);//random(2*PI);
+
+				//if(rand%4==0)rand+=Math.PI/2;
+				this.mult=1;
+				if(Math.random()>0.5)this.mult=-1;
+				this.angle=latestAngle+(this.rand*(Math.PI/4)*this.mult);//random(2*PI);
 				latestAngle=this.angle;
 
 
-				this.duration=scale(rand,3,5,800,1000);//random(500,3000);
+				this.duration=scale(this.rand,3,5,800,1000);//random(500,3000);
 				//const rn= randomIntFromInterval(0,colors.length);
 				// this.color=color(colors[rn]);
 				this.flutterDistance=randomIntFromInterval(200,500);
 				this.flutterRadius=randomIntFromInterval(50,200);
 				this.flutterSpeed=randomFloatFromInterval(0.1,0.5);
 				this.rotMax=randomFloatFromInterval(0,5*Math.PI);//*int(random(5));
-				this.easingType='easeInOutSine';
+				this.easingType='easeOutQuad';
+
 
 				this.geometry = new THREE.CircleGeometry( 5, 32 );
 				this.material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
@@ -48,12 +54,11 @@
 		    var selectedObject = scene.getObjectById(this.name);
     		scene.remove( selectedObject );
 
+			//this.circle = new THREE.Mesh( this.geometry, this.material );
+			//this.name=this.circle.id;
 
-			this.circle = new THREE.Mesh( this.geometry, this.material );
-			this.name=this.circle.id;
-
-			this.circle.position.x=this.x;
-			this.circle.position.y=-this.y;
+			//this.circle.position.x=this.x;
+			//this.circle.position.y=-this.y;
 			//scene.add( this.circle );
 
 
