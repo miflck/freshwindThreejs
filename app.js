@@ -53,7 +53,7 @@ var angle = Math.PI/10;//Math.random()*Math.PI;
 
 var material;
 var matline;
-var wireframe;
+
 
 const colors=[0xff7700, 0xadd8e6, 0x497393 , 0x1e84d4 ,0x155c94,0xaaaaaa,0x1FB937,0x96B91F,0x1FB9B7,0x941FB9  ]
 
@@ -110,10 +110,29 @@ function init() {
 	vanegeometry.computeBoundingSphere();
 
 
+var params = function() {
+	this.curves = true;
+	this.circles = false;
+	this.amount = 100;
+	this.lineWidth = 1;
+	this.dashArray = 0.6;
+	this.dashOffset = 0;
+	this.dashRatio = 0.5;
+	this.taper = 'parabolic';
+	this.strokes = false;
+	this.sizeAttenuation = false;
+	this.animateWidth = false;
+	this.spread = false;
+	this.autoRotate = true;
+	this.autoUpdate = true;
+	this.animateVisibility = false;
+	this.animateDashOffset = false;
+	
+};
 
-
+/*
 	// make line
-/*	for ( i = 0; i < 1; ++ i ) {
+	for ( i = 0; i < 1; ++ i ) {
 		p = parameters[ i ];
 		material = new THREE.LineBasicMaterial({ 
 			color: p[ 1 ], 
@@ -123,29 +142,68 @@ function init() {
 
 
 
-		line = new THREE.LineSegments( geometry, material );
+		line = new THREE.LineSegments( vanegeometry, material );
 		line.updateMatrix();
 		scene.add( line );	
 	}*/
 
 	line = new THREE.LineSegments( vanegeometry, material );
-		
 	scene.add( line );
 
 
+	//line = new THREE.LineSegments( vanegeometry, material );
+	//line.computeLineDistances()
+
+//	line.computeLineDistances();
+	//			line.scale.set( 1, 1, 1 );
+	//scene.add( line );
 
 
-	matLine = new THREE.LineMaterial( {
+/*var TAU = 2 * Math.PI;
+
+	var hexagonGeometry = new THREE.Geometry();
+for( var j = 0; j < TAU - .1; j += TAU / 100 ) {
+	var v = new THREE.Vector3();
+	v.set( Math.cos( j )*200, Math.sin( j )*200, 0 );
+	hexagonGeometry.vertices.push( v );
+}
+hexagonGeometry.vertices.push( hexagonGeometry.vertices[ 0 ].clone() );
+
+
+var resolution = new THREE.Vector2( window.innerWidth, window.innerHeight );
+
+
+var mline = new MeshLine();
+mline.setGeometry( hexagonGeometry );
+var mat = new MeshLineMaterial( {
+		useMap: false,
+		color: new THREE.Color( colors[ 0 ] ),
+		opacity: 1,
+		resolution: resolution,
+		sizeAttenuation: !false,
+		lineWidth: 0.1,
+		near: camera.near,
+		far: camera.far
+		
+	});
+
+
+var mesh = new THREE.Mesh( mline.geometry, mat ); // this syntax could definitely be improved!
+scene.add( mesh );
+	*/
+	/*matLine = new THREE.LineMaterial( {
 
 	color: 0x4080ff,
-	linewidth: 5, // in pixels
+	linewidth: 1, // in pixels
 	//resolution:  // to be set by renderer, eventually
 	dashed: false
 
-} );
+} );*/
 
 
+				//	line2 = new THREE.Line2( lgeometry, matLine );
 
+				//scene.add( line2 );
 
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setSize( windowWidth, windowHeight );
@@ -217,7 +275,6 @@ function updateGeometry(){
   		//var factH=imagedata.height/fixedWindowHeight;
 		angle=vanes[i].getCurrentAngle;
 
-
 		var col=vanes[i].getStrokeColor;
 	
 		vector.x=vanel;
@@ -252,14 +309,18 @@ function updateGeometry(){
 	
 	}
 	vanegeometry.attributes.position.needsUpdate = true;
-vanegeometry.attributes.color.needsUpdate = true;
+	vanegeometry.attributes.color.needsUpdate = true;
 
 }
 
 function createGeometry() {
+
+//vanegeometry=new THREE.Geometry();
 	//vanegeometry= new THREE.BufferGeometry();
 	var vertices = [];
 	var colors = [];
+
+
 
 
 	var vertex = new THREE.Vector3();
@@ -279,10 +340,13 @@ function createGeometry() {
 		var vector = new THREE.Vector3( vanel, 0, 0 );
 		//vector.applyAxisAngle( axis, angle );
 		vertices.push( vertex.x, vertex.y, vertex.z );
+		//vanegeometry.vertices.push( vertex );
+
 		vertex.add(vector);
 		vertices.push( vertex.x, vertex.y, vertex.z );
 
 
+
 		colors.push(0 );
 		colors.push(0 );
 		colors.push( 0 );
@@ -290,9 +354,10 @@ function createGeometry() {
 		colors.push(0 );
 		colors.push(0 );
 		colors.push( 0 );
+
+		//vanegeometry.vertices.push( vertex );
 
 	})
-
 
 
 	/*for ( var i = 0; i <numberOfVanes; i ++ ) {
