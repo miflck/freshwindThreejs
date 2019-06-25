@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"va",
+				"vanegeometry"
+			],
+			[
+				"vane",
+				"vanegeometry"
+			],
+			[
+				"inst",
+				"instanceEnd"
+			],
+			[
+				"co",
+				"strokeColor"
+			],
+			[
+				"ler",
+				"lerpFact"
+			],
+			[
+				"le",
+				"lerpFact"
+			],
+			[
+				"ta",
+				"targetColor"
+			],
+			[
+				"targ",
+				"targetColor"
+			],
+			[
+				"curren",
+				"currentColor"
+			],
+			[
+				"ran",
+				"random"
+			],
+			[
+				"is",
+				"isOnMask"
+			],
+			[
+				"isl",
+				"isloaded"
+			],
+			[
+				"image",
+				"imagedata"
+			],
+			[
 				"SC",
 				"SCREEN_WIDTH"
 			],
@@ -64,14 +116,6 @@
 				"z-index\tproperty"
 			],
 			[
-				"is",
-				"isOffscreen"
-			],
-			[
-				"ta",
-				"targetAlpha"
-			],
-			[
 				"getC",
 				"getCurrentAngle"
 			],
@@ -98,10 +142,6 @@
 			[
 				"al",
 				"alphaDuration"
-			],
-			[
-				"image",
-				"actualImageIndex"
 			],
 			[
 				"ig",
@@ -226,10 +266,6 @@
 			[
 				"d",
 				"duration"
-			],
-			[
-				"le",
-				"length"
 			],
 			[
 				"window",
@@ -419,50 +455,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "app.js",
-			"settings":
-			{
-				"buffer_size": 7920,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "index.html",
-			"settings":
-			{
-				"buffer_size": 711,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "WindVane.js",
-			"settings":
-			{
-				"buffer_size": 2254,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "Wind.js",
-			"settings":
-			{
-				"buffer_size": 2253,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "helper.js",
-			"settings":
-			{
-				"buffer_size": 1395,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -508,10 +500,20 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs"
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/images"
 	],
 	"file_history":
 	[
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/helper.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/Wind.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/WindVane.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/LineSegments2.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/Line2.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/build/three.module.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/index.html",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/app.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/LineSegmentsGeometry.js",
 		"/Users/fgm4/Downloads/three.js-master/examples/webgl_buffergeometry_selective_draw.html",
 		"/Users/fgm4/htdocs_Mamp/p5js_webgl/empty-example/sketch.js",
 		"/Users/fgm4/htdocs_Mamp/freshWind/sftp-config.json",
@@ -630,16 +632,7 @@
 		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/application/logs/2017/02/01.php",
 		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/application/views/templates/contents/mars_ex_csv/viewbackend.php",
 		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/classes/Frontend/Container.php",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/views/backend/content/container.php",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/package.json",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/sftp-config.json",
-		"/Users/fgm4/Downloads/ofxARKit-master-2/.gitignore",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/sigi-media/styles/css/sigi.css",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/sigi-media/styles/less/content.less",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/sigi-media/styles/compile_less.sh",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/sigi-media/styles/less/mixins.less",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/media/js/isotope.min.js",
-		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/sigi-media/styles/less/sigi.less"
+		"/Users/fgm4/htdocs_Mamp/fork_sigi3_4_app/modules/sigi_core/views/backend/content/container.php"
 	],
 	"find":
 	{
@@ -650,6 +643,7 @@
 		"height": 101.0,
 		"where_history":
 		[
+			""
 		]
 	},
 	"find_state":
@@ -657,6 +651,14 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"hexagonGeometry",
+			"updateGeometry",
+			"instanceStart",
+			"lge",
+			"onTouchDown",
+			"strokeColor",
+			"isOnMask",
+			"this.isActive",
 			"getMilliseconds",
 			"millis",
 			"setTargetAngle",
@@ -680,171 +682,8 @@
 	"groups":
 	[
 		{
-			"selected": 2,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "app.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 7920,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6874,
-								6874
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 4337.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "index.html",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 711,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								489,
-								489
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/HTML/HTML.sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "WindVane.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2254,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								889,
-								919
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "Wind.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2253,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1778,
-								1778
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 151.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "helper.js",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 1395,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								685,
-								698
-							]
-						],
-						"settings":
-						{
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"synced": false,
-							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 8.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				}
 			]
 		}
 	],
@@ -854,7 +693,7 @@
 	},
 	"input":
 	{
-		"height": 31.0
+		"height": 36.0
 	},
 	"layout":
 	{
