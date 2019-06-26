@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"win",
+				"windowWidth"
+			],
+			[
+				"images",
+				"imagesData"
+			],
+			[
+				"wind",
+				"windowWidth"
+			],
+			[
+				"tar",
+				"targetColor"
+			],
+			[
 				"va",
 				"vanegeometry"
 			],
@@ -244,10 +260,6 @@
 				"getAngle"
 			],
 			[
-				"win",
-				"windowHeight"
-			],
-			[
 				"rotationdurationmi",
 				"rotationdurationminimum"
 			],
@@ -258,10 +270,6 @@
 			[
 				"P",
 				"-PI"
-			],
-			[
-				"tar",
-				"targetAngle"
 			],
 			[
 				"d",
@@ -505,14 +513,14 @@
 	],
 	"file_history":
 	[
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/helper.js",
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/Wind.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/WindVane.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/Wind.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/index.html",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/helper.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/app.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/LineSegments2.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/Line2.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/build/three.module.js",
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/index.html",
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/app.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/LineSegmentsGeometry.js",
 		"/Users/fgm4/Downloads/three.js-master/examples/webgl_buffergeometry_selective_draw.html",
 		"/Users/fgm4/htdocs_Mamp/p5js_webgl/empty-example/sketch.js",
@@ -651,6 +659,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"imagedata",
+			"getImageData",
+			"imagedata",
+			"his.strokeColor",
 			"hexagonGeometry",
 			"updateGeometry",
 			"instanceStart",

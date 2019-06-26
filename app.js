@@ -1,3 +1,4 @@
+
 // Threejs
 // Get a reference to the container element that will hold our scene
 const container = document.querySelector( '#scene-container' );
@@ -18,7 +19,6 @@ const windowHalfY = windowHeight / 2
 
 // Create a Camera
 const left = -windowWidth/2; 
-console.log(window);
 const right = windowWidth/2;
 const topB =	windowHeight/2;
 const bottom = -windowHeight/2;
@@ -56,7 +56,7 @@ var angle = Math.PI/10;//Math.random()*Math.PI;
 var lineGeometry;
 var lineMaterial;
 
-const colors=[0xff7700, 0xadd8e6, 0x497393 , 0x1e84d4 ,0x155c94,0xaaaaaa,0x1FB937,0x96B91F,0x1FB9B7,0x941FB9  ]
+const colors=[0x6CCFF6, 0x0094CE, 0x00435B , 0xADE3F7 ,0x6AB2F1,0x8EB8DD,0x3D77AA,0x70BCFF,0x07243D,0x2B4E6D,0x11937C,0xF66161  ]
 
 
 // image
@@ -71,6 +71,7 @@ var imagesData=[];
 			
 init();
 animate();
+
 
 
 function init() {
@@ -119,7 +120,7 @@ function init() {
  lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
  lineGeometry.setColors( vanegeometry.attributes.color.array);
 
- lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 3 } );
+ lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 5 } );
 lineMaterial.resolution.set( window.innerWidth, window.innerHeight ); // important, for now...
 var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 scene.add( thickline );
@@ -558,36 +559,37 @@ function setActive(vane,wind,millis){
 
 
 function makeRandomWind(){
-  var pos= new THREE.Vector3( windowWidth,0,0);
-var axis = new THREE.Vector3( 1, 0, 0 );
-var angle = Math.PI / 2;
+  	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
+  	var pos=new THREE.Vector3(windowWidth/2,0,0);
+	var axis = new THREE.Vector3( 0, 0, 1);
+	var angle = randomFloatFromInterval(0,2*Math.PI);
+	pos.applyAxisAngle( axis, angle );
+	pos.add(center);
 
-
-pos.applyAxisAngle( axis, angle );
-
-console.log(pos);
-
+	console.log(pos);
 	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
 	winds.push(new Wind(pos.x ,pos.y,0,col));
 
 }
 
 
-		function removeEntity(object) {
-    		var selectedObject = scene.getObjectById(object.name);
-    		scene.remove( selectedObject );
-		}
+function removeEntity(object) {
+	var selectedObject = scene.getObjectById(object.name);
+	scene.remove( selectedObject );
+}
 
 
-		function onMouseDown(event) {
-			makeRandomWind();
-			var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-			//winds.push(new Wind(event.clientX ,event.clientY,0,col));
-		}
+function onMouseDown(event) {
+	makeRandomWind();
+	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
+	//winds.push(new Wind(event.clientX ,event.clientY,0,col));
+}
 
-			function onTouchDown(event) {
-			var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-			winds.push(new Wind(event.touches[0].clientX ,event.touches[0].clientY,0,col));
-		}
+	function onTouchDown(event) {
+	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
+	winds.push(new Wind(event.touches[0].clientX ,event.touches[0].clientY,0,col));
+}
+
+
 
 		
