@@ -5,14 +5,15 @@ const container = document.querySelector( '#scene-container' );
 const scene = new THREE.Scene();
 
 // create the renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true });
+const renderer = new THREE.WebGLRenderer({ antialias: false,alpha: true,preserveDrawingBuffer: true  });
+renderer.autoClearColor = false;
 
 var clock = new THREE.Clock({autoStart:true});
 
 
  // Create shortcuts for window size.
- var windowWidth = window.innerWidth;
- var windowHeight = window.innerHeight;
+var windowWidth = window.innerWidth;
+var windowHeight = window.innerHeight;
 const windowHalfY = windowHeight / 2
 
 // Create a Camera
@@ -38,7 +39,7 @@ let latestAngle=0;
 var numberOfVanes=10000;
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
-var diameter=15;
+var diameter=18;
 
 
 var vanes = [];
@@ -51,8 +52,6 @@ const mouseY = 0;
 var  stats;
 var angle = Math.PI/10;//Math.random()*Math.PI;
 
-var material;
-var matline;
 
 var lineGeometry;
 var lineMaterial;
@@ -62,8 +61,13 @@ const colors=[0xff7700, 0xadd8e6, 0x497393 , 0x1e84d4 ,0x155c94,0xaaaaaa,0x1FB93
 
 // image
 
-	var imagedata;
+	//var imagedata;
 	var isloaded=false;
+
+
+var imagesData=[];
+
+
 			
 init();
 animate();
@@ -107,39 +111,23 @@ function init() {
 	
 
 	var vanegeometry = createGeometry();
-	material = new THREE.LineBasicMaterial( { vertexColors: THREE.VertexColors,linewidth: 3 } );
+//	material = new THREE.LineBasicMaterial( { vertexColors: THREE.VertexColors,linewidth: 3 } );
 
-	vanegeometry.computeBoundingSphere();
+	//vanegeometry.computeBoundingSphere();
 
 
  lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
- lineGeometry = new THREE.LineSegmentsGeometry().setColors( vanegeometry.attributes.color.array);
+ lineGeometry.setColors( vanegeometry.attributes.color.array);
 
  lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 3 } );
 lineMaterial.resolution.set( window.innerWidth, window.innerHeight ); // important, for now...
-var linePavement = new THREE.LineSegments2( lineGeometry, lineMaterial );
-scene.add( linePavement );
+var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+scene.add( thickline );
 
-
-var params = function() {
-	this.curves = true;
-	this.circles = false;
-	this.amount = 100;
-	this.lineWidth = 1;
-	this.dashArray = 0.6;
-	this.dashOffset = 0;
-	this.dashRatio = 0.5;
-	this.taper = 'parabolic';
-	this.strokes = false;
-	this.sizeAttenuation = false;
-	this.animateWidth = false;
-	this.spread = false;
-	this.autoRotate = true;
-	this.autoUpdate = true;
-	this.animateVisibility = false;
-	this.animateDashOffset = false;
-	
-};
+// background plane
+var plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.6 } ) );
+plane.position.z = -10;
+scene.add( plane );
 
 /*
 	// make line
@@ -170,37 +158,7 @@ var params = function() {
 	//scene.add( line );
 
 
-var TAU = 2 * Math.PI;
 
-	var hexagonGeometry = new THREE.Geometry();
-for( var j = 0; j < TAU - .1; j += TAU / 100 ) {
-	var v = new THREE.Vector3();
-	v.set( Math.cos( j )*300, Math.sin( j )*300, 0 );
-	hexagonGeometry.vertices.push( v );
-}
-hexagonGeometry.vertices.push( hexagonGeometry.vertices[ 0 ].clone() );
-
-
-var resolution = new THREE.Vector2( window.innerWidth/2, window.innerHeight/2 );
-
-
-var mline = new MeshLine();
-mline.setGeometry( hexagonGeometry );
-var mat = new MeshLineMaterial( {
-		useMap: false,
-		color: new THREE.Color( colors[ 0 ] ),
-		opacity: 1,
-		resolution: resolution,
-		sizeAttenuation: !false,
-		lineWidth: 0.01,
-		near: camera.near,
-		far: camera.far
-		
-	});
-
-
-var mesh = new THREE.Mesh( mline.geometry, mat ); // this syntax could definitely be improved!
-scene.add( mesh );
 	
 	/*matLine = new THREE.LineMaterial( {
 
@@ -226,7 +184,7 @@ scene.add( mesh );
 	stats = new Stats();
 	container.appendChild( stats.dom );
 
-var loader = new THREE.ImageLoader();
+/*var loader = new THREE.ImageLoader();
 
 // load a image resource
 loader.load(
@@ -237,6 +195,7 @@ loader.load(
 	function ( image ) {
 
 	imagedata = getImageData(image);
+
 	var color = getPixel( imagedata, 900, 300 );
 	console.log(color.a);
 	isloaded=true;
@@ -261,10 +220,53 @@ loader.load(
 		console.error( 'An error happened.' );
 	}
 );
+*/
 
 
+/*
+var files = ['images/1.png','images/11.png','images/22.png','images/33.png'];
+	
+loadBackgroundImages(files);
+*/
+
+
+
+	console.log(imagesData.length);
+	if(typeof imagesData[0] === 'undefined') {
+		console.log("undef");
+	}
+	else {
+		 console.log("def");
 	}
 
+}
+
+
+function setMask(image){
+	var imagedata = getImageData(image);
+
+	var color = getPixel( imagedata, 900, 300 );
+	console.log(color.a);
+	isloaded=true;
+
+	for (let i = 0; i < numberOfVanes; i++) {
+		var color = getPixel( imagedata, vanes[i].ox,vanes[i].oy );
+		if(color.a==255){
+			vanes[i].isOnMask=true;		
+		}else{
+			vanes[i].isOnMask=false;
+		}
+	}
+
+}
+
+function loadBackgroundImages(files){
+	loadImages(files,function(data){
+		imagesData=data;
+		console.log(imagesData);
+		setMask(imagesData[2]);
+	});
+}
 
 function updateGeometry(){
 	angle+=0.1;
@@ -320,12 +322,12 @@ function updateGeometry(){
 	
 	}
 	vanegeometry.attributes.position.needsUpdate = true;
-	lineGeometry.attributes.position.needsUpdate = true;
-	lineGeometry.setPositions( vanegeometry.attributes.position.array);
-
-	lineGeometry.setColors( vanegeometry.attributes.color.array);
 
 	vanegeometry.attributes.color.needsUpdate = true;
+
+	lineGeometry.attributes.position.needsUpdate = true;
+	lineGeometry.setPositions( vanegeometry.attributes.position.array);
+	lineGeometry.setColors( vanegeometry.attributes.color.array);
 
 }
 
@@ -335,10 +337,6 @@ function createGeometry() {
 	//vanegeometry= new THREE.BufferGeometry();
 	var vertices = [];
 	var colors = [];
-
-
-
-
 	var vertex = new THREE.Vector3();
 	var vertex3 = new THREE.Vector3();
 	var xpos=-windowWidth/2
@@ -403,6 +401,8 @@ function createGeometry() {
 
 	vanegeometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 	vanegeometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
+
+
 
 
 	return vanegeometry;
@@ -556,6 +556,23 @@ function setActive(vane,wind,millis){
 }
 
 
+
+function makeRandomWind(){
+  var pos= new THREE.Vector3( windowWidth,0,0);
+var axis = new THREE.Vector3( 1, 0, 0 );
+var angle = Math.PI / 2;
+
+
+pos.applyAxisAngle( axis, angle );
+
+console.log(pos);
+
+	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
+	winds.push(new Wind(pos.x ,pos.y,0,col));
+
+}
+
+
 		function removeEntity(object) {
     		var selectedObject = scene.getObjectById(object.name);
     		scene.remove( selectedObject );
@@ -563,12 +580,12 @@ function setActive(vane,wind,millis){
 
 
 		function onMouseDown(event) {
+			makeRandomWind();
 			var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-			winds.push(new Wind(event.clientX ,event.clientY,0,col));
+			//winds.push(new Wind(event.clientX ,event.clientY,0,col));
 		}
 
 			function onTouchDown(event) {
-				alert(event)
 			var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
 			winds.push(new Wind(event.touches[0].clientX ,event.touches[0].clientY,0,col));
 		}

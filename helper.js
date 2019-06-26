@@ -97,5 +97,33 @@ function getPixel( imagedata, x, y ) {
 }
 
 
+function loadImages(imageurls,successCallback){
+    var data=[];
+
+    const loadManager = new THREE.LoadingManager();
+
+    loadManager.onProgress = function ( item, loaded, total ) {
+    // this gets called after any item has been loaded
+        console.log( 'Loading file: ' + item + '.\nLoaded ' + loaded + ' of ' + total + ' files.' );
+    };
+
+    loadManager.onLoad = function () {
+        console.log( 'Loading complete!');
+        console.log(data.length);
+        successCallback(data)
+
+
+    };
+
+
+    const multiloader = new THREE.ImageLoader(loadManager);
+
+    for(var i=0;i<imageurls.length;i++){
+        multiloader.load( imageurls[i], function ( image ) {
+            data.push( image );
+        });
+    }
+}
+
 
 
