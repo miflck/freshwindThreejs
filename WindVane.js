@@ -71,7 +71,7 @@ class WindVane {
           }
 
 		}
-        if(Math.abs(this.currentAngle-this.targetAngle)<0.1){
+        if(Math.abs(this.currentAngle-this.targetAngle)<0.001){
        // if(millis > this.endAnimation){
 
 

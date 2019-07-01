@@ -36,7 +36,7 @@ let latestAngle=0;
 
 
 // VANES
-var numberOfVanes=10000;
+var numberOfVanes=5000;
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
 var diameter=18;
@@ -67,6 +67,13 @@ const colors=[0x6CCFF6, 0x0094CE, 0x00435B , 0xADE3F7 ,0x6AB2F1,0x8EB8DD,0x3D77A
 
 var imagesData=[];
 
+
+
+var eraseWaveInitTime;
+var eraseWaveTimerDuration;
+
+
+var imageIndex=0;
 
 			
 init();
@@ -126,7 +133,7 @@ var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 scene.add( thickline );
 
 // background plane
-var plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.6 } ) );
+var plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.3 } ) );
 plane.position.z = -10;
 scene.add( plane );
 
@@ -245,6 +252,7 @@ loadBackgroundImages(files);
 
 function setMask(image){
 	var imagedata = getImageData(image);
+	console.log("get imagedata"+imagedata);
 
 	var color = getPixel( imagedata, 900, 300 );
 	console.log(color.a);
@@ -264,8 +272,8 @@ function setMask(image){
 function loadBackgroundImages(files){
 	loadImages(files,function(data){
 		imagesData=data;
-		console.log(imagesData);
-		setMask(imagesData[2]);
+		console.log(imagesData.length);
+		setMask(imagesData[0]);
 	});
 }
 
@@ -451,12 +459,12 @@ function createGeometry() {
 
 			//
 
-	function animate() {
-		updateGeometry();
-		
+function animate() {
+	var millis=getMilliseconds(clock);
+
 		// update Wind	
 		winds.map((wind,i) =>{
-			wind.move();
+			wind.move(millis);
 	//		wind.display();
 			if(wind.getDeleteMe()){
 				removeEntity(wind);
@@ -468,7 +476,6 @@ function createGeometry() {
 		// update Vane
   		//vanes.map(vane =>{
   	// get millis slows whole down. so one Time for all…
-	var millis=getMilliseconds(clock);
 	for (let i = 0; i < numberOfVanes; i++) {
 			var vane=vanes[i];
   			winds.map((wind,i) =>{
@@ -481,11 +488,13 @@ function createGeometry() {
             })
   			vane.update(millis);
 	}
+	
+	updateGeometry();
 
-		requestAnimationFrame( animate );
-		render();
-		stats.update();
-	}
+	requestAnimationFrame( animate );
+	render();
+	stats.update();
+}
 
 
 
@@ -521,16 +530,19 @@ function setActive(vane,wind,millis){
 	vane.setEasingType(wind.easingType);
 	vane.setColor(wind.color)
 
-
-	 if(vane.isOnMask){
-
-	     vane.setDuration(duration+dilitationTime);
-         vane.setTargetAngle((angle+dilitationAngle),millis); 
+    if(wind.isMasked){
+		if(vane.isOnMask){
+	    	vane.setDuration(duration+dilitationTime);
+        	vane.setTargetAngle((angle+dilitationAngle),millis); 
+		}else{
+			vane.setDuration(duration);
+			vane.setTargetAngle(angle,millis); 
+		}
 	}else{
-		vane.setDuration(duration);
 		vane.setTargetAngle(angle,millis); 
-	}
+		vane.setDuration(duration);
 
+	}
 
 
 
@@ -558,17 +570,25 @@ function setActive(vane,wind,millis){
 
 
 
-function makeRandomWind(){
+function makeRandomWind(isMasked){
   	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
   	var pos=new THREE.Vector3(windowWidth/2,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1);
 	var angle = randomFloatFromInterval(0,2*Math.PI);
 	pos.applyAxisAngle( axis, angle );
 	pos.add(center);
+	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)]);
+    var vel = randomIntFromInterval(20,20);
+ 	var rand=randomIntFromInterval(3,10);
+	var mult=1;
+	if(Math.random()>0.5)mult=-1;
+	var angle=rand*(Math.PI/4)*mult;
+    var dur=scale(rand,3,5,500,1000);
+    var wait=0;
+	var millis=getMilliseconds(clock);
 
-	console.log(pos);
-	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-	winds.push(new Wind(pos.x ,pos.y,0,col));
+	winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked));
+	cycleImages()
 
 }
 
@@ -580,14 +600,22 @@ function removeEntity(object) {
 
 
 function onMouseDown(event) {
-	makeRandomWind();
+	makeRandomWind(1);
 	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
 	//winds.push(new Wind(event.clientX ,event.clientY,0,col));
 }
 
 	function onTouchDown(event) {
 	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-	winds.push(new Wind(event.touches[0].clientX ,event.touches[0].clientY,0,col));
+	//winds.push(new Wind(event.touches[0].clientX ,event.touches[0].clientY,0,col));
+		//makeRandomWind(0);
+
+}
+
+function cycleImages(){
+	imageIndex=(imageIndex+1)%imagesData.length
+	setMask(imagesData[imageIndex]);
+	console.log("cycle!"+imageIndex);
 }
 
 
