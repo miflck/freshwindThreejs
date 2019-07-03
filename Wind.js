@@ -7,7 +7,7 @@
 				this.radius = 0;
 				this.velocity=velocity;//randomIntFromInterval(8,20);
 				this.maxRadius=10000;
-				this.innerradius=80;
+				this.innerradius=300;
 				this.currentInnerRadius=0;
 				this.isMasked=isMasked;
 				this.color=color;
@@ -16,6 +16,16 @@
 				//var rand=int(random(3,10));
 				this.rand=randomIntFromInterval(5,20);
 				this.randDur=randomIntFromInterval(1,5);
+
+
+				/*this.wc=color;
+				this.hsl = this.wc.getHSL(this.hsl);
+				this.maskColor = new THREE.Color();
+
+				this.s=scale(this.hsl.s,0,1,0.5,0.7);
+				this.l=this.hsl.l+0.1//scale(this.hsl.l,0,1,0.5,0.7);
+				this.maskColor.setHSL( this.hsl.h, this.s,this.l);
+*/
 
 
 

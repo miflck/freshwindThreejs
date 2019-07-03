@@ -15,6 +15,24 @@ var clock = new THREE.Clock({autoStart:true});
  // Create shortcuts for window size.
 var windowWidth = window.innerWidth;
 var windowHeight = window.innerHeight;
+
+
+ // Create shortcuts for window size.
+//var windowWidth = window.innerWidth;
+//var windowHeight = window.innerHeight;
+
+//var windowWidth=1920;
+//var windowHeight=1200;
+
+
+var windowWidth=1920;
+var windowHeight=1080;
+var pixelScaleFact=1;
+
+
+//var windowWidth=1500;
+//var windowHeight=800;
+
 const windowHalfY = windowHeight / 2
 
 // Create a Camera
@@ -36,10 +54,10 @@ let latestAngle=0;
 
 
 // VANES
-var numberOfVanes=5000;
+var numberOfVanes=[];
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
-var diameter=18;
+var diameter=15;
 
 
 var vanes = [];
@@ -56,15 +74,20 @@ var angle = Math.PI/10;//Math.random()*Math.PI;
 var lineGeometry;
 var lineMaterial;
 
-const colors=[0x6CCFF6, 0x0094CE, 0x00435B , 0xADE3F7 ,0x6AB2F1,0x8EB8DD,0x3D77AA,0x70BCFF,0x07243D,0x2B4E6D,0x11937C,0xF66161  ]
+//oldcolors
+//const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000]
+
+const colors=[0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0xC7DBF4,0x0057B8,0x8DC8E8,0x1E22AA]
+
+// music color
+//const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
+
 
 
 // image
 
-	//var imagedata;
-	var isloaded=false;
-
-
+//var imagedata;
+var isloaded=false;
 var imagesData=[];
 
 
@@ -84,9 +107,9 @@ animate();
 function init() {
 	var xpos=-windowWidth/2
 	var ypos=windowHeight/2
-		var opX=0
+	var opX=0
 	var opY=0
-	for(var i=0;i<numberOfVanes;i++){
+	/*for(var i=0;i<numberOfVanes;i++){
 		vanes.push(new WindVane(xpos,ypos,diameter,clock,opX,opY));
 		xpos+=diameter;
 		opX+=diameter;
@@ -96,7 +119,11 @@ function init() {
 			opX=0;
 			opY+=diameter;
 		}
-	}
+	}*/
+
+
+createVanes(diameter);
+
 /*
 	for(var i=0;i<60000;i++){
 		testvanes.push(new WindVane(xpos,ypos,diameter,clock));
@@ -110,12 +137,13 @@ function init() {
   	window.addEventListener("mousedown", onMouseDown, false);
 	window.addEventListener( 'resize', onWindowResize, false );
 
-	  	window.addEventListener("touchstart", onTouchDown, false);
+	window.addEventListener("touchstart", onTouchDown, false);
+	document.addEventListener("keydown", onDocumentKeyDown, false);
+
 
 
 	camera.position.z = 1;
 
-	var i, p,parameters = [[ 0.25, 0xff7700, 1 ], [ 0.5, 0xadd8e6, 1 ], [ 0.75, 0x497393, 0.75 ], [ 1, 0x1e84d4, 0.5 ], [ 1.25, 0x155c94, 0.8 ],[ 3.0, 0xaaaaaa, 0.75 ]];
 	
 
 	var vanegeometry = createGeometry();
@@ -127,13 +155,13 @@ function init() {
  lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
  lineGeometry.setColors( vanegeometry.attributes.color.array);
 
- lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 5 } );
+ lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 4} );
 lineMaterial.resolution.set( window.innerWidth, window.innerHeight ); // important, for now...
 var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 scene.add( thickline );
 
 // background plane
-var plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.3 } ) );
+var plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.5 } ) );
 plane.position.z = -10;
 scene.add( plane );
 
@@ -182,9 +210,13 @@ scene.add( plane );
 
 				//scene.add( line2 );
 
+	//renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.setPixelRatio( window.devicePixelRatio );
+	//renderer.setPixelRatio( 1);
+
+
 	renderer.setSize( windowWidth, windowHeight );
-	renderer.setClearColor( 0xffff00, 0);
+	renderer.setClearColor( 0x000000, 0);
 
 	// add the automatically created <canvas> element to the page
 	container.appendChild( renderer.domElement );
@@ -254,12 +286,12 @@ function setMask(image){
 	var imagedata = getImageData(image);
 	console.log("get imagedata"+imagedata);
 
-	var color = getPixel( imagedata, 900, 300 );
-	console.log(color.a);
+	//var color = getPixel( imagedata, 900, 300 );
+	//console.log(color.a);
 	isloaded=true;
 
 	for (let i = 0; i < numberOfVanes; i++) {
-		var color = getPixel( imagedata, vanes[i].ox,vanes[i].oy );
+		var color = getPixel( imagedata, vanes[i].ox*pixelScaleFact,vanes[i].oy*pixelScaleFact);
 		if(color.a==255){
 			vanes[i].isOnMask=true;		
 		}else{
@@ -528,17 +560,36 @@ function setActive(vane,wind,millis){
 	var dilitationTime=	500;
 	var dilitationAngle=Math.PI/4;
 	vane.setEasingType(wind.easingType);
-	vane.setColor(wind.color)
+
+	/*var wc=wind.color;
+	var hsl = wc.getHSL(hsl);
+	var color = new THREE.Color();
+	color.setHSL( hsl[0], hsl[1], hsl[2]);*/
+
+				vane.setColor(wind.color);
+
 
     if(wind.isMasked){
 		if(vane.isOnMask){
+			//vane.setColor(wind.color)
 	    	vane.setDuration(duration+dilitationTime);
         	vane.setTargetAngle((angle+dilitationAngle),millis); 
+
 		}else{
+			//var s=scale(hsl.s,0,1,0,0.5);
+			//var l=scale(hsl.l,0,1,0.7,1);
+
+			//color.setHSL( hsl.h, s,l);
+        	//vane.setColor(wind.maskColor);
+
 			vane.setDuration(duration);
 			vane.setTargetAngle(angle,millis); 
 		}
 	}else{
+		//color.setHSL( hsl[0], hsl[1], hsl[2]);
+		//vane.setColor(color);
+		//vane.setColor(wind.color);
+
 		vane.setTargetAngle(angle,millis); 
 		vane.setDuration(duration);
 
@@ -577,20 +628,34 @@ function makeRandomWind(isMasked){
 	var angle = randomFloatFromInterval(0,2*Math.PI);
 	pos.applyAxisAngle( axis, angle );
 	pos.add(center);
-	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)]);
-    var vel = randomIntFromInterval(20,20);
- 	var rand=randomIntFromInterval(3,10);
+		var randNr=Math.floor(Math.random()*colors.length);
+	var col=new THREE.Color( colors[randNr]);
+		console.log("color "+randNr+' #' + col.getHex().toString(16));
+
+
+    var vel = randomIntFromInterval(18,20);
+
+    var randMin=5;
+        var randMax=8;
+
+ 	var rand=randomIntFromInterval(randMin,randMax);
+ 	//var rand=randomIntFromInterval(30,40);
+
+
 	var mult=1;
 	if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
-    var dur=scale(rand,3,5,500,1000);
+    var dur=scale(rand,randMin,randMax,500,1000);
+    //    var dur=scale(rand,30,80,3000,8000);
+
     var wait=0;
 	var millis=getMilliseconds(clock);
 
 	winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked));
-	cycleImages()
 
 }
+
+
 
 
 function removeEntity(object) {
@@ -617,6 +682,31 @@ function cycleImages(){
 	setMask(imagesData[imageIndex]);
 	console.log("cycle!"+imageIndex);
 }
+
+
+// movement
+function onDocumentKeyDown(event) {
+    var keyCode = event.which;
+    // up
+    if (keyCode == 87) {
+       	makeRandomWind(1);
+
+        // down
+    } else if (keyCode == 81) {
+       	makeRandomWind(1);
+       	    	cycleImages();
+
+        // left
+    } else if (keyCode == 65) {
+       
+        // right
+    } else if (keyCode == 68) {
+        
+        // space
+    } else if (keyCode == 32) {
+        makeRandomWind(false)
+    }
+};
 
 
 

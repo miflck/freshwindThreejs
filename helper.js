@@ -97,6 +97,30 @@ function getPixel( imagedata, x, y ) {
 }
 
 
+function createVanes(vaneDiameter){
+  vanes =[];
+  res = vaneDiameter;
+   var countX = Math.ceil(windowWidth/res);
+   var countY = Math.ceil(windowHeight/res);
+
+    var xpos=-windowWidth/2
+    var ypos=windowHeight/2
+    var opX=0
+    var opY=0
+
+    for (var j = 0; j < countY; j++) {
+        for (var i = 0; i < countX; i++) {
+            vanes.push( new WindVane((res*i)-windowWidth/2, (res*j)-windowHeight/2  ,vaneDiameter,clock,res*i,-res*j+windowHeight ));
+        }
+    };
+
+ 
+
+  numberOfVanes=vanes.length;
+  console.log("num Vanes"+numberOfVanes);
+}
+
+
 function loadImages(imageurls,successCallback){
     var data=[];
 

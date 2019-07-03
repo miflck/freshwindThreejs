@@ -62,7 +62,13 @@ class WindVane {
             break;
   			}
 
-          this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration+500);
+          //this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration+500);
+
+//          this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration);
+
+
+          this.lerpFact=1;
+
         //var col=this.oldColor;
           this.strokeColor.lerp(this.targetColor,this.lerpFact);
           if(this.isOnMask){
@@ -71,7 +77,7 @@ class WindVane {
           }
 
 		}
-        if(Math.abs(this.currentAngle-this.targetAngle)<0.001){
+        if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
        // if(millis > this.endAnimation){
 
 

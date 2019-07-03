@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"imageDa",
+				"imagedata"
+			],
+			[
+				"image",
+				"imageIndex"
+			],
+			[
+				"is",
+				"isMasked"
+			],
+			[
 				"win",
 				"windowWidth"
 			],
@@ -60,16 +72,8 @@
 				"random"
 			],
 			[
-				"is",
-				"isOnMask"
-			],
-			[
 				"isl",
 				"isloaded"
-			],
-			[
-				"image",
-				"imagedata"
 			],
 			[
 				"SC",
@@ -513,11 +517,11 @@
 	],
 	"file_history":
 	[
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/WindVane.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/Wind.js",
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/index.html",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/helper.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/WindVane.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/app.js",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/index.html",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/LineSegments2.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/js/lines/Line2.js",
 		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/build/three.module.js",
@@ -659,6 +663,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"setMask",
+			"loadImages",
+			"loadBackgroundImages",
+			"isMasked",
 			"imagedata",
 			"getImageData",
 			"imagedata",
