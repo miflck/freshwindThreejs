@@ -16,7 +16,7 @@ var clock = new THREE.Clock({autoStart:true});
 
 // Window and Pixel Vars
 let windowWidth=1920;
-let windowHeight=1080;
+let windowHeight=1200;
 let pixelScaleFact=1;
 let windowHalfY = windowHeight / 2
 
