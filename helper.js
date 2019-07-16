@@ -24,6 +24,16 @@ function check_a_point(a, b, x, y, r) {
 }
 
 
+function checkIsInside(x,y,px, py,w,h) {
+
+    if(x>px && x<px+w && y>py&&y<py+h){
+        return true;
+    }else{
+        return false
+    }
+}
+
+
 // EASING
 
 /*t is current time

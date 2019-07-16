@@ -7,8 +7,8 @@ const scene = new THREE.Scene();
 
 // create the renderer
 //const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true,preserveDrawingBuffer: true  });
-const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true  });
-renderer.autoClearColor = false;
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: false  });
+renderer.autoClearColor = true;
 
 var  stats;
 // create a clock for animations
@@ -43,6 +43,7 @@ var windVelocityMax=20;
 
 // wind timer
 var bIsTimed=true;
+
 var eraseWaveInitTime;
 var eraseWaveTimerDuration;
 var eraseWaveIntervalMin=1500;
@@ -51,7 +52,10 @@ var eraseWaveIntervalMax=3000;
 var waveInitTime;
 var waveTimerDuration;
 var waveIntervalMin=1500;
-var waveIntervalMax=5000;
+var waveIntervalMax=3000;
+
+var waveIntervalContentMin=3000;
+var waveIntervalContentMax=8000;
 
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
@@ -88,7 +92,7 @@ var imageIndex=0;
 // STATE
 var state;
 let oldstate;
-const WAVE =0;
+const WIND =0;
 const CONTENT=1;
 
 var zeroStartX=windowWidth-50;
@@ -96,13 +100,20 @@ var zeroStartY=0;
 
 var debugLog=true;
 
+let contentRectX=300;
+let contentRectY=180;
+let contentRectW=600;
+let contentRectH=windowHeight-contentRectY;
 
+
+
+/*
 // setup event listeners		
 window.addEventListener("mousedown", onMouseDown, false);
 window.addEventListener( 'resize', onWindowResize, false );
 window.addEventListener("touchstart", onTouchStart, false);
 document.addEventListener("keydown", onDocumentKeyDown, false);	
-
+*/
 
 /*
 	init();
@@ -115,7 +126,6 @@ document.addEventListener("keydown", onDocumentKeyDown, false);
 function init() {
 
  	container= document.querySelector( '#scene-container' );
-
 
 	// create all the vanes
 	createVanes(diameter);
@@ -131,17 +141,17 @@ function init() {
 	 thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 	scene.add( thickline );
 	// background plane
-	 plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
+	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.1 } ) );
 	plane.position.z = -10;
-	scene.add( plane );
+	//scene.add( plane );
 
 
 
 
 	// start automatic timers
-	state=WAVE;
-	eraseWaveInitTime=getMilliseconds(clock);
-	eraseWaveTimerDuration=randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
+	state=WIND;
+	waveInitTime=getMilliseconds(clock);
+	waveTimerDuration=randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
 
 	cycleWaveInitTime=getMilliseconds(clock);
 	cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
@@ -151,7 +161,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	//renderer.setPixelRatio( 1);
 	renderer.setSize( windowWidth, windowHeight );
-	renderer.setClearColor( 0x000000, 1);
+	renderer.setClearColor( 0xFFFF00, 0);
 	// add the automatically created <canvas> element to the page
 	container.appendChild( renderer.domElement );
 
@@ -174,29 +184,34 @@ function animate() {
 			}
   		})
 	
-	if(bIsTimed){
-		if(millis>eraseWaveInitTime+eraseWaveTimerDuration){
-   			makeRandomWind(true);
-    		eraseWaveInitTime=millis;
-   			eraseWaveTimerDuration=randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
-  		}
 
-	 	if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
-	   		cycleImages();
-	   		makeRandomWind(true);
-	    	cycleWaveInitTime=millis;
-	    	cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
-	    	eraseWaveInitTime=millis;
-	    	eraseWaveTimerDuration=3000//randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
-  		}
-	}
   	
   	switch(state){
-        case WAVE:
-        
+        case WIND:
+        	if(bIsTimed){
+				if(millis>waveInitTime+waveTimerDuration){
+   				makeRandomWind(true);
+    			waveInitTime=millis;
+   				waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
+  				}
+
+	 			if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
+	   			cycleImages();
+	   			makeRandomWind(true);
+	    		cycleWaveInitTime=millis;
+	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
+	    		waveInitTime=millis;
+	    		waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
+  				}
+			}
         break;
 
         case CONTENT:
+        	if(millis>waveInitTime+waveTimerDuration){
+   				makeRandomWind(true);
+    			waveInitTime=millis;
+   				waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
+  			}
 
         break;
         }
@@ -275,16 +290,27 @@ function updateGeometry(){
 		var x=Math.cos(angle)*vanel;
 		var y=Math.sin(angle)*vanel;
 
+        	vertex.z=vane.zPos;
+
+
+
+
 		vertex.x=p[i*6];
 		vertex.y=p[i*6+1];
-		vertex.z=p[i*6+2]
+
+		//vertex.z=p[i*6+2]
 
 		//vertex2.x=p[i*6+3];
 		//vertex2.y=p[i*6+4];
 		//vertex2.z=p[i*6+5];
 
+		p[i*6+2]=vertex.z;
+
+
 		p[i*6+3]=vertex.x+x;
 		p[i*6+4]=vertex.y+y;
+		p[i*6+5]=vertex.z;
+
 		
 		color[i*6]=col.r;
 		color[i*6+1]=col.g;
@@ -343,7 +369,7 @@ function createGeometry() {
 function setActive(vane,wind,millis){
 	var angle=wind.angle
 	var duration=wind.duration
-	var dilitationTime=	500;
+	var dilitationTime=	-500;
 	var dilitationAngle=Math.PI/4;
 	vane.setEasingType(wind.easingType);
 
@@ -355,22 +381,37 @@ function setActive(vane,wind,millis){
 	var col=wind.color;
 	var maskColor;
 
-	var color = getPixel( wind.imageData, vane.ox*pixelScaleFact,vane.oy*pixelScaleFact);
-	if(color.a==255){
-		vane.isOnMask=true;		
-	}else{
-		vane.isOnMask=false;
-	}
+
 
   	switch(state){
-        case WAVE:
-          //updateVanes(mil);
-          maskColor=wind.color;
+        case WIND:
+
+        	var color = getPixel( wind.imageData, vane.ox*pixelScaleFact,vane.oy*pixelScaleFact);
+			if(color.a==255){
+				vane.isOnMask=true;		
+			}else{
+				vane.isOnMask=false;
+			}
+          	maskColor=wind.color;
+          	vane.zPos=0;
         break;
 
         case CONTENT:
           //updateVanesInverse(mil);
           maskColor=new THREE.Color('#FFFFFF');
+          let isInside=checkIsInside(vane.ox*pixelScaleFact,vane.oy*pixelScaleFact,contentRectX,contentRectY,contentRectW,contentRectH);
+          	// check if inside rect
+			if(isInside){
+				vane.isOnMask=true;
+			}else{
+				vane.isOnMask=false;
+			}
+
+        	if(vane.isOnMask){
+          		vane.zPos=500;
+      		}else{
+      			vane.zPos=0;
+      		}
         break;
         }
         
@@ -382,7 +423,6 @@ function setActive(vane,wind,millis){
         	vane.setTargetAngle((angle+dilitationAngle),millis); 
 		}else{
 			vane.setColor(wind.color);
-
 			//var s=scale(hsl.s,0,1,0,0.5);
 			//var l=scale(hsl.l,0,1,0.7,1);
 			//color.setHSL( hsl.h, s,l);
@@ -408,11 +448,23 @@ function setState(newState){
 	state=newState;
 
 	switch(state){
-        case WAVE:
+        case WIND:
+        winds=[];
+        imageIndex=0;
+        waveInitTime=getMilliseconds(clock);
+		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
+
+		cycleWaveInitTime=getMilliseconds(clock);
+		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
+
+        makeWindFromLocation(windowWidth-50,0,0);
         break;
 
         case CONTENT:
-      //  setMask(nullImage);
+        winds=[];
+        makeWindFromLocation(windowWidth-50,0,1);
+       	waveInitTime=getMilliseconds(clock);
+		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
         break;
       }
 
@@ -456,15 +508,50 @@ function makeRandomWind(isMasked){
 	}
 }
 
+function makeWindFromLocation(xPos,yPos,isMasked){
+  	
+	// get random color from array
+	var randNr=Math.floor(Math.random()*colors.length);
+	var col=new THREE.Color( colors[randNr]);
+	if(debugLog)console.log("color "+randNr+' #' + col.getHex().toString(16));
+
+
+    var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
+    // random rotation factor
+ 	var rand=randomIntFromInterval(randMin,randMax);
+	var mult=1;
+	//if(Math.random()>0.5)mult=-1;
+	var angle=rand*(Math.PI/4)*mult;
+    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
+    //    var dur=scale(rand,30,80,3000,8000);
+
+    // delay in starting wave, not implemented yet
+    var wait=0;
+    // get start time
+	var millis=getMilliseconds(clock);
+	if(isloaded){
+		var imagedata = getImageData(imagesData[imageIndex]);
+		if(debugLog)console.log("data "+imagedata);
+		winds.push(new Wind(xPos,yPos,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+	}
+}
 
 
 
+
+function setContentRect(_contentRectX,_contentRectY,_contentRectW,_contentRectH){
+	contentRectX=_contentRectX;
+	contentRectY=_contentRectY;
+	contentRectW=_contentRectW;
+	contentRectH=_contentRectH;
+}
+
+
+/*
 // INPUT EVENTS
 
 function onMouseDown(event) {
 	makeRandomWind(1);
-	var col=new THREE.Color( colors[Math.floor(Math.random()*colors.length)] );
-	//winds.push(new Wind(event.clientX ,event.clientY,0,col));
 }
 
 // movement
@@ -493,19 +580,11 @@ function onDocumentKeyDown(event) {
     }
 };
 
-
-
-
-
 function onWindowResize() {
-
 		//windowHalfY = window.innerHeight / 2;
-
 		//camera.aspect = window.innerWidth / window.innerHeight;
 		//camera.updateProjectionMatrix();
-
 		//renderer.setSize( window.innerWidth, window.innerHeight );
-
 }
 
 function onTouchStart(event) {
@@ -516,6 +595,6 @@ function onTouchStart(event) {
 }
 
 
-
+*/
 
 		

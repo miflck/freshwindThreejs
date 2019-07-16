@@ -3,35 +3,48 @@ body {
 	padding		: 0;
 	margin		: 0;
 
-	color		: #222;
-	background-color: #FFFFFF;
-	font-family	: arial;
-	font-size	: 100%;
 }
-#info .top {
-	position	: absolute;
-	top		: 0px;
-	width		: 100%;
-	padding		: 5px;
-	text-align	: center;
-}
-#info a {
-	color		: #66F;
-	text-decoration	: none;
-}
-#info a:hover {
-	text-decoration	: underline;
-}
-#info .bottom {
-	position	: absolute;
-	bottom		: 0px;
-	right		: 5px;
-	padding		: 5px;
+
+
+
+nav{
+	display: block;
+	position: absolute;
+	top:20px;
+	right:20px;
+	z-index: 30;
+
 }
 
 #scene-container{
-	border:solid thin blue;
-	/*width:1920;
-	height:1200;/*
-	border:solid thin red;*/
+	position: absolute;
+	z-index: 20;
+}
+
+#content{
+	opacity: 0;
+	display: block;
+	position: absolute;
+	left:300px;
+	top:180px;
+	width: 800px;
+  	padding:2em;
+}
+
+#content.fadeIn{
+	opacity: 1;
+    -webkit-transition: opacity 1.5s ease-in;
+    -moz-transition: opacity 1.5s ease-in;
+    -o-transition: opacity 1.5s ease-in;
+    -ms-transition: opacity 1.5s ease-in;
+    transition: opacity 1.5s ease-in;
+}
+
+#content.fadeOut{
+    opacity: 0;
+    -webkit-transition: opacity 1.5s ease-in;
+    -moz-transition: opacity 1.5s ease-in;
+    -o-transition: opacity 1.5s ease-in;
+    -ms-transition: opacity 1.5s ease-in;
+    transition: opacity 1.5s ease-in;
 }

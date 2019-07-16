@@ -26,20 +26,109 @@
 	<body>
 
 
+		<!--Example SCRIPT FOR BUTTONS -->
+		<!-- To create whitespace for content, set state to CONTENT:
+			setState(CONTENT)
+			To hide the space again, set state to WIND
+		  -->
+		<script>
+			function fadeContentIn(){
+    			// fade In content
+    			var element = document.getElementById("content");
+    			element.classList.remove("fadeOut");
+ 				element.classList.add("fadeIn");
+ 				// set contentstate for app
+				setState(CONTENT);
+			}
 
- 	<div id="scene-container">
-      <!-- This div will hold our scene-->
+			function fadeContentOut(){
+				  			//fade out content
+    			var element = document.getElementById("content");
+    			element.classList.remove("fadeIn");
+ 				element.classList.add("fadeOut");
+ 				//set windstate for app
+				setState(WIND);
+			}
+		</script>
+
+	<nav class="menu">
+		<button class="menubutton" onclick=" fadeContentIn()">Show Content</button>
+		<button class="menubutton" onclick=" fadeContentOut()">Hide Content</button>
+	</nav>
+
+      <!-- container for the threejs action -->
+ 	<div id="scene-container"></div>
+
+	<!-- dummy content -->
+    <div id="content">
+       <article class="article">
+            <h>Title</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+        </article>
     </div>
 	
-	<!-- load and start the wind application -->	
 	 
 	<script>
 	 	/* the application wants some background images*/ 
 	    var files = ['images/1111.png','images/2222.png','images/3333.png','images/4444.png','images/5555.png'];
 	    /* load the backgroundimages*/
 		loadBackgroundImages(files);
+
+		// set empty space for content
+		setContentRect(300,180,900,windowHeight-180);
+
+		//setup
 		init();
+		// start loop
 		animate();
+
+
+		//  Key listener to debug and test. not necessary in production…
+		document.addEventListener('keydown', function(event) {
+			// w to make wind
+    		if (event.keyCode == 87) {
+				makeRandomWind(1);
+   			}
+   			// q to change background image
+    		else if (event.keyCode == 81) {
+    			cycleImages();
+     			makeRandomWind(1);
+    		}
+    		// t to toggle automatic timer
+     		else if(event.keyCode==84){
+    			bIsTimed=!bIsTimed;
+    		}
+    		// n to make nullwind
+    		if (event.keyCode == 78) {
+				makeRandomWind(0);
+   			}
+			// c to show content
+    		if (event.keyCode == 67) {
+    			// fade In content
+    			var element = document.getElementById("content");
+    			element.classList.remove("fadeOut");
+ 				element.classList.add("fadeIn");
+ 				// set contentstate for app
+				setState(CONTENT);
+
+   			}
+   			// x to show wave
+    		if (event.keyCode == 88) {
+    			//fade out content
+    			var element = document.getElementById("content");
+    			element.classList.remove("fadeIn");
+ 				element.classList.add("fadeOut");
+ 				//set windstate for app
+				setState(WIND);
+   			}
+
+
+
+
+
+		}, false);
+
+
 	</script>
 
 	</body>

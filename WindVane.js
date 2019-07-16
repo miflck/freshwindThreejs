@@ -9,6 +9,8 @@ class WindVane {
 
     	this.diameter = diameter;
     	this.pos= new THREE.Vector3( this.x, this.y,0);
+
+
     	this.strokeColor=new THREE.Color("rgb(255, 0, 0)"); // red
       this.targetColor=new THREE.Color("rgb(255, 0, 0)"); // red
     
@@ -37,6 +39,7 @@ class WindVane {
 
       this.isActive=false;
       this.isOnMask=false;
+      this.zPos=0;
     //  Math.random()>0.7?this.isOnMask=true:this.isOnMask=false;
     	//console.log("init vane");
 
