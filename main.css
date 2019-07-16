@@ -30,6 +30,7 @@ body {
 }
 
 #scene-container{
+	border:solid thin blue;
 	/*width:1920;
 	height:1200;/*
 	border:solid thin red;*/
