@@ -1,7 +1,7 @@
 
 
 		class Wind {
-		  	constructor(iX,iY,velocity,angle,dur,wait,initTime,color,isMasked) {
+		  	constructor(iX,iY,velocity,angle,dur,wait,initTime,color,isMasked,imageData) {
 				this.x = iX-windowWidth/2;
 				this.y =-iY+windowHeight/2;
 				this.radius = 0;
@@ -16,16 +16,17 @@
 				//var rand=int(random(3,10));
 				this.rand=randomIntFromInterval(5,20);
 				this.randDur=randomIntFromInterval(1,5);
+				this.imageData=imageData;
+				console.log("push "+this.imageData);
 
 
-				/*this.wc=color;
-				this.hsl = this.wc.getHSL(this.hsl);
+				this.hsl = this.color.getHSL(this.hsl);
 				this.maskColor = new THREE.Color();
 
 				this.s=scale(this.hsl.s,0,1,0.5,0.7);
-				this.l=this.hsl.l+0.1//scale(this.hsl.l,0,1,0.5,0.7);
+				this.l=this.hsl.l//scale(this.hsl.l,0,1,0.5,0.7);
 				this.maskColor.setHSL( this.hsl.h, this.s,this.l);
-*/
+
 
 
 

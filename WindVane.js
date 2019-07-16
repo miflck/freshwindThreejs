@@ -10,8 +10,11 @@ class WindVane {
     	this.diameter = diameter;
     	this.pos= new THREE.Vector3( this.x, this.y,0);
     	this.strokeColor=new THREE.Color("rgb(255, 0, 0)"); // red
+      this.targetColor=new THREE.Color("rgb(255, 0, 0)"); // red
     
       this.strokeColor.setRGB(Math.random(),Math.random(),Math.random());
+        //    this.targetColor.setRGB(Math.random(),Math.random(),Math.random());
+
      // this.oldColor.set(this.strokeColor);
       //this.lerpToColor=this.strokeColor;
       //this.currentColor=this.strokeColor;
@@ -62,7 +65,7 @@ class WindVane {
             break;
   			}
 
-          //this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration+500);
+          //this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration);
 
 //          this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration);
 
@@ -71,27 +74,11 @@ class WindVane {
 
         //var col=this.oldColor;
           this.strokeColor.lerp(this.targetColor,this.lerpFact);
-          if(this.isOnMask){
-           
-           //   this.strokeColor.setHSL(this.strokeColor.getHSL().h,this.strokeColor.getHSL().s,this.strokeColor.getHSL().l-0.01);
-          }
-
-		}
+		  }
         if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
-       // if(millis > this.endAnimation){
-
-
           this.currentAngle=this.targetAngle;
           this.isActive=false;
         }
-
-        /*    if(millis > this.endAnimation){
-              this.strokeColor.setRGB(1,0,0);
-            }else{
-              this.strokeColor.setRGB(0,1,0);
-            }
-*/
-
 	}
 
 
