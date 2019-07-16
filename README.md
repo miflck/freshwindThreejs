@@ -1,7 +1,6 @@
 # freshwindThreejs
-Freshwind Threejs repo
-
-first provide some background images:
+# setup and use:
+ provide some background images:
 ```javascript
 var files = ['images/1111.png','images/2222.png','images/3333.png','images/4444.png','images/5555.png'];
 /* load the backgroundimages*/
@@ -24,4 +23,13 @@ then call init and start the loop with animate():
 init();
 //start loop
 animate();
+```
+to make a white rect for content, call setState(CONTENT):
+```javascript
+setState(CONTENT);
+```
+
+to fade out the content rect, call setState(WIND)
+```javascript
+setState(WIND);
 ```
