@@ -107,7 +107,6 @@ function setSize(width,height,resolution){
      camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
 
     // remove old stuff
-    
     scene.remove(vanegeometry);
     scene.remove(lineGeometry);
     scene.remove( thickline );
@@ -124,10 +123,10 @@ function setSize(width,height,resolution){
     lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 4.5} );
     lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
      thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
-    scene.add( thickline );
+  //  scene.add( thickline );
 
     plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
-    scene.add(plane);
+    //scene.add(plane);
 
         
     renderer.setPixelRatio( resolution );

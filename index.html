@@ -77,11 +77,12 @@
 		// set empty space for content
 		setContentRect(300,180,900,windowHeight-180);
 
+	//	setSize(1500,800,window.devicePixelRatio);
+
 		//setup
 		init();
 		// start loop
 		animate();
-
 
 		//  Key listener to debug and test. not necessary in production…
 		document.addEventListener('keydown', function(event) {
@@ -102,6 +103,7 @@
     		if (event.keyCode == 78) {
 				makeRandomWind(0);
    			}
+
 			// c to show content
     		if (event.keyCode == 67) {
     			// fade In content
@@ -121,10 +123,6 @@
  				//set windstate for app
 				setState(WIND);
    			}
-
-
-
-
 
 		}, false);
 

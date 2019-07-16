@@ -29,6 +29,8 @@ nav{
 	top:180px;
 	width: 800px;
   	padding:2em;
+  		z-index: 40;
+
 }
 
 #content.fadeIn{
