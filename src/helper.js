@@ -166,20 +166,37 @@ function removeEntity(object) {
 function loadImages(imageurls,successCallback){
     var data=[];
     const loadManager = new THREE.LoadingManager();
+
     loadManager.onProgress = function ( item, loaded, total ) {
     // this gets called after any item has been loaded
         if(debugLog)console.log( 'Loading file: ' + item + '.\nLoaded ' + loaded + ' of ' + total + ' files.' );
     };
 
-    loadManager.onLoad = function () {
+    /*loadManager.onLoad = function () {
         console.log( 'Loading complete!');
-        console.log(data.length);
+        console.log(data);
+        successCallback(data)
+    };*/
+
+     loadManager.onLoad = function () {
+        console.log( 'Loading complete!');
+
+        data.map(datap => console.log(datap))
+
+        data.sort(function(a, b) {
+            return a.src.localeCompare(b.src);
+             // return imageurls.indexOf(a) - imageurls.indexOf(b);
+
+        });
+
+        data.map(datap => console.log(datap))
+
         successCallback(data)
     };
 
     const multiloader = new THREE.ImageLoader(loadManager);
     for(var i=0;i<imageurls.length;i++){
-        multiloader.load( imageurls[i], function ( image ) {
+        multiloader.load(imageurls[i], function ( image ) {
             data.push( image );
         });
     }

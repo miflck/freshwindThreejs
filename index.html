@@ -19,7 +19,7 @@
 		<script src="src/helper.js?v=0.3"></script>
 		<script src="src/WindVane.js?v=0.3"></script>
 		<script src="src/Wind.js?v=0.4"></script>
-		<script src="src/app.js?v=0.5"></script>
+		<script src="src/app.js?v=1.0"></script>
 
 
 	</head>
@@ -70,9 +70,14 @@
 	 
 	<script>
 	 	/* the application wants some background images*/ 
-	    var files = ['images/1111.png','images/2222.png','images/3333.png','images/4444.png','images/5555.png'];
+	    var files = ['images/1x/01.png','images/1x/02.png','images/1x/03.png','images/1x/04.png','images/1x/05.png','images/1x/06.png','images/1x/07.png','images/1x/08.png','images/1x/09.png','images/1x/10.png','images/1x/11.png','images/1x/12.png',];
+
+	    //var files = ['images/2/1.png','images/2/2.png','images/2/3.png','images/2/4.png','images/2/5.png','images/2/6.png'];
+	   	//var files = ['images/2/1.png'];
+
 	    /* load the backgroundimages*/
 		loadBackgroundImages(files);
+
 
 		// set empty space for content
 		setContentRect(300,180,900,windowHeight-180);

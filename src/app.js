@@ -15,8 +15,8 @@ var  stats;
 var clock = new THREE.Clock({autoStart:true});
 
 // Window and Pixel Vars
-let windowWidth=1920;
-let windowHeight=1200;
+let windowWidth=1280;
+let windowHeight=800;
 let pixelScaleFact=1;
 let windowHalfY = windowHeight / 2
 
@@ -68,7 +68,7 @@ var numberOfVanes;
 var vanes = [];
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
-var diameter=18;
+var diameter=13;
 var lineGeometry;
 var lineMaterial;
 var thickline;
@@ -146,7 +146,7 @@ function init() {
 
 
 	// set up material
- 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 4.5} );
+ 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 3.5} );
 	lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
 	thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 	scene.add( thickline );
@@ -169,8 +169,8 @@ function init() {
 
 
 	camera.position.z = 1;	
-	//renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setPixelRatio( 1);
+	renderer.setPixelRatio( window.devicePixelRatio );
+	//renderer.setPixelRatio( 1);
 	renderer.setSize( windowWidth, windowHeight );
 	renderer.setClearColor( 0xFFFF00, 0);
 	// add the automatically created <canvas> element to the page
@@ -259,8 +259,13 @@ function render() {
 function loadBackgroundImages(files){
 	loadImages(files,function(data){
 		imagesData=data;
-		console.log("loaded "+imagesData.length);
+		console.log("loaded ");
 		isloaded=true;
+
+
+
+
+		  console.log(imagesData);
 		//setMask(imagesData[0]);
 	});
 }
