@@ -7,7 +7,7 @@ const scene = new THREE.Scene();
 
 // create the renderer
 //const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true,preserveDrawingBuffer: true  });
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true  });
+const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true  });
 renderer.autoClearColor = false;
 
 var  stats;
@@ -151,7 +151,7 @@ function init() {
 	thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 	scene.add( thickline );
 	// background plane
-	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.2 } ) );
+	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.3 } ) );
 	plane.position.z = -10;
 	scene.add( plane );
 
@@ -311,7 +311,7 @@ function updateGeometry(){
 
 		vertex.x=p[i*6];
 		vertex.y=p[i*6+1];
-		p[i*6+2]=vane.zPos//vane.zPos//ertex.z;
+			p[i*6+2]=vane.zPos//vane.zPos//ertex.z;
 
 
 		p[i*6+3]=vertex.x+x;
