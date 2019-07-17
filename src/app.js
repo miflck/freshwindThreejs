@@ -169,8 +169,8 @@ function init() {
 
 
 	camera.position.z = 1;	
-	renderer.setPixelRatio( window.devicePixelRatio );
-	//renderer.setPixelRatio( 1);
+	//renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.setPixelRatio( 1);
 	renderer.setSize( windowWidth, windowHeight );
 	renderer.setClearColor( 0xFFFF00, 0);
 	// add the automatically created <canvas> element to the page
