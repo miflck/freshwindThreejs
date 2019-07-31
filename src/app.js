@@ -59,8 +59,8 @@ var waveIntervalContentMax=8000;
 
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
-var cycleWaveIntervalMin=6000;
-var cycleWaveIntervalMax=7000;
+var cycleWaveIntervalMin=1500;
+var cycleWaveIntervalMax=5000;
 
 
 // VANES
@@ -203,11 +203,11 @@ function animate() {
   	switch(state){
         case WIND:
         	if(bIsTimed){
-				if(millis>waveInitTime+waveTimerDuration){
+				/*if(millis>waveInitTime+waveTimerDuration){
    				makeRandomWind(true);
     			waveInitTime=millis;
    				waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
-  				}
+  				}*/
 
 	 			if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
 	   			cycleImages();
