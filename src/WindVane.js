@@ -11,10 +11,11 @@ class WindVane {
     	this.pos= new THREE.Vector3( this.x, this.y,0);
 
 
-    	this.strokeColor=new THREE.Color("rgb(255, 0, 0)"); // red
-      this.targetColor=new THREE.Color("rgb(255, 0, 0)"); // red
+    	this.strokeColor=new THREE.Color(0x26539D); // red
+      this.targetColor=new THREE.Color(0x26539D); // red
+
     
-      this.strokeColor.setRGB(Math.random(),Math.random(),Math.random());
+     // this.strokeColor.setRGB(Math.random(),Math.random(),Math.random());
         //    this.targetColor.setRGB(Math.random(),Math.random(),Math.random());
 
      // this.oldColor.set(this.strokeColor);

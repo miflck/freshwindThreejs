@@ -76,7 +76,10 @@ var plane;
 
 //oldcolors
 //const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
-const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D]
+const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D];
+let darkBlueColor=new THREE.Color(0x26539D);
+let dynamicColor=false;
+
 // music color
 //const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
 
@@ -277,7 +280,7 @@ function updateGeometry(){
 	var vanel=diameter;
 
 	var p = vanegeometry.attributes.position.array;
-	var color = vanegeometry.attributes.color.array;
+	if(dynamicColor)var color = vanegeometry.attributes.color.array;
 
 
 	var vector = new THREE.Vector3( vanel, 0, 0 );
@@ -302,7 +305,7 @@ function updateGeometry(){
   		
   		vane.update(millis);
 		var angle=vanes[i].getCurrentAngle;
-		var col=vanes[i].getStrokeColor;
+		if(dynamicColor)var col=vanes[i].getStrokeColor;
 		vector.x=vanel;
 		vector.y=0;
 
@@ -324,20 +327,21 @@ function updateGeometry(){
 		p[i*6+5]=vane.zPos
 
 		
-		color[i*6]=col.r;
-		color[i*6+1]=col.g;
-		color[i*6+2]=col.b;
+		if(dynamicColor){
+			color[i*6]=col.r;
+			color[i*6+1]=col.g;
+			color[i*6+2]=col.b;
 
-		color[i*6+3]=col.r;
-		color[i*6+4]=col.g;
-		color[i*6+5]=col.b;
-
+			color[i*6+3]=col.r;
+			color[i*6+4]=col.g;
+			color[i*6+5]=col.b;
+		}
 	}
 	//vanegeometry.attributes.position.needsUpdate = true;
 	//vanegeometry.attributes.color.needsUpdate = true;
 	lineGeometry.setPositions( vanegeometry.attributes.position.array);
 	lineGeometry.attributes.position.needsUpdate = true;
-	lineGeometry.setColors( vanegeometry.attributes.color.array);
+	if(dynamicColor)lineGeometry.setColors( vanegeometry.attributes.color.array);
 
 }
 
@@ -359,13 +363,21 @@ function createGeometry() {
 		vertices.push( vertex.x, vertex.y, vertex.z );
 		vertices.push( vertex.x+vanel, vertex.y, vertex.z );
 
-		colors.push(0 );
-		colors.push(0 );
-		colors.push( 0 );
+		colors.push(darkBlueColor.r);
+		colors.push(darkBlueColor.g);
+		colors.push(darkBlueColor.b);
 
-		colors.push(0 );
-		colors.push(0 );
-		colors.push( 0 );
+		colors.push(darkBlueColor.r);
+		colors.push(darkBlueColor.g);
+		colors.push(darkBlueColor.b);
+
+		//colors.push(0 );
+		//colors.push(0 );
+		//colors.push( 0 );
+
+		//colors.push(1 );
+		//colors.push(0 );
+		//colors.push( 0 );
 
 	})
 
@@ -409,7 +421,18 @@ function setActive(vane,wind,millis){
 
         case CONTENT:
           //updateVanesInverse(mil);
-        //  maskColor=new THREE.Color('0xFFFFFF');
+        //  maskColor=new THREE.Color('0xFFFFFF');        
+
+			/*var content = document.getElementsByClassName("content");
+			var rect = content[0].getBoundingClientRect();
+			contentRectX=rect.left;
+			contentRectY=rect.top;
+			contentRectW=content[0].clientWidth;
+			contentRectH=content[0].offsetHeight;
+			*/
+
+
+
           let isInside=checkIsInside(vane.ox*pixelScaleFact,vane.oy*pixelScaleFact,contentRectX,contentRectY,contentRectW,contentRectH);
           	// check if inside rect
 			if(isInside){
@@ -494,11 +517,10 @@ function makeRandomWind(isMasked){
 	pos.add(center);
 
 	// get random color from array
-	var randNr=Math.floor(Math.random()*colors.length);
-	var col=new THREE.Color( colors[randNr]);
-	if(debugLog)console.log("color "+randNr+' #' + col.getHex().toString(16));
-
-
+	//var randNr=Math.floor(Math.random()*colors.length);
+//	var col=new THREE.Color( colors[randNr]);
+	// no more random!
+	var col=new THREE.Color( 0x26539D);
     var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
     // random rotation factor
  	var rand=randomIntFromInterval(randMin,randMax);

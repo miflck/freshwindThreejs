@@ -21,8 +21,8 @@ nav{
 	z-index: 20;
 }
 
-#content{
-	opacity: 0;
+.content{
+	/*opacity: 0;
 	display: block;
 	position: absolute;
 	left:300px;
@@ -31,9 +31,20 @@ nav{
   	padding:2em;
   		z-index: 40;
 
+*/
+
+  		position: absolute;
+top: 5.3125rem;
+right: 0;
+width: 75vw;
+height: calc(800px - 5.3125rem - 5.3125rem/4);
+overflow-y: scroll;
+border:solid thin red;
+margin-right: calc(5.3125rem*2);
+
 }
 
-#content.fadeIn{
+.content.fadeIn{
 	opacity: 1;
     -webkit-transition: opacity 1.5s ease-in;
     -moz-transition: opacity 1.5s ease-in;
@@ -42,7 +53,7 @@ nav{
     transition: opacity 1.5s ease-in;
 }
 
-#content.fadeOut{
+.content.fadeOut{
     opacity: 0;
     -webkit-transition: opacity 1.5s ease-in;
     -moz-transition: opacity 1.5s ease-in;

@@ -34,18 +34,18 @@
 		<script>
 			function fadeContentIn(){
     			// fade In content
-    			var element = document.getElementById("content");
-    			element.classList.remove("fadeOut");
- 				element.classList.add("fadeIn");
+    			var element = document.getElementsByClassName("content");
+    			element[0].classList.remove("fadeOut");
+ 				element[0].classList.add("fadeIn");
  				// set contentstate for app
 				setState(CONTENT);
 			}
 
 			function fadeContentOut(){
 				  			//fade out content
-    			var element = document.getElementById("content");
-    			element.classList.remove("fadeIn");
- 				element.classList.add("fadeOut");
+    			var element = document.getElementsByClassName("content");
+    			element[0].classList.remove("fadeIn");
+ 				element[0].classList.add("fadeOut");
  				//set windstate for app
 				setState(WIND);
 			}
@@ -60,7 +60,7 @@
  	<div id="scene-container"></div>
 
 	<!-- dummy content -->
-    <div id="content">
+    <div class="content">
        <article class="article">
             <h>Title</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
