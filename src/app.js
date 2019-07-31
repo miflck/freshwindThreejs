@@ -36,10 +36,10 @@ let latestAngle=0;
 // rotation fact
 var randMin=5;
 var randMax=15;
-var rotationDurationMin=1000;
-var rotationDurationMAx=2000;
-var windVelocityMin=15;
-var windVelocityMax=20;
+var rotationDurationMin=1500;
+var rotationDurationMAx=3000;
+var windVelocityMin=8;
+var windVelocityMax=13;
 
 // wind timer
 var bIsTimed=true;
@@ -59,7 +59,7 @@ var waveIntervalContentMax=8000;
 
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
-var cycleWaveIntervalMin=1500;
+var cycleWaveIntervalMin=3000;
 var cycleWaveIntervalMax=5000;
 
 
