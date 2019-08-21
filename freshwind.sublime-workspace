@@ -4,6 +4,14 @@
 		"selected_items":
 		[
 			[
+				"dynam",
+				"dynamicColor"
+			],
+			[
+				"dy",
+				"dynamicColor"
+			],
+			[
 				"update",
 				"updateGeometry"
 			],
@@ -506,15 +514,47 @@
 			[
 				"me",
 				"Mesh"
-			],
-			[
-				"joint",
-				"jointpos"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"file": "src/app.js",
+			"settings":
+			{
+				"buffer_size": 15103,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/WindVane.js",
+			"settings":
+			{
+				"buffer_size": 3203,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "index.html",
+			"settings":
+			{
+				"buffer_size": 4092,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "main.css",
+			"settings":
+			{
+				"buffer_size": 1026,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -560,7 +600,8 @@
 	},
 	"expanded_folders":
 	[
-		"/Users/fgm4/htdocs_Mamp/freshwind_threejs"
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs",
+		"/Users/fgm4/htdocs_Mamp/freshwind_threejs/src"
 	],
 	"file_history":
 	[
@@ -709,6 +750,13 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"windVelocityMin",
+			"cycleWaveInitTime",
+			"vanegeometry",
+			"color",
+			"colors",
+			"createVanes",
+			"contentRectX"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -732,8 +780,135 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "src/app.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 15103,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4392,
+								4392
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1911.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/WindVane.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3203,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								326,
+								318
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Babel/JavaScript (Babel).sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "index.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4092,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1452,
+								1452
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/HTML/HTML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "main.css",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1026,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								533,
+								533
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/CSS/CSS.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
 			]
 		}
 	],
