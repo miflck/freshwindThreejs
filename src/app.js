@@ -468,8 +468,8 @@ function setActive(vane,wind,millis){
 		//color.setHSL( hsl[0], hsl[1], hsl[2]);
 		//vane.setColor(color);
 		//vane.setColor(wind.color);
-		vane.setTargetAngle(angle,millis); 
 		vane.setDuration(duration);
+		vane.setTargetAngle(angle,millis); 
 		vane.setColor(wind.color);
 
 	}
