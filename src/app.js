@@ -1,22 +1,26 @@
 
 // Threejs
 // Get a reference to the container element that will hold our scene
-var container;
+//var container;
 // create a Scene
 const scene = new THREE.Scene();
 
 // create the renderer
 //const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true,preserveDrawingBuffer: true  });
-const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true  });
-renderer.autoClearColor = false;
+//const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true  });
+//renderer.autoClearColor = false;
+
+
+var scenes = [], views, t, canvas, renderer;
+
 
 var  stats;
 // create a clock for animations
 var clock = new THREE.Clock({autoStart:true});
 
 // Window and Pixel Vars
-let windowWidth=1280;
-let windowHeight=800;
+let windowWidth=300;
+let windowHeight=300;
 let pixelScaleFact=1;
 let windowHalfY = windowHeight / 2
 
@@ -43,6 +47,7 @@ var windVelocityMax=13;
 
 // wind timer
 var bIsTimed=true;
+
 
 var eraseWaveInitTime;
 var eraseWaveTimerDuration;
@@ -128,8 +133,88 @@ let bCreated=false;
 
 function init() {
 
- 	container= document.querySelector( '#scene-container' );
 
+// get canvas:
+	canvas = document.getElementById( 'c' );
+
+	// create the renderer
+	renderer = new THREE.WebGLRenderer( { canvas: canvas, antialias: true,alpha: true,preserveDrawingBuffer: true } );
+	renderer.setPixelRatio( window.devicePixelRatio );
+	renderer.autoClearColor = true;
+	views = document.querySelectorAll( '.windcontainer');
+
+	for ( var n = 0; n < views.length; n ++ ) {
+		var scene = new THREE.Scene();
+		scene.userData.view = views[ n ];
+		console.log(scene.userData.view);
+
+		
+		// set the viewport
+		var rect = scene.userData.view.getBoundingClientRect();
+        camera = new THREE.OrthographicCamera();
+        camera.left = 0;
+        camera.right = rect.width;
+        camera.top = rect.height / 2;
+        camera.bottom = rect.height / -2;
+        camera.near = 0.1;
+        camera.far = 1500;
+        camera.updateProjectionMatrix();
+        camera.position.set( -rect.width/2, 0, 50 );
+        scene.userData.camera = camera;
+
+
+        const boxWidth = 50;
+		const boxHeight = 50;
+		const boxDepth = 50;
+		const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+		const material = new THREE.MeshBasicMaterial({color: 0x44aa88});
+		const cube = new THREE.Mesh(geometry, material);
+		scene.add(cube);
+		cube.position.z=0;
+		scene.userData.cube = cube;
+		scene.userData.hey = "hey";
+
+
+
+		// vanes
+		vanegeometry = new THREE.BufferGeometry();
+		vanegeometry.dynamic = true;
+		vanegeometry = createGeometry();
+
+		scene.userData.vanegeometry=vanegeometry;
+		
+		vanes =[];
+   		var countX = Math.ceil(rect.width/diameter);
+   		var countY = Math.ceil(rect.height/diameter);
+    	var xpos=-rect.width/2
+    	var ypos=rect.height/2
+    	var opX=0
+    	var opY=0
+    	for (var j = 0; j < countY; j++) {
+        	for (var i = 0; i < countX; i++) {
+            	vanes.push( new WindVane((diameter*i)-rect.width/2, (diameter*j)-rect.height/2  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
+        	}
+    	};
+  		numberOfVanes=vanes.length;
+  		//scene.userdata.vanes=vanes;
+  		//scene.userdata.numberOfVanes=numberOfVanes;
+  		
+  		if(debugLog)console.log("num Vanes"+numberOfVanes);
+
+
+
+		scenes.push( scene );
+
+
+
+		}
+
+	t = 0;
+	animate();
+
+
+
+/*
 	// create all the vanes
 	createVanes(diameter);
 
@@ -174,20 +259,24 @@ function init() {
 	camera.position.z = 1;	
 	renderer.setPixelRatio( window.devicePixelRatio );
 	//renderer.setPixelRatio( 1);
-	renderer.setSize( windowWidth, windowHeight );
-	renderer.setClearColor( 0xFFFF00, 0);
+	//renderer.setSize( windowWidth, windowHeight );
+	//renderer.setClearColor( 0xFFFF00, 0);
 	// add the automatically created <canvas> element to the page
-	container.appendChild( renderer.domElement );
+	//container.appendChild( renderer.domElement );
 
 	stats = new Stats();
 	//container.appendChild( stats.dom );
+
+	*/
 }
 
 
 
 
-function animate() {
-	var millis=getMilliseconds(clock);
+function animate(time) {
+
+
+	/*var millis=getMilliseconds(clock);
 		// update Wind	
 		winds.map((wind,i) =>{
 			wind.move(millis);
@@ -203,12 +292,6 @@ function animate() {
   	switch(state){
         case WIND:
         	if(bIsTimed){
-				/*if(millis>waveInitTime+waveTimerDuration){
-   				makeRandomWind(true);
-    			waveInitTime=millis;
-   				waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
-  				}*/
-
 	 			if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
 	   			cycleImages();
 	   			makeRandomWind(true);
@@ -230,16 +313,58 @@ function animate() {
         break;
         }
 
-	updateGeometry();
+	updateGeometry();*/
 	requestAnimationFrame( animate );
 	render();
-	stats.update();
+
+	time *= 0.001;  // convert time to seconds
+	scenes.forEach( function ( scene ) {
+	    var cube = scene.userData.cube;
+		cube.rotation.x = time;
+	    cube.rotation.y = time;
+    });
+	//stats.update();
 }
 
 
 
 function render() {			
-	renderer.render( scene, camera );
+
+
+	updateWindowSize();
+	renderer.setClearColor( 0xffffff );
+	renderer.setScissorTest( false );
+	renderer.clear();
+	renderer.setClearColor( 0x000000 );
+	renderer.setScissorTest( true );
+
+	scenes.forEach( function ( scene ) {
+	
+		var rect = scene.userData.view.getBoundingClientRect();
+		// check if it's offscreen. If so skip it
+		if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+			 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+			return; // it's off screen
+		}
+
+		// set the viewport
+		var width = rect.right - rect.left;
+		var height = rect.bottom - rect.top;
+		var left = rect.left;
+		var bottom = renderer.domElement.clientHeight - rect.bottom;
+
+		//update camera if needed
+
+		scene.userData.camera.aspect = width / height;
+   		scene.userData.camera.updateProjectionMatrix();
+
+
+
+		renderer.setViewport( left, bottom, width, height );
+		renderer.setScissor( left, bottom, width, height );
+		renderer.render( scene, scene.userData.camera );
+
+	});
 }
 
 
@@ -577,6 +702,17 @@ function setContentRect(_contentRectX,_contentRectY,_contentRectW,_contentRectH)
 	contentRectY=_contentRectY;
 	contentRectW=_contentRectW;
 	contentRectH=_contentRectH;
+}
+
+
+
+function updateWindowSize() {
+	var width = canvas.clientWidth;
+	var height = canvas.clientHeight;
+	if ( canvas.width !== width || canvas.height != height ) {
+		renderer.setSize( width, height, false );
+
+	}
 }
 
 

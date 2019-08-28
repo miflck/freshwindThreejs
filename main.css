@@ -16,48 +16,19 @@ nav{
 
 }
 
-#scene-container{
-	position: absolute;
-	z-index: 20;
-}
-
-.content{
-	/*opacity: 0;
+.windcontainer {
 	display: block;
-	position: absolute;
-	left:300px;
-	top:180px;
-	width: 800px;
-  	padding:2em;
-  		z-index: 40;
-
-*/
-
-  		position: absolute;
-top: 5.3125rem;
-right: 0;
-width: 75vw;
-height: calc(800px - 5.3125rem - 5.3125rem/4);
-overflow-y: scroll;
-border:solid thin red;
-margin-right: calc(5.3125rem*2);
-
+	float:left;
+	width: 30%;
+	height: 5in;
+	border: solid thin red;
 }
 
-.content.fadeIn{
-	opacity: 1;
-    -webkit-transition: opacity 1.5s ease-in;
-    -moz-transition: opacity 1.5s ease-in;
-    -o-transition: opacity 1.5s ease-in;
-    -ms-transition: opacity 1.5s ease-in;
-    transition: opacity 1.5s ease-in;
-}
-
-.content.fadeOut{
-    opacity: 0;
-    -webkit-transition: opacity 1.5s ease-in;
-    -moz-transition: opacity 1.5s ease-in;
-    -o-transition: opacity 1.5s ease-in;
-    -ms-transition: opacity 1.5s ease-in;
-    transition: opacity 1.5s ease-in;
+#c {
+	position: fixed;
+	left: 0px; top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	z-index: -1;
 }

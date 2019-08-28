@@ -31,7 +31,7 @@
 			setState(CONTENT)
 			To hide the space again, set state to WIND
 		  -->
-		<script>
+	<!--	<script>
 			function fadeContentIn(){
     			// fade In content
     			var element = document.getElementsByClassName("content");
@@ -49,23 +49,23 @@
  				//set windstate for app
 				setState(WIND);
 			}
-		</script>
+		</script>-->
 
 	<nav class="menu">
 		<button class="menubutton" onclick=" fadeContentIn()">Show Content</button>
 		<button class="menubutton" onclick=" fadeContentOut()">Hide Content</button>
 	</nav>
 
-      <!-- container for the threejs action -->
- 	<div id="scene-container"></div>
+    <!-- container for the threejs action -->
+ 	<canvas id="c"></canvas>
 
-	<!-- dummy content -->
-    <div class="content">
-       <article class="article">
-            <h>Title</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-        </article>
-    </div>
+
+<div class="windcontainer">
+</div>
+
+<div class="windcontainer">
+</div>
+
 	
 	 
 	<script>
@@ -82,14 +82,14 @@
 		// set empty space for content
 		setContentRect(300,180,900,windowHeight-180);
 
-		//setup
-		init();
-		// start loop
-		animate();
+		// stop automatic wind
+		bIsTimed=false;
+
+		window.onload = init;
 
 		//  Key listener to debug and test. not necessary in production…
 		document.addEventListener('keydown', function(event) {
-			// w to make wind
+		/*	// w to make wind
     		if (event.keyCode == 87) {
 				makeRandomWind(1);
    			}
@@ -126,8 +126,17 @@
  				//set windstate for app
 				setState(WIND);
    			}
-
+*/
 		}, false);
+
+
+
+
+		/* MOUSE LISTENER könnten auch ins app.js, mache ich aber jetzt im Index für bessere Kontrolle*/
+
+	document.addEventListener("mousedown", function(event) {
+		//makeRandomWind(0);
+	},false);
 
 
 	</script>
