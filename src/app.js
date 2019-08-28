@@ -38,11 +38,11 @@ let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far 
 var winds=[];
 let latestAngle=0;
 // rotation fact
-var randMin=5;
-var randMax=15;
+var randMin=0.5;
+var randMax=3;
 var rotationDurationMin=1500;
 var rotationDurationMAx=3000;
-var windVelocityMin=8;
+var windVelocityMin=2;
 var windVelocityMax=13;
 
 // wind timer
@@ -142,13 +142,23 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.autoClearColor = true;
 	views = document.querySelectorAll( '.windcontainer');
+	// vanes
+		vanegeometry = new THREE.BufferGeometry();
+		vanegeometry.dynamic = true;
+		vanegeometry = createGeometry();
+
+		lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+ 		lineGeometry.setColors( vanegeometry.attributes.color.array);
+		//scene.userData.lineGeometry=lineGeometry;
+				// set up material
+	 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 1} );
+		//lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
 
 	for ( var n = 0; n < views.length; n ++ ) {
+
 		var scene = new THREE.Scene();
 		scene.userData.view = views[ n ];
-		console.log(scene.userData.view);
-
-		
+		console.log("view");		
 		// set the viewport
 		var rect = scene.userData.view.getBoundingClientRect();
         camera = new THREE.OrthographicCamera();
@@ -172,7 +182,6 @@ function init() {
 		scene.add(cube);
 		cube.position.z=0;
 		scene.userData.cube = cube;
-		scene.userData.hey = "hey";
 
 
 
@@ -180,8 +189,26 @@ function init() {
 		vanegeometry = new THREE.BufferGeometry();
 		vanegeometry.dynamic = true;
 		vanegeometry = createGeometry();
-
+		vanegeometry.computeBoundingSphere();
 		scene.userData.vanegeometry=vanegeometry;
+
+
+		lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+ 		lineGeometry.setColors( vanegeometry.attributes.color.array);
+		scene.userData.lineGeometry=lineGeometry;
+
+			// set up material
+	 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 2} );
+		lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
+		thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+		scene.add( thickline );
+		// background plane
+	//	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.3 } ) );
+	//	plane.position.z = -10;
+	//	scene.add( plane );
+
+
+
 		
 		vanes =[];
    		var countX = Math.ceil(rect.width/diameter);
@@ -196,10 +223,15 @@ function init() {
         	}
     	};
   		numberOfVanes=vanes.length;
-  		//scene.userdata.vanes=vanes;
-  		//scene.userdata.numberOfVanes=numberOfVanes;
-  		
-  		if(debugLog)console.log("num Vanes"+numberOfVanes);
+  		scene.userData.vanes=vanes;
+  		scene.userData.numberOfVanes=numberOfVanes;
+
+
+  		scene.userData.winds=[];
+
+  				updateGeometry(scene);
+
+  		makeRandomWind(scene,false);
 
 
 
@@ -207,7 +239,13 @@ function init() {
 
 
 
+
 		}
+
+	scenes.forEach( function ( scene ) {
+console.log(scene.userData.numberOfVanes);
+	});
+
 
 	t = 0;
 	animate();
@@ -265,9 +303,13 @@ function init() {
 	//container.appendChild( renderer.domElement );
 
 	stats = new Stats();
-	//container.appendChild( stats.dom );
+	container.appendChild( stats.dom );
 
 	*/
+
+
+	stats = new Stats();
+	//canvas.appendChild( stats.dom );
 }
 
 
@@ -276,7 +318,24 @@ function init() {
 function animate(time) {
 
 
+var millis=getMilliseconds(clock);
+scenes.forEach( function ( scene ) {
+
+	// update Wind	
+		scene.userData.winds.map((wind,i) =>{
+			wind.move(scene,millis);
+	//		wind.display();
+			if(wind.getDeleteMe()){
+				removeEntity(scene,wind);
+				scene.userData.winds.splice(i,1);
+			}
+  		})
+
+});
+
 	/*var millis=getMilliseconds(clock);
+
+
 		// update Wind	
 		winds.map((wind,i) =>{
 			wind.move(millis);
@@ -314,6 +373,12 @@ function animate(time) {
         }
 
 	updateGeometry();*/
+
+	scenes.forEach( function ( scene ) {
+		updateGeometry(scene);
+	});
+
+
 	requestAnimationFrame( animate );
 	render();
 
@@ -332,10 +397,10 @@ function render() {
 
 
 	updateWindowSize();
-	renderer.setClearColor( 0xffffff );
+	//renderer.setClearColor( 0xffffff );
 	renderer.setScissorTest( false );
 	renderer.clear();
-	renderer.setClearColor( 0x000000 );
+	//renderer.setClearColor( 0x000000 );
 	renderer.setScissorTest( true );
 
 	scenes.forEach( function ( scene ) {
@@ -398,28 +463,28 @@ function loadBackgroundImages(files){
 	});
 }
 
-function updateGeometry(){
+function updateGeometry(scene){
 	if(!bCreated)return;
 	var vertex = new THREE.Vector3(0,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1 );
 	var vanel=diameter;
 
-	var p = vanegeometry.attributes.position.array;
-	if(dynamicColor)var color = vanegeometry.attributes.color.array;
+	var p = scene.userData.vanegeometry.attributes.position.array;
+	if(dynamicColor)var color = vscene.userData.anegeometry.attributes.color.array;
 
 
 	var vector = new THREE.Vector3( vanel, 0, 0 );
 	var millis=getMilliseconds(clock);
 
 
-	for (let i = 0; i < numberOfVanes; i++) {
+	for (let i = 0; i < scene.userData.numberOfVanes; i++) {
 
 
 
 
-		var vane=vanes[i];
+		var vane=scene.userData.vanes[i];
 
-  			winds.map((wind,i) =>{
+  			scene.userData.winds.map((wind,i) =>{
             	let outer=check_a_point(vane.x,vane.y,wind.x,wind.y,wind.radius);
             	let inner=check_a_point(vane.x,vane.y,wind.x,wind.y,wind.currentInnerRadius);
            // Circles
@@ -429,8 +494,8 @@ function updateGeometry(){
             })
   		
   		vane.update(millis);
-		var angle=vanes[i].getCurrentAngle;
-		if(dynamicColor)var col=vanes[i].getStrokeColor;
+		var angle=vane.getCurrentAngle;
+		if(dynamicColor)var col=vane.getStrokeColor;
 		vector.x=vanel;
 		vector.y=0;
 
@@ -464,9 +529,9 @@ function updateGeometry(){
 	}
 	//vanegeometry.attributes.position.needsUpdate = true;
 	//vanegeometry.attributes.color.needsUpdate = true;
-	lineGeometry.setPositions( vanegeometry.attributes.position.array);
-	lineGeometry.attributes.position.needsUpdate = true;
-	if(dynamicColor)lineGeometry.setColors( vanegeometry.attributes.color.array);
+	scene.userData.lineGeometry.setPositions( scene.userData.vanegeometry.attributes.position.array);
+	scene.userData.lineGeometry.attributes.position.needsUpdate = true;
+	if(dynamicColor)scene.userData.lineGeometry.setColors( scene.userData.vanegeometry.attributes.color.array);
 
 }
 
@@ -630,11 +695,15 @@ function setState(newState){
 }
 
 
-function makeRandomWind(isMasked){
+function makeRandomWind(scene,isMasked){
   	
+
+		var rect = scene.userData.view.getBoundingClientRect();
+
+
 	// make startposition
-  	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
-  	var pos=new THREE.Vector3(-(windowWidth/3)*2,0,0);
+  	var center= new THREE.Vector3( rect.width/2,rect.height/2,0);
+  	var pos=new THREE.Vector3(-(rect.width/3)*2,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1);
 	//var angle = randomFloatFromInterval(0,2*Math.PI);
 	var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
@@ -662,7 +731,7 @@ function makeRandomWind(isMasked){
 	if(isloaded){
 		var imagedata = getImageData(imagesData[imageIndex]);
 		if(debugLog)console.log("data "+imagedata);
-		winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+		scene.userData.winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
 	}
 }
 

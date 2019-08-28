@@ -57,15 +57,28 @@
 	</nav>
 
     <!-- container for the threejs action -->
- 	<canvas id="c"></canvas>
+<canvas id="c"></canvas>
 
-
-<div class="windcontainer">
+<div class="text">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
 </div>
 
-<div class="windcontainer">
+<div class="windcontainer">1</div>
+<div class="text">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
+</div>
+<div class="windcontainer">2</div>
+
+
+<div class="text">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
+</div>
+<div class="windcontainer">3</div>
+<div class="text">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
 </div>
 
+<div class="windcontainer">4</div>
 	
 	 
 	<script>
@@ -89,10 +102,13 @@
 
 		//  Key listener to debug and test. not necessary in production…
 		document.addEventListener('keydown', function(event) {
-		/*	// w to make wind
+			// w to make wind
     		if (event.keyCode == 87) {
-				makeRandomWind(1);
+				scenes.forEach( function ( scene ) {
+					makeRandomWind(scene,0);
+				});
    			}
+   			/*
    			// q to change background image
     		else if (event.keyCode == 81) {
     			cycleImages();

@@ -155,7 +155,7 @@ function createVanes(vaneDiameter){
   if(debugLog)console.log("num Vanes"+numberOfVanes);
 }
 
-function removeEntity(object) {
+function removeEntity(scene,object) {
     var selectedObject = scene.getObjectById(object.name);
     scene.remove( selectedObject );
 }

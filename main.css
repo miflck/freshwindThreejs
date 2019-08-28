@@ -16,12 +16,18 @@ nav{
 
 }
 
+.text{
+	display: block;
+	float:left;
+	width: 5in;
+	height: 5in;
+background:rgba(210,150,10);}
+
 .windcontainer {
 	display: block;
 	float:left;
-	width: 30%;
+	width: 5in;
 	height: 5in;
-	border: solid thin red;
 }
 
 #c {

@@ -58,7 +58,7 @@
 
 		  }
 
-		  move(millis){
+		  move(scene,millis){
 		  	//console.log(this.radius);
 		  	if(millis>this.initTime+this.wait){
 		    	this.radius+=this.velocity;
@@ -66,17 +66,17 @@
 		    	this.currentInnerRadius=this.radius-this.innerradius;
 		    	if(this.currentInnerRadius<0)this.currentInnerRadius=0;
 			}
-		    //this.geometry = new THREE.CircleGeometry( this.radius, 32 );
-		   // var selectedObject = scene.getObjectById(this.name);
-    		//scene.remove( selectedObject );
+		    /*this.geometry = new THREE.CircleGeometry( this.radius, 32 );
+		   	var selectedObject = scene.getObjectById(this.name);
+    		scene.remove( selectedObject );
 
-			//this.circle = new THREE.Mesh( this.geometry, this.material );
-			//this.name=this.circle.id;
+			this.circle = new THREE.Mesh( this.geometry, this.material );
+			this.name=this.circle.id;
 
-			//this.circle.position.x=this.x;
-			//this.circle.position.y=-this.y;
-			//scene.add( this.circle );
-
+			this.circle.position.x=this.x;
+			this.circle.position.y=-this.y;
+			scene.add( this.circle );
+*/
 
 		  }
 
