@@ -1,7 +1,7 @@
 
 
 		class Wind {
-		  	constructor(iX,iY,velocity,angle,dur,wait,initTime,color,isMasked,imageData) {
+		  	constructor(scene,iX,iY,velocity,angle,dur,wait,initTime,color,isMasked,imageData) {
 				this.x = iX-windowWidth/2;
 				this.y =-iY+windowHeight/2;
 				this.radius = 0;
@@ -34,11 +34,11 @@
 				//if(rand%4==0)rand+=Math.PI/2;
 				this.mult=1;
 				if(Math.random()>0.5)this.mult=-1;
-				this.angle=latestAngle+angle;//(this.rand*(Math.PI/4)*this.mult);//random(2*PI);
+				this.angle=scene.userData.latestAngle+angle;//(this.rand*(Math.PI/4)*this.mult);//random(2*PI);
 
-				//this.angle=latestAngle+2*Math.PI//random(2*PI);
+			//	this.angle=latestAngle+2*Math.PI//random(2*PI);
 
-				latestAngle=this.angle;
+				scene.userData.latestAngle=this.angle;
 
 
 				//this.duration=scale(this.randDur,1,5,200,2000);//random(500,3000);
