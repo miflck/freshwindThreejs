@@ -162,6 +162,91 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 		//makeRandomWind(0);
 	},false);
 
+	document.addEventListener('mousemove', debounce(function (event) {
+
+  		directionX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+  		directionY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		//console.log("Debounced move "+directionX);
+
+		scenes.forEach( function ( scene ) {
+
+						var rect = scene.userData.view.getBoundingClientRect();
+						// check if it's offscreen. If so skip it
+						if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+							 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+							return; // it's off screen
+						}
+					makeRandomWind(scene,0);
+
+
+			});
+		
+	},1));
+		
+
+		/*document.addEventListener('mousemove', function (event) {
+
+  		directionX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
+  		directionY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
+		//console.log("move "+directionX);
+
+		//if(directionX>10){
+			scenes.forEach( function ( scene ) {
+
+						var rect = scene.userData.view.getBoundingClientRect();
+						// check if it's offscreen. If so skip it
+						if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+							 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+							return; // it's off screen
+						}
+						makeRandomWind(scene,0);
+
+			});
+		//}
+	});
+		
+*/
+
+
+function debounce(fn, delay) {
+var timer = null;
+return function () {
+var context = this, args = arguments;
+clearTimeout(timer);
+    timer = setTimeout(function () {
+fn.apply(context, args);
+    }, delay);
+  };
+}
+
+
+	/*	function myHandler(){
+			return function (e) {
+				console.log(e.clientX);
+   			///	makeRandomWind(scene,0);
+  			}
+		}
+		function mouseHandler(){
+			console.log("handler");
+			debounced(200, myHandler);
+		}
+
+function debounced(delay, fn) {
+  let timerId;
+  return function (...args) {
+    if (timerId) {
+      clearTimeout(timerId);
+    }
+    timerId = setTimeout(() => {
+      fn(...args);
+      timerId = null;
+    }, delay);
+  }
+}
+*/
+
+
+
 
 	</script>
 

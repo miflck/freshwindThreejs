@@ -36,7 +36,7 @@ let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far 
 
 
 //Vane Settings
-var diameter=20;
+var diameter=25;
 const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D];
 let darkBlueColor=new THREE.Color(0x26539D);
 let dynamicColor=false;
@@ -222,7 +222,7 @@ function init() {
 
   		updateGeometry(scene);
 
-  		//makeRandomWind(scene,false);
+  		makeRandomWind(scene,false);
 
 
 
@@ -385,8 +385,8 @@ scenes.forEach( function ( scene ) {
 	time *= 0.001;  // convert time to seconds
 	scenes.forEach( function ( scene ) {
 	    var cube = scene.userData.cube;
-		cube.rotation.x = time;
-	    cube.rotation.y = time;
+		//cube.rotation.x = time;
+	    //cube.rotation.y = time;
     });
 	//stats.update();
 }
@@ -705,6 +705,51 @@ function setState(newState){
 
 function makeRandomWind(scene,isMasked){
   	
+  	if(scene.userData.winds.length > 1) return;
+
+	var rect = scene.userData.view.getBoundingClientRect();
+
+
+	// make startposition
+  	var center= new THREE.Vector3( rect.width/2,rect.height/2,0);
+  	var pos=new THREE.Vector3(-(rect.width/3)*2,0,0);
+	var axis = new THREE.Vector3( 0, 0, 1);
+	//var angle = randomFloatFromInterval(0,2*Math.PI);
+	var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
+	pos.applyAxisAngle( axis, angle );
+	pos.add(center);
+
+	// get random color from array
+	var randNr=Math.floor(Math.random()*colors.length);
+	var col=new THREE.Color( colors[randNr]);
+	// no more random!
+	//var col=new THREE.Color( 0x26539D);
+    var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
+    // random rotation factor
+ 	var rand=randomIntFromInterval(randMin,randMax);
+	var mult=1;
+	//if(Math.random()>0.5)mult=-1;
+	var angle=rand*(Math.PI/4)*mult;
+    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
+    //    var dur=scale(rand,30,80,3000,8000);
+
+    // delay in starting wave, not implemented yet
+    var wait=0;
+    // get start time
+	var millis=getMilliseconds(clock);
+	if(isloaded){
+		var imagedata = getImageData(imagesData[imageIndex]);
+		if(debugLog)console.log("data "+imagedata);
+		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+		var mywind=scene.userData.winds[scene.userData.winds.length -1];
+		mywind.setMaxRadius(rect.width*2);
+	}
+}
+
+
+
+
+function makeRandomWindWithForce(scene,isMasked,force){
 
 		var rect = scene.userData.view.getBoundingClientRect();
 

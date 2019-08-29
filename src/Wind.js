@@ -95,4 +95,12 @@
 		    return this.deleteMe;
 		  }
 
+		  hello(){
+		  	console.log("hello");
+		  }
+
+		  setMaxRadius(maxrad){
+		  	this.maxRadius=maxrad;
+		  }
+
 		}
