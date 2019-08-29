@@ -1,3 +1,6 @@
+//v 0.2
+
+
 // HELPERS
 // random number interval
 
