@@ -14,9 +14,6 @@ class WindVane {
     	this.strokeColor=new THREE.Color(0x26539D); // red
       this.targetColor=new THREE.Color(0x26539D); // red
 
-      this.activeColor=new THREE.Color(0xff0000); // red
-      this.passiveColor=new THREE.Color(0x0000ff); // red
-
     
      // this.strokeColor.setRGB(Math.random(),Math.random(),Math.random());
         //    this.targetColor.setRGB(Math.random(),Math.random(),Math.random());
@@ -52,7 +49,7 @@ class WindVane {
 
 	 update(millis){
 		//var millis=getMilliseconds(clock);
-		//if(millis < this.endAnimation){
+		// if(millis < this.endAnimation){
       if(this.isActive){
   		 	switch (this.easingType) {
     				case 'easeInOutSine':
@@ -81,33 +78,17 @@ class WindVane {
 
         //var col=this.oldColor;
           this.strokeColor.lerp(this.targetColor,this.lerpFact);
-
-
-         // this.strokeColor=this.activeColor;
-        /*if(Math.abs(this.currentAngle-this.targetAngle)<0.1){
+		  }
+      /*  if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
           this.currentAngle=this.targetAngle;
           this.isActive=false;
         }*/
-		  }
-     /* if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
-          this.currentAngle=this.thetaAngle;
+
+        if(millis>this.endAnimation){
+          this.currentAngle=this.targetAngle;
           this.isActive=false;
-        }*/
-
-    if(millis > this.endAnimation){
-       this.currentAngle=this.targetAngle;
-        this.isActive=false;
-        this.strokeColor=this.passiveColor;
-    }
-         
-        
-     // }
-
-
- 
+        }
 	}
-
-
 
 
 
@@ -134,13 +115,10 @@ class WindVane {
     	this.duration=duration;
   	}
 
-  setTargetAngle(angle,millis){
+  	setTargetAngle(angle,millis){
     	if(angle!=this.targetAngle){
     		this.startAngle=this.currentAngle;
     		this.targetAngle=angle;
-        //this.targetAngle=this.startAngle+angle;
-
-
     		this.thetaAngle= this.targetAngle-this.startAngle;
    			this.endAnimation=millis+this.duration;
     		this.startAnimation=millis;
