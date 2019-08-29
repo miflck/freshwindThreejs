@@ -1,0 +1,5 @@
+#scene-container{
+	position: absolute;
+	z-index: 20;
+	border:solid thin red;
+}
