@@ -79,7 +79,12 @@ class WindVane {
         //var col=this.oldColor;
           this.strokeColor.lerp(this.targetColor,this.lerpFact);
 		  }
-        if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
+      /*  if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
+          this.currentAngle=this.targetAngle;
+          this.isActive=false;
+        }*/
+
+        if(millis>this.endAnimation){
           this.currentAngle=this.targetAngle;
           this.isActive=false;
         }
