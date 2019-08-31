@@ -18,6 +18,25 @@ load following sourcefiles:
 <script src="src/Wind.js?v=0.4"></script>
 <script src="src/app.js?v=0.5"></script>
 ```
+
+
+provide a canvas:
+```html
+<!-- container for the threejs action -->
+<canvas id="c"></canvas>
+```
+
+```css
+#c {
+	position: fixed;
+	left: 0px; top: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: #fff;
+	z-index: -1;
+}
+```
+
  provide some background images:
 
 ```javascript
@@ -27,28 +46,40 @@ loadBackgroundImages(files);
 
 ```
 
-set rectangle for content:
-setContentRect(x,y,width,height)
-
-```javascript
-// set empty space for content
-setContentRect(300,180,900,windowHeight-180);
+append windcontainer:
+```html
+<div class="windcontainer"></div>
 ```
 
-then call init and start the loop with animate():
+
+you can keydown like that:
+```javascript
+
+//  Key listener to debug and test. not necessary in production…
+		document.addEventListener('keydown', function(event) {
+			// w to make wind
+    		if (event.keyCode == 87) {
+				scenes.forEach( function ( scene ) {
+
+					var rect = scene.userData.view.getBoundingClientRect();
+					// check if it's offscreen. If so skip it
+					if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+						 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+						return; // it's off screen
+					}
+					makeRandomWind(scene,0);
+				});
+   			}
+		}, false);
+
+```
+
+
+
+then call init:
 
 ```javascript
 //setup
 init();
-//start loop
-animate();
-```
-to make a white rect for content, call setState(CONTENT):
-```javascript
-setState(CONTENT);
-```
 
-to fade out the content rect, call setState(WIND)
-```javascript
-setState(WIND);
 ```
