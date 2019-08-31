@@ -84,76 +84,85 @@ function getMilliseconds(clock){
 
 
 
-// for setting another size
-function setSize(width,height,resolution){
+function resetScene(scene,linewidth){
+
+    var rect = scene.userData.view.getBoundingClientRect();
 
 
-    if(debugLog)console.log("Setting new size: "+width+" "+height+" ratio "+resolution)
-
-    // Window and Pixel Vars
-     windowWidth=width;
-     windowHeight=height;
-     pixelScaleFact=resolution;
-     windowHalfY = windowHeight / 2;
-
-
-    // Create a Camera
-     left = -windowWidth/2; 
-     right = windowWidth/2;
-     topB = windowHeight/2;
-     bottom = -windowHeight/2;
-     near= 0;
-     far= 100;
-     camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
+   
 
     // remove old stuff
-    scene.remove(vanegeometry);
-    scene.remove(lineGeometry);
-    scene.remove( thickline );
-    scene.remove( plane );
+    scene.remove(scene.userData.vanegeometry);
+    scene.remove(scene.userData.lineGeometry);
+    scene.remove(scene.userData.thickline );
+   // scene.remove( plane );
 
-    createVanes(diameter);
+    createVanes(scene,diameter);
 
     // set up geometry
-    vanegeometry = createGeometry();
-    vanegeometry.computeBoundingSphere();
-    lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
-    lineGeometry.setColors( vanegeometry.attributes.color.array);
-    // set up material
-    lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 4.5} );
-    lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
-     thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
-  //  scene.add( thickline );
+    var vanegeometry = createGeometry(scene.userData.vanes);
+     vanegeometry.computeBoundingSphere();
+    scene.userData.vanegeometry=vanegeometry;
 
-    plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
+    var lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+     lineGeometry.setColors( vanegeometry.attributes.color.array);
+    scene.userData.lineGeometry=lineGeometry;
+
+    // set up material
+    var lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: linewidth} );
+     lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
+    lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
+    var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+
+     scene.add( thickline );
+     scene.userData.thickline=thickline;
+
+
+    // reset angle
+    scene.userData.latestAngle=0;
+
+
+
+    //plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
     //scene.add(plane);
 
         
-    renderer.setPixelRatio( resolution );
-    renderer.setSize( width,height );
+   // renderer.setPixelRatio( resolution );
+   // renderer.setSize( width,height );
 
 }
 
 
 
-
-
-function createVanes(vaneDiameter){
-  vanes =[];
-   var countX = Math.ceil(windowWidth/vaneDiameter);
-   var countY = Math.ceil(windowHeight/vaneDiameter);
-    var xpos=-windowWidth/2
-    var ypos=windowHeight/2
+function createVanes(scene, diameter){
+    var rect = scene.userData.view.getBoundingClientRect();
+    var vanes = [];
+    var countX = Math.ceil(rect.width/diameter);
+    var countY = Math.ceil(rect.height/diameter);
+    var xpos=-rect.width/2
+    var ypos=rect.height/2
     var opX=0
     var opY=0
     for (var j = 0; j < countY; j++) {
         for (var i = 0; i < countX; i++) {
-            vanes.push( new WindVane((vaneDiameter*i)-windowWidth/2, (vaneDiameter*j)-windowHeight/2  ,vaneDiameter,clock,vaneDiameter*i,-vaneDiameter*j+windowHeight ));
+            vanes.push( new WindVane((diameter*i)-rect.width/2, (diameter*j)-rect.height/2  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
         }
     };
-  numberOfVanes=vanes.length;
-  if(debugLog)console.log("num Vanes"+numberOfVanes);
+    var numberOfVanes=vanes.length;
+    scene.userData.vanes=vanes;
+    scene.userData.numberOfVanes=numberOfVanes;
+
+        console.log("created Vanes:"+scene.userData.numberOfVanes);
+
+    return vanes;
 }
+
+
+
+
+
+
+
 
 function removeEntity(scene,object) {
     var selectedObject = scene.getObjectById(object.name);

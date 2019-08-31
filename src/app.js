@@ -40,6 +40,7 @@ var diameter=25;
 const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D];
 let darkBlueColor=new THREE.Color(0x26539D);
 let dynamicColor=false;
+let lineWidth=1;
 
 // Winds
 var winds=[];
@@ -158,7 +159,7 @@ function init() {
         camera.position.set( -rect.width/2, 0, 50 );
         scene.userData.camera = camera;
 
-        const boxWidth = 50;
+       /* const boxWidth = 50;
 		const boxHeight = 50;
 		const boxDepth = 50;
 		const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
@@ -167,8 +168,11 @@ function init() {
 		scene.add(cube);
 		cube.position.z=0;
 		scene.userData.cube = cube;
-
-		var vanes = [];
+*/
+		
+		var vanes=createVanes(scene, diameter);
+		resetScene(scene,lineWidth);
+	/*	var vanes = [];
    		var countX = Math.ceil(rect.width/diameter);
    		var countY = Math.ceil(rect.height/diameter);
     	var xpos=-rect.width/2
@@ -183,15 +187,13 @@ function init() {
   		var numberOfVanes=vanes.length;
   		scene.userData.vanes=vanes;
   		scene.userData.numberOfVanes=numberOfVanes;
+  		*/
 
-
-
-		var vanegeometry = new THREE.BufferGeometry();
+		/*var vanegeometry = new THREE.BufferGeometry();
 		vanegeometry.dynamic = true;
 		vanegeometry = createGeometry(vanes);
 		vanegeometry.computeBoundingSphere();
 		scene.userData.vanegeometry=vanegeometry;
-
 
 		var lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
  		lineGeometry.setColors( vanegeometry.attributes.color.array);
@@ -202,7 +204,7 @@ function init() {
 		lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
 		
 		var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
-		scene.add( thickline );
+		scene.add( thickline );*/
 		// background plane
 	//var	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.3 } ) );
 	//	plane.position.z = -10;
@@ -217,16 +219,8 @@ function init() {
   		scene.userData.latestAngle=0;
 
   		updateGeometry(scene);
-
   		makeRandomWind(scene,false);
-
-
-
 		scenes.push( scene );
-
-
-
-
 		}
 
 	scenes.forEach( function ( scene ) {
@@ -298,6 +292,29 @@ function init() {
 
 	//stats = new Stats();
 	//canvas.appendChild( stats.dom );
+}
+
+
+
+function recalculateVanes(){
+	scenes.forEach( function ( scene ) {
+		var rect = scene.userData.view.getBoundingClientRect();
+		var vanes = [];
+		var countX = Math.ceil(rect.width/diameter);
+		var countY = Math.ceil(rect.height/diameter);
+		var xpos=-rect.width/2
+		var ypos=rect.height/2
+		var opX=0
+		var opY=0
+		for (var j = 0; j < countY; j++) {
+			for (var i = 0; i < countX; i++) {
+				vanes.push( new WindVane((diameter*i)-rect.width/2, (diameter*j)-rect.height/2  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
+			}
+		};
+		var numberOfVanes=vanes.length;
+		scene.userData.vanes=vanes;
+		scene.userData.numberOfVanes=numberOfVanes;
+	});
 }
 
 
@@ -380,9 +397,9 @@ scenes.forEach( function ( scene ) {
 
 	time *= 0.001;  // convert time to seconds
 	scenes.forEach( function ( scene ) {
-	    var cube = scene.userData.cube;
-		cube.rotation.x = time;
-	    cube.rotation.y = time;
+	   // var cube = scene.userData.cube;
+	//	cube.rotation.x = time;
+	  //  cube.rotation.y = time;
     });
 	//stats.update();
 }
@@ -393,10 +410,8 @@ function render() {
 
 
 	updateWindowSize();
-	//renderer.setClearColor( 0xffffff );
 	renderer.setScissorTest( false );
 	renderer.clear();
-	//renderer.setClearColor( 0x000000 );
 	renderer.setScissorTest( true );
 
 	scenes.forEach( function ( scene ) {
@@ -415,8 +430,6 @@ function render() {
 		var bottom = renderer.domElement.clientHeight - rect.bottom;
 
 		//update camera if needed
-		//scene.userData.camera.aspect = width / height;
-   		//scene.userData.camera.updateProjectionMatrix();
    		scene.userData.camera.left = 0;
         scene.userData.camera.right = rect.width;
         scene.userData.camera.top = rect.height / 2;
@@ -465,11 +478,6 @@ function loadBackgroundImages(files){
 }
 
 function updateGeometry(scene){
-
-
-
-
-
 	if(!bCreated)return;
 	var vertex = new THREE.Vector3(0,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1 );
@@ -511,19 +519,14 @@ function updateGeometry(scene){
 		var x=Math.cos(angle)*vanel;
 		var y=Math.sin(angle)*vanel;
 
-        //vertex.z=vane.zPos
-
-
 		vertex.x=p[i*6];
 		vertex.y=p[i*6+1];
-			p[i*6+2]=vane.zPos//vane.zPos//ertex.z;
-
+		p[i*6+2]=vane.zPos//vane.zPos//ertex.z;
 
 		p[i*6+3]=vertex.x+x;
 		p[i*6+4]=vertex.y+y;
 		p[i*6+5]=vane.zPos
 
-		
 		if(dynamicColor){
 			color[i*6]=col.r;
 			color[i*6+1]=col.g;
@@ -570,15 +573,6 @@ function createGeometry(vanes) {
 		colors.push(darkBlueColor.r);
 		colors.push(darkBlueColor.g);
 		colors.push(darkBlueColor.b);
-
-		//colors.push(0 );
-		//colors.push(0 );
-		//colors.push( 0 );
-
-		//colors.push(1 );
-		//colors.push(0 );
-		//colors.push( 0 );
-
 	})
 
 	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
@@ -837,6 +831,28 @@ function updateWindowSize() {
 
 	}
 }
+
+
+
+
+window.addEventListener( 'resize', onWindowResize, false );
+		
+function onWindowResize() {
+
+	scenes.forEach( function ( scene ) {
+
+var vanes=createVanes(scene, diameter);
+		resetScene(scene,lineWidth);
+	});
+
+}
+
+
+
+
+
+
+
 
 
 /*
