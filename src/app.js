@@ -737,7 +737,7 @@ function makeRandomWind(scene,isMasked){
 		if(debugLog)console.log("data "+imagedata);
 		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
 		var mywind=scene.userData.winds[scene.userData.winds.length -1];
-		mywind.setMaxRadius(rect.width*2);
+		mywind.setMaxRadius(rect.width*5);
 	}
 }
 

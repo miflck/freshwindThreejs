@@ -25,37 +25,6 @@
 	</head>
 	<body>
 
-
-		<!--Example SCRIPT FOR BUTTONS -->
-		<!-- To create whitespace for content, set state to CONTENT:
-			setState(CONTENT)
-			To hide the space again, set state to WIND
-		  -->
-	<!--	<script>
-			function fadeContentIn(){
-    			// fade In content
-    			var element = document.getElementsByClassName("content");
-    			element[0].classList.remove("fadeOut");
- 				element[0].classList.add("fadeIn");
- 				// set contentstate for app
-				setState(CONTENT);
-			}
-
-			function fadeContentOut(){
-				  			//fade out content
-    			var element = document.getElementsByClassName("content");
-    			element[0].classList.remove("fadeIn");
- 				element[0].classList.add("fadeOut");
- 				//set windstate for app
-				setState(WIND);
-			}
-		</script>-->
-
-	<nav class="menu">
-		<button class="menubutton" onclick=" fadeContentIn()">Show Content</button>
-		<button class="menubutton" onclick=" fadeContentOut()">Hide Content</button>
-	</nav>
-
     <!-- container for the threejs action -->
 <canvas id="c"></canvas>
 
@@ -65,11 +34,8 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 
 <div class="windcontainer">1</div>
 
-<div class="text">
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
-</div>
-<div class="windcontainer">2</div>
 
+<div class="windcontainer">2</div>
 
 <div class="text">
 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
@@ -79,9 +45,20 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
 </div>
 
+	<!--
 <div class="windcontainer">4</div>
-	
-	 
+<div class="windcontainer">5</div>
+<div class="windcontainer">6</div>
+<div class="windcontainer">7</div>
+<div class="text">
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
+</div>
+
+<div class="windcontainer">8</div>
+<div class="windcontainer">9</div>
+<div class="windcontainer">10</div>
+<div class="windcontainer">11</div>
+	 -->
 	<script>
 	 	/* the application wants some background images*/ 
 	    var files = ['images/1x/01.png','images/1x/02.png','images/1x/03.png','images/1x/04.png','images/1x/05.png','images/1x/06.png','images/1x/07.png','images/1x/08.png','images/1x/09.png','images/1x/10.png','images/1x/11.png','images/1x/12.png',];
@@ -93,11 +70,9 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 		loadBackgroundImages(files);
 
 
-		// set empty space for content
-		setContentRect(300,180,900,windowHeight-180);
 
 		// stop automatic wind
-		bIsTimed=false;
+		bIsTimed=true;
 
 		window.onload = init;
 
@@ -116,41 +91,6 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 					makeRandomWind(scene,0);
 				});
    			}
-   			/*
-   			// q to change background image
-    		else if (event.keyCode == 81) {
-    			cycleImages();
-     			makeRandomWind(1);
-    		}
-    		// t to toggle automatic timer
-     		else if(event.keyCode==84){
-    			bIsTimed=!bIsTimed;
-    		}
-    		// n to make nullwind
-    		if (event.keyCode == 78) {
-				makeRandomWind(0);
-   			}
-
-			// c to show content
-    		if (event.keyCode == 67) {
-    			// fade In content
-    			var element = document.getElementById("content");
-    			element.classList.remove("fadeOut");
- 				element.classList.add("fadeIn");
- 				// set contentstate for app
-				setState(CONTENT);
-
-   			}
-   			// x to show wave
-    		if (event.keyCode == 88) {
-    			//fade out content
-    			var element = document.getElementById("content");
-    			element.classList.remove("fadeIn");
- 				element.classList.add("fadeOut");
- 				//set windstate for app
-				setState(WIND);
-   			}
-*/
 		}, false);
 
 
@@ -176,74 +116,26 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 							 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
 							return; // it's off screen
 						}
-				//	makeRandomWind(scene,0);
-
-
-			});
-		
-	},1));
-		
-
-		/*document.addEventListener('mousemove', function (event) {
-
-  		directionX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
-  		directionY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-		//console.log("move "+directionX);
-
-		//if(directionX>10){
-			scenes.forEach( function ( scene ) {
-
-						var rect = scene.userData.view.getBoundingClientRect();
-						// check if it's offscreen. If so skip it
-						if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
-							 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
-							return; // it's off screen
-						}
-						makeRandomWind(scene,0);
+					makeRandomWind(scene,0);
 
 			});
-		//}
-	});
 		
-*/
+	},2));
+		
+
 
 
 function debounce(fn, delay) {
-var timer = null;
-return function () {
-var context = this, args = arguments;
-clearTimeout(timer);
-    timer = setTimeout(function () {
-fn.apply(context, args);
-    }, delay);
-  };
+	var timer = null;
+	return function () {
+		var context = this, args = arguments;
+		clearTimeout(timer);
+    	timer = setTimeout(function () {
+			fn.apply(context, args);
+    	}, delay);
+  	};
 }
 
-
-	/*	function myHandler(){
-			return function (e) {
-				console.log(e.clientX);
-   			///	makeRandomWind(scene,0);
-  			}
-		}
-		function mouseHandler(){
-			console.log("handler");
-			debounced(200, myHandler);
-		}
-
-function debounced(delay, fn) {
-  let timerId;
-  return function (...args) {
-    if (timerId) {
-      clearTimeout(timerId);
-    }
-    timerId = setTimeout(() => {
-      fn(...args);
-      timerId = null;
-    }, delay);
-  }
-}
-*/
 
 
 
