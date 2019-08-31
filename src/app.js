@@ -158,8 +158,7 @@ function init() {
         camera.position.set( -rect.width/2, 0, 50 );
         scene.userData.camera = camera;
 
-
-        /*const boxWidth = 50;
+        const boxWidth = 50;
 		const boxHeight = 50;
 		const boxDepth = 50;
 		const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
@@ -168,9 +167,6 @@ function init() {
 		scene.add(cube);
 		cube.position.z=0;
 		scene.userData.cube = cube;
-*/
-
-	
 
 		var vanes = [];
    		var countX = Math.ceil(rect.width/diameter);
@@ -300,7 +296,7 @@ function init() {
 	*/
 
 
-	stats = new Stats();
+	//stats = new Stats();
 	//canvas.appendChild( stats.dom );
 }
 
@@ -385,8 +381,8 @@ scenes.forEach( function ( scene ) {
 	time *= 0.001;  // convert time to seconds
 	scenes.forEach( function ( scene ) {
 	    var cube = scene.userData.cube;
-		//cube.rotation.x = time;
-	    //cube.rotation.y = time;
+		cube.rotation.x = time;
+	    cube.rotation.y = time;
     });
 	//stats.update();
 }
@@ -419,11 +415,16 @@ function render() {
 		var bottom = renderer.domElement.clientHeight - rect.bottom;
 
 		//update camera if needed
-
-		scene.userData.camera.aspect = width / height;
-   		scene.userData.camera.updateProjectionMatrix();
-
-
+		//scene.userData.camera.aspect = width / height;
+   		//scene.userData.camera.updateProjectionMatrix();
+   		scene.userData.camera.left = 0;
+        scene.userData.camera.right = rect.width;
+        scene.userData.camera.top = rect.height / 2;
+        scene.userData.camera.bottom = rect.height / -2;
+        scene.userData.camera.near = 0.1;
+        scene.userData.camera.far = 1500;
+        scene.userData.camera.updateProjectionMatrix();
+		scene.userData.camera.position.set( -rect.width/2, 0, 50 );
 
 		renderer.setViewport( left, bottom, width, height );
 		renderer.setScissor( left, bottom, width, height );

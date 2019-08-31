@@ -19,14 +19,14 @@ nav{
 .text{
 	display: block;
 	float:left;
-	width: 5in;
+	width: 30%;
 	height: 5in;
 background:rgba(210,150,10);}
 
 .windcontainer {
 	display: block;
 	float:left;
-	width: 5in;
+	width: 30%;
 	height: 5in;
 }
 
