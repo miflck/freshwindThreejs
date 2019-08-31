@@ -1,3 +1,7 @@
+.container{
+	margin:0;
+}
+
 #scene-container{
 	position: absolute;
 	z-index: 20;

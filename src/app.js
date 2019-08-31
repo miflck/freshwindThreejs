@@ -15,8 +15,8 @@ var  stats;
 var clock = new THREE.Clock({autoStart:true});
 
 // Window and Pixel Vars
-let windowWidth=1280;
-let windowHeight=800;
+let windowWidth=window.innerWidth; //1280;
+let windowHeight=window.innerHeight; //800;
 let pixelScaleFact=1;
 let windowHalfY = windowHeight / 2
 
@@ -180,7 +180,7 @@ function init() {
 	container.appendChild( renderer.domElement );
 
 	stats = new Stats();
-	//container.appendChild( stats.dom );
+	container.appendChild( stats.dom );
 }
 
 
