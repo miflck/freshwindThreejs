@@ -76,15 +76,13 @@ function draw() {
   var h = map(micLevel, 0, 1, 0, height);
   rect(0,height,10,-h);
 
-if(micLevel>maxVolumeToRandomWave){
-  if(isMaxVolume)return;
-    isMaxVolume=true;
-    makeRandomWind(1);
-}else{
-      isMaxVolume=false;
-}
-
-
+  if(micLevel>maxVolumeToRandomWave){
+    if(isMaxVolume)return;
+      isMaxVolume=true;
+      makeRandomWind(1);
+  }else{
+        isMaxVolume=false;
+  }
 }
 
 /*var spectrum = fft.analyze();
