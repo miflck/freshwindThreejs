@@ -11,9 +11,11 @@ const nBands=32;
 let w;
 let initMic=false;
 
-let maxVolumeToRandomWave=0.1;
+let maxVolumeToRandomWave=0.05;
 let isMaxVolume=true;
 
+
+let =1000;
 
 function preload(){
   //song = loadSound('assets/Game Ambient.mp3');
@@ -57,33 +59,67 @@ function setup() {
 
 
 
-   //   mic.start();
-
 
 }
 
+
+var makeWind = throttle(function(mask,intensity) {
+ makeRandomWind(mask);
+}, 1000);
+
 function draw() {
+
+
   //console.log(mic.getSources());
-  background(200);
 
   // Get the average (root mean square) amplitude
   //let rms = analyzer.getLevel();
   fill(127);
   stroke(0);
-  if(initMic){
-  var micLevel = mic.getLevel();
-  console.log(micLevel);
-  var h = map(micLevel, 0, 1, 0, height);
-  rect(0,height,10,-h);
 
+  background(255);
+
+
+  if(initMic){
+
+      fill(0,0,255);
+
+  var micLevel = mic.getLevel();
   if(micLevel>maxVolumeToRandomWave){
+      makeWind(0,micLevel);
+      fill(255,0,0);
+  }
+
+
+
+    var h = map(micLevel, 0, 1, 0, height);
+    rect(0,height,10,-h);
+
+   // console.log("try wind");
+
+
+    //  makeRandomWind(1);
+   /* debounce(function () {
+      console.log("debounced wind");
+
+  console.log(micLevel);
+      makeRandomWind(1);
+    },1);
+
+//}
+  /*  debounce(function (event) {
+      makeRandomWind(1);
+    },1);
+  }*/
+
+/*  if(micLevel>maxVolumeToRandomWave){
     if(isMaxVolume)return;
       isMaxVolume=true;
       makeRandomWind(1);
   }else{
         isMaxVolume=false;
   }
-}
+}*/
 
 /*var spectrum = fft.analyze();
 var h = map(fft.getEnergy("highMid"), 0, 255, 0, height);
@@ -117,40 +153,59 @@ if(h>150)makeRandomWind(0);
   endShape();
 */
 
+  }
 }
-
 function error(){
   console.log("error");
 }
 
 
 function toggleSound() {
-//mic.stop();
-if(initMic==true){
-  mic.stop();
-  initMic=false;
-  userStartAudio();
+  //mic.stop();
+  if(initMic==true){
+    mic.stop();
+    initMic=false;
 
-}else{
-  mic.start();
-  initMic=true;
+  }else{
+   mic.start();
+    initMic=true;
+        userStartAudio();
+
+      getAudioContext().resume()
+
+  }
 }
 
 
 
-  //mic.getSources(function(deviceList) {
-    //print out the array of available sources
-    //console.log(deviceList);
-    //set the source to the first item in the deviceList array
-   // mic.setSource(0);
-     
 
- // });
-  /* console.log("song? "+song.isPlaying());
-  if ( song.isPlaying() ) { // .isPlaying() returns a boolean
-    song.pause(); // .play() will resume from .pause() position
-  } else {
-    song.play();
-    background(0,255,0);
-  }*/
+
+
+// as long as it continues to be invoked, raise on every interval
+function throttle (func, interval) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function () {
+      timeout = false;
+    };
+    if (!timeout) {
+      func.apply(context, args)
+      timeout = true;
+      setTimeout(later, interval)
+    }
+  }
 }
+
+/*
+function debounce(fn, delay) {
+  var timer = null;
+  return function () {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+      timer = setTimeout(function () {
+      fn.apply(context, args);
+      }, delay);
+    };
+}*/
+
