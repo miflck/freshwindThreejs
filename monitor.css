@@ -7,3 +7,13 @@
 	z-index: 20;
 	border:solid thin red;
 }
+
+
+#mycanvas{
+	position: absolute;
+	border:solid thin red;
+		z-index:30;
+		left:50px;
+		top:50px;
+
+}

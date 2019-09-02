@@ -16,6 +16,19 @@
 		<script src='src/threejs/lines/LineSegments2.js'></script>
 		<script src='src/threejs/lines/Line2.js'></script>
 
+
+		<!-- Import p5 for audio -->
+		<script language="javascript" type="text/javascript" src="src/p5/p5.min.js"></script>
+		<script language="javascript" type="text/javascript" src="src/p5/addons/p5.sound.js"></script>
+				<script language="javascript" type="text/javascript" src="src/p5/addons/p5.sound.min.js"></script>
+
+		  <script language="javascript" type="text/javascript" src="src/p5/addons/p5.dom.js"></script> 
+
+
+
+
+		<script type="text/javascript"  src="src/audioInput.js"></script>
+
 		<!-- Import wind sources -->
 		<script src="src/helper.js?v=0.3"></script>
 		<script src="src/WindVane.js?v=0.3"></script>
@@ -33,40 +46,18 @@
 			To hide the space again, set state to WIND
 		  -->
 		<script>
-			function fadeContentIn(){
-    			// fade In content
-    			var element = document.getElementsByClassName("content");
-    			element[0].classList.remove("fadeOut");
- 				element[0].classList.add("fadeIn");
- 				// set contentstate for app
-				setState(CONTENT);
-			}
-
-			function fadeContentOut(){
-				  			//fade out content
-    			var element = document.getElementsByClassName("content");
-    			element[0].classList.remove("fadeIn");
- 				element[0].classList.add("fadeOut");
- 				//set windstate for app
-				setState(WIND);
-			}
+			function startSound(){
+    			toggleSound(); // .play() will resume from .pause() position
+    		}
 		</script>
 
 	<nav class="menu">
-		<button class="menubutton" onclick=" fadeContentIn()">Show Content</button>
-		<button class="menubutton" onclick=" fadeContentOut()">Hide Content</button>
+		<button class="menubutton" onclick="startSound()">Start sound</button>
 	</nav>
 
       <!-- container for the threejs action -->
  	<div id="scene-container"></div>
 
-	<!-- dummy content -->
-    <div class="content">
-       <article class="article">
-            <h>Title</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
-        </article>
-    </div>
 	
 	 
 	<script>
@@ -82,6 +73,8 @@
 
 		// set empty space for content
 		setContentRect(300,180,900,windowHeight-180);
+
+		bIsTimed=false;
 
 		//setup
 		init();

@@ -187,6 +187,7 @@ function init() {
 
 
 function animate() {
+	//console.log(winds.length);
 	var millis=getMilliseconds(clock);
 		// update Wind	
 		winds.map((wind,i) =>{
@@ -506,7 +507,8 @@ function setState(newState){
 
 
 function makeRandomWind(isMasked){
-  	
+
+  	if(winds.length>1)return;
 	// make startposition
   	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
   	var pos=new THREE.Vector3(-(windowWidth/3)*2,0,0);
