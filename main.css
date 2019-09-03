@@ -1,9 +1,11 @@
+
 body {
 	/*overflow	: hidden;*/
-	padding		: 0;
-	margin		: 0;
-
+	padding		: 50px;
+	margin		: 50px;
+	height:100%; /* force the BODY element to match the height of the HTML element */
 }
+
 
 
 
@@ -16,25 +18,69 @@ nav{
 
 }
 
+.wrapper{
+	min-width:800px;
+	background: #ff0000;
+}
+
+
 .text{
 	display: block;
 	float:left;
 	width: 30%;
-	height: 5in;
-background:rgba(210,150,10);}
+	height: 30em;
+	padding:5px;
+	background:rgba(210,150,10,0.2);
+		padding:1em;
+
+
+}
 
 .windcontainer {
 	display: block;
 	float:left;
 	width: 30%;
-	height: 5in;
-}
+	height: 30em;
+	padding:1em;
+
+
+	}
 
 #c {
 	position: fixed;
 	left: 0px; top: 0px;
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
 	z-index: -1;
+}
+
+
+@media only screen and (min-device-width: 40em) {
+
+
+
+}
+
+@media only screen and (max-width: 40em) {
+  body {
+    background-color: lightblue;
+    padding		: 0px;
+	margin		: 0px;
+  }
+	.wrapper{
+		min-width:100%;
+		margin:0 0;
+	}
+
+	.windcontainer { 
+	  	width: 50%; 
+	  	padding:0;
+
+	  	height:20em;
+	}
+	.text { width: 50%; 
+		height:20em;
+			  	padding:0;
+
+	}
 }
