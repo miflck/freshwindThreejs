@@ -19,31 +19,30 @@ nav{
 }
 
 .wrapper{
-	min-width:800px;
-	background: #ff0000;
+	display: block;
+	max-width:1200px;
+	border:solid thin blue;
+	margin:0 auto;
+
 }
 
 
 .text{
 	display: block;
 	float:left;
-	width: 30%;
+	width: 33.33%;
 	height: 30em;
-	padding:5px;
-	background:rgba(210,150,10,0.2);
-		padding:1em;
-
-
+	background:rgb(210,250,110);
+	padding:1em;
+	box-sizing: border-box; 
 }
 
 .windcontainer {
 	display: block;
 	float:left;
-	width: 30%;
+	width: 33.33%;
 	height: 30em;
-	padding:1em;
-
-
+	box-sizing: border-box; 
 	}
 
 #c {
@@ -55,15 +54,10 @@ nav{
 }
 
 
-@media only screen and (min-device-width: 40em) {
-
-
-
-}
 
 @media only screen and (max-width: 40em) {
   body {
-    background-color: lightblue;
+    background-color: #dddddd;
     padding		: 0px;
 	margin		: 0px;
   }
@@ -75,12 +69,12 @@ nav{
 	.windcontainer { 
 	  	width: 50%; 
 	  	padding:0;
-
 	  	height:20em;
 	}
-	.text { width: 50%; 
+	.text { 
+		width: 50%; 
 		height:20em;
-			  	padding:0;
+		padding:0;
 
 	}
 }
