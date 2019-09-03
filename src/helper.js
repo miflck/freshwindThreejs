@@ -113,23 +113,10 @@ function resetScene(scene,linewidth){
      lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
     lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
     var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
-
      scene.add( thickline );
      scene.userData.thickline=thickline;
-
-
     // reset angle
     scene.userData.latestAngle=0;
-
-
-
-    //plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
-    //scene.add(plane);
-
-        
-   // renderer.setPixelRatio( resolution );
-   // renderer.setSize( width,height );
-
 }
 
 
@@ -157,20 +144,10 @@ function createVanes(scene, diameter){
     return vanes;
 }
 
-
-
-
-
-
-
-
 function removeEntity(scene,object) {
     var selectedObject = scene.getObjectById(object.name);
     scene.remove( selectedObject );
 }
-
-
-
 
 function loadImages(imageurls,successCallback){
     var data=[];
@@ -181,12 +158,6 @@ function loadImages(imageurls,successCallback){
         if(debugLog)console.log( 'Loading file: ' + item + '.\nLoaded ' + loaded + ' of ' + total + ' files.' );
     };
 
-    /*loadManager.onLoad = function () {
-        console.log( 'Loading complete!');
-        console.log(data);
-        successCallback(data)
-    };*/
-
      loadManager.onLoad = function () {
         console.log( 'Loading complete!');
 
@@ -194,8 +165,6 @@ function loadImages(imageurls,successCallback){
 
         data.sort(function(a, b) {
             return a.src.localeCompare(b.src);
-             // return imageurls.indexOf(a) - imageurls.indexOf(b);
-
         });
 
         data.map(datap => console.log(datap))
@@ -228,7 +197,6 @@ function getPixel( imagedata, x, y ) {
 
 function cycleImages(){
     imageIndex=(imageIndex+1)%imagesData.length
-    //setMask(imagesData[imageIndex]);
     if(debugLog)console.log("cycle!"+imageIndex);
 }
 

@@ -13,24 +13,12 @@ class WindVane {
 
     	this.strokeColor=new THREE.Color(0x26539D); // red
       this.targetColor=new THREE.Color(0x26539D); // red
-
-    
-     // this.strokeColor.setRGB(Math.random(),Math.random(),Math.random());
-        //    this.targetColor.setRGB(Math.random(),Math.random(),Math.random());
-
-     // this.oldColor.set(this.strokeColor);
-      //this.lerpToColor=this.strokeColor;
-      //this.currentColor=this.strokeColor;
       this.lerpFact=0;
-
     	this.alpha=255;
-    
     	this.startAngle = 0;
     	this.currentAngle = 0;
     	this.targetAngle = 0;
     	this.thetaAngle = this.targetAngle-this.currentAngle;
-
-
 
   		this.duration=0;
    		this.endAnimation=getMilliseconds(clock)+this.duration;
@@ -41,15 +29,10 @@ class WindVane {
       this.isActive=false;
       this.isOnMask=false;
       this.zPos=0;
-    //  Math.random()>0.7?this.isOnMask=true:this.isOnMask=false;
-    	//console.log("init vane");
-
 	}
 
 
 	 update(millis){
-		//var millis=getMilliseconds(clock);
-		// if(millis < this.endAnimation){
       if(this.isActive){
   		 	switch (this.easingType) {
     				case 'easeInOutSine':
@@ -68,22 +51,9 @@ class WindVane {
               this.currentAngle=easeInOutQuad(millis-this.startAnimation,this.startAngle,this.thetaAngle,this.duration);
             break;
   			}
-
-          //this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration);
-
-//          this.lerpFact=easeInOutQuad(millis-this.startAnimation,0,1,this.duration);
-
-
           this.lerpFact=1;
-
-        //var col=this.oldColor;
           this.strokeColor.lerp(this.targetColor,this.lerpFact);
 		  }
-      /*  if(Math.abs(this.currentAngle-this.targetAngle)<0.01){
-          this.currentAngle=this.targetAngle;
-          this.isActive=false;
-        }*/
-
         if(millis>this.endAnimation){
           this.currentAngle=this.targetAngle;
           this.isActive=false;
@@ -94,9 +64,7 @@ class WindVane {
 
 
   setColor(color){
-    //this.oldColor=this.strokeColor;
    this.targetColor=color;
-    //this.strokeColor=color;
   }
 
 	get getCurrentAngle(){
