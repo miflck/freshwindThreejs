@@ -190,7 +190,7 @@ function toggleSound() {
 
 function startButton_clicked() {
   if(isStarted)return;
-  startSound();
+ toggleSound();
   isStarted=true;
   button.addClass("invisible");
 }
