@@ -14,6 +14,11 @@ let initMic=false;
 let maxVolumeToRandomWave=0.05;
 let isMaxVolume=true;
 
+var button;
+
+var isStarted=false;
+
+
 
 let =1000;
 
@@ -30,6 +35,12 @@ function setup() {
 
   let cnv = createCanvas(100, 100);
   cnv.id('mycanvas');
+
+
+  button = createButton('start input');
+  button.id("recordbutton");
+  //button.position(50, 50);
+  button.mousePressed(startButton_clicked);
 
   w=width/nBands;
 
@@ -176,6 +187,13 @@ function toggleSound() {
   }
 }
 
+
+function startButton_clicked() {
+  if(isStarted)return;
+  startSound();
+  isStarted=true;
+  button.addClass("invisible");
+}
 
 
 

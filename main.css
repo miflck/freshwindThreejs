@@ -19,4 +19,5 @@ nav{
 #scene-container{
 	position: absolute;
 	z-index:-1;
+	border:solid thin green;
 }

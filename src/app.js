@@ -42,7 +42,7 @@ var windVelocityMin=8;
 var windVelocityMax=13;
 
 // wind timer
-var bIsTimed=true;
+var bIsTimed=false;
 
 var eraseWaveInitTime;
 var eraseWaveTimerDuration;
