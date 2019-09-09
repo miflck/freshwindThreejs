@@ -77,7 +77,7 @@ const CONTENT=1;
 var zeroStartX=windowWidth-50;
 var zeroStartY=0;
 
-var debugLog=true;
+var debugLog=false;
 
 let contentRectX=300;
 let contentRectY=180;
@@ -94,6 +94,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.autoClearColor = true;
 	views = document.querySelectorAll( '.windcontainer');
+	if(debugLog)console.log("views "+views.length)
 	
 
 	for ( var n = 0; n < views.length; n ++ ) {
@@ -122,8 +123,8 @@ function init() {
 		}
 
 	scenes.forEach( function ( scene ) {
-		console.log("scene")
-		console.log(scene.userData.vanes[0].position);
+		if(debugLog)console.log("scene")
+		if(debugLog)console.log(scene.userData.vanes[0].position);
 	});
 
 	t = 0;
@@ -237,7 +238,7 @@ function render() {
 function loadBackgroundImages(files){
 	loadImages(files,function(data){
 		imagesData=data;
-		console.log("loaded ");
+		if(debugLog)console.log("loaded ");
 		isloaded=true;
 		if(debugLog)console.log(imagesData);
 	});

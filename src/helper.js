@@ -139,7 +139,7 @@ function createVanes(scene, diameter){
     scene.userData.vanes=vanes;
     scene.userData.numberOfVanes=numberOfVanes;
 
-        console.log("created Vanes:"+scene.userData.numberOfVanes);
+    if(debugLog)console.log("created Vanes:"+scene.userData.numberOfVanes);
 
     return vanes;
 }
@@ -159,15 +159,15 @@ function loadImages(imageurls,successCallback){
     };
 
      loadManager.onLoad = function () {
-        console.log( 'Loading complete!');
+         if(debugLog)console.log( 'Loading complete!');
 
-        data.map(datap => console.log(datap))
+        if(debugLog) data.map(datap => console.log(datap))
 
         data.sort(function(a, b) {
             return a.src.localeCompare(b.src);
         });
 
-        data.map(datap => console.log(datap))
+        if(debugLog) data.map(datap => console.log(datap))
 
         successCallback(data)
     };

@@ -17,7 +17,7 @@
 				this.rand=randomIntFromInterval(5,20);
 				this.randDur=randomIntFromInterval(1,5);
 				this.imageData=imageData;
-				console.log("push "+this.imageData);
+				if(debugLog)console.log("push "+this.imageData);
 
 
 				this.hsl = this.color.getHSL(this.hsl);
