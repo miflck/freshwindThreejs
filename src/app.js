@@ -86,7 +86,10 @@ let dynamicColor=true;
 // music color
 //const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
 
-const colors =[0xFF1919,0xff7300,0xffaa00,0xffff00,0xb3ff1a,0x79d28b,0x66b5c1];
+//const colors =[0xFF1919,0xff7300,0xffaa00,0xffff00,0xb3ff1a,0x79d28b,0x66b5c1];
+const colors =[0x66b5c1,0x79d28b,0xb3ff1a,0xffff00,0xffaa00,0xff7300,0xFF1919];
+
+
 
 const colorcounter=0;
 
@@ -119,8 +122,8 @@ let contentRectH=windowHeight-contentRectY;
 
 
 
-let minVolume=0.05;
-let maxVolume=0.5;
+let minVolume=0.1;
+let maxVolume=0.2;
 
 
 let freqMin=180;
