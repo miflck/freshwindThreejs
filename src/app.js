@@ -37,9 +37,9 @@ let latestAngle=0;
 var randMin=5;
 var randMax=15;
 var rotationDurationMin=500;
-var rotationDurationMAx=1000;//3000;
+var rotationDurationMAx=1500;//3000;
 var windVelocityMin=10;
-var windVelocityMax=60;
+var windVelocityMax=50;
 
 // wind timer
 var bIsTimed=true;
