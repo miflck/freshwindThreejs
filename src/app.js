@@ -68,7 +68,7 @@ var numberOfVanes;
 var vanes = [];
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
-var diameter=15;//13
+var diameter=18;//13
 var lineGeometry;
 var lineMaterial;
 var thickline;
