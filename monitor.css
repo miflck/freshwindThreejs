@@ -1,13 +1,3 @@
-.container{
-	margin:0;
-}
-
-#scene-container{
-	position: absolute;
-	z-index: 20;
-	border:solid thin red;
-}
-
 
 #mycanvas{
 	position: absolute;
@@ -25,6 +15,22 @@
 	width:100px;
 	height:100px;
 }
+
+.container{
+	margin:0 !important;
+	border:solid thin blue;
+	width:100%;
+	height: 100%;
+}
+
+#scene-container{
+	position: absolute;
+	z-index: 20;
+	border:solid thin red;
+}
+
+
+
 
 .invisible{
 	visibility: hidden;

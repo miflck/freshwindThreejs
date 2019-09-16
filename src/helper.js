@@ -10,7 +10,19 @@ function randomFloatFromInterval(min, max){
 }
 // mapping
 const scale = (num, in_min, in_max, out_min, out_max) => {
-     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    let v= (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+
+
+    return v;
+}
+
+// mapping
+const scaleClamped = (num, in_min, in_max, out_min, out_max) => {
+    let v= (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+if(v>out_max)v=out_max;
+if(v<out_min)v=out_min;
+
+    return v;
 }
 
 

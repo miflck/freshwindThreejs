@@ -7,7 +7,7 @@ const scene = new THREE.Scene();
 
 // create the renderer
 //const renderer = new THREE.WebGLRenderer({ antialias: true,alpha: true,preserveDrawingBuffer: true  });
-const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, preserveDrawingBuffer: true  });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true  });
 renderer.autoClearColor = false;
 
 var  stats;
@@ -37,12 +37,15 @@ let latestAngle=0;
 var randMin=5;
 var randMax=15;
 var rotationDurationMin=1500;
-var rotationDurationMAx=3000;
+var rotationDurationMax=3000;
 var windVelocityMin=8;
 var windVelocityMax=13;
 
 // wind timer
 var bIsTimed=false;
+var idleMicroTimer;
+var maxMicroIdleTime=3000;
+
 
 var eraseWaveInitTime;
 var eraseWaveTimerDuration;
@@ -81,8 +84,11 @@ let darkBlueColor=new THREE.Color(0x26539D);
 let dynamicColor=true;
 
 // music color
-const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
+//const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
 
+const colors =[0xFF1919,0xff7300,0xffaa00,0xffff00,0xb3ff1a,0x79d28b,0x66b5c1];
+
+const colorcounter=0;
 
 
 // Background images
@@ -97,6 +103,9 @@ var state;
 let oldstate;
 const WIND =0;
 const CONTENT=1;
+const MICRO=2;
+
+
 
 var zeroStartX=windowWidth-50;
 var zeroStartY=0;
@@ -108,6 +117,14 @@ let contentRectY=180;
 let contentRectW=600;
 let contentRectH=windowHeight-contentRectY;
 
+
+
+let minVolume=0.05;
+let maxVolume=0.5;
+
+
+let freqMin=180;
+let freqMax=500;
 
 
 /*
@@ -125,6 +142,16 @@ document.addEventListener("keydown", onDocumentKeyDown, false);
 
 
 let bCreated=false;
+
+
+
+
+//var gui = new dat.GUI();
+//var cam = gui.addFolder('Micro');
+
+
+
+
 
 function init() {
 
@@ -200,6 +227,11 @@ function animate() {
   		})
 	
 
+// check if switch back to Wind Waves
+	if(millis>idleMicroTimer+maxMicroIdleTime){
+		setState(WIND);
+	}
+
   	
   	switch(state){
         case WIND:
@@ -229,8 +261,19 @@ function animate() {
   			}
 
         break;
-        }
 
+    	case MICRO:
+    		// no other Winds please
+        	/*if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
+	   			cycleImages();
+	   			makeRandomWind(true);
+	    		cycleWaveInitTime=millis;
+	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
+	    		waveInitTime=millis;
+	    		waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
+  				}*/
+        break;
+        }
 	updateGeometry();
 	requestAnimationFrame( animate );
 	render();
@@ -410,7 +453,6 @@ function setActive(vane,wind,millis){
 
   	switch(state){
         case WIND:
-
         	var color = getPixel( wind.imageData, vane.ox*pixelScaleFact,vane.oy*pixelScaleFact);
 			if(color.a==255){
 				vane.isOnMask=true;		
@@ -421,9 +463,8 @@ function setActive(vane,wind,millis){
         break;
 
         case CONTENT:
-          //updateVanesInverse(mil);
-        //  maskColor=new THREE.Color('0xFFFFFF');        
-
+         	 //updateVanesInverse(mil);
+        	//  maskColor=new THREE.Color('0xFFFFFF');        
 			/*var content = document.getElementsByClassName("content");
 			var rect = content[0].getBoundingClientRect();
 			contentRectX=rect.left;
@@ -431,9 +472,6 @@ function setActive(vane,wind,millis){
 			contentRectW=content[0].clientWidth;
 			contentRectH=content[0].offsetHeight;
 			*/
-
-
-
           let isInside=checkIsInside(vane.ox*pixelScaleFact,vane.oy*pixelScaleFact,contentRectX,contentRectY,contentRectW,contentRectH);
           	// check if inside rect
 			if(isInside){
@@ -447,6 +485,16 @@ function setActive(vane,wind,millis){
       		}else{
       			vane.zPos=0;
       		}
+        break;
+
+        case MICRO:
+			var color = getPixel( wind.imageData, vane.ox*pixelScaleFact,vane.oy*pixelScaleFact);
+			if(color.a==255){
+				vane.isOnMask=true;		
+			}else{
+				vane.isOnMask=false;
+			}
+          	vane.zPos=0;
         break;
         }
         
@@ -478,9 +526,16 @@ function setActive(vane,wind,millis){
 
 
 
+function getState(){
+	return state;
+}
+
+
 function setState(newState){
 	oldstate=state;
 	state=newState;
+
+	if(debugLog)console.log("--- set State: "+oldstate+" "+state);
 
 	switch(state){
         case WIND:
@@ -488,10 +543,8 @@ function setState(newState){
         imageIndex=0;
         waveInitTime=getMilliseconds(clock);
 		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
-
 		cycleWaveInitTime=getMilliseconds(clock);
 		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
-
         makeWindFromLocation(windowWidth-50,0,0);
         break;
 
@@ -501,8 +554,12 @@ function setState(newState){
        	waveInitTime=getMilliseconds(clock);
 		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
         break;
-      }
+      
+      	case MICRO:
+        //makeWindFromLocation(0,0,1);
+      	break;
 
+      }
 }
 
 
@@ -519,17 +576,18 @@ function makeRandomWind(isMasked){
 	pos.add(center);
 
 	// get random color from array
-	var randNr=Math.floor(Math.random()*colors.length);
-	var col=new THREE.Color( colors[randNr]);
+	//var randNr=Math.floor(Math.random()*colors.length);
+	//var col=new THREE.Color( colors[randNr]);
 	// no more random!
 	//var col=new THREE.Color( 0x26539D);
+	var col=darkBlueColor;
     var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
     // random rotation factor
  	var rand=randomIntFromInterval(randMin,randMax);
 	var mult=1;
 	//if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
-    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
+    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
     //    var dur=scale(rand,30,80,3000,8000);
 
     // delay in starting wave, not implemented yet
@@ -542,6 +600,75 @@ function makeRandomWind(isMasked){
 		winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
 	}
 }
+
+
+
+function makeRandomWindFromSound(isMasked,frequency,miclevel){
+	idleMicroTimer=millis;
+  	//if(winds.length>1)return;
+	// make startposition
+  	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
+	//var axis = new THREE.Vector3( 0, 0, 1);
+	//var angle = randomFloatFromInterval(0,2*Math.PI);
+	//var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
+	//pos.applyAxisAngle( axis, angle );
+
+	let x=scaleClamped(frequency,freqMin,freqMax,0,windowWidth); //randomIntFromInterval(randMin,randMax);
+	let y=scaleClamped(miclevel,minVolume,maxVolume,0,windowHeight); //randomIntFromInterval(randMin,randMax);
+
+
+  	var pos=new THREE.Vector3(x,y,0);
+
+	//pos.add(center);
+
+
+
+
+	// get random color from array
+	//var randNr=Math.floor(Math.random()*colors.length);
+	//let x=scaleClamped(frequency,freqMin,freqMax,0,windowWidth); //randomIntFromInterval(randMin,randMax);
+
+ 	var colnr=Math.floor(scaleClamped(miclevel,minVolume,maxVolume,0,colors.length-1)); //randomIntFromInterval(randMin,randMax);
+ 	//var colnr=Math.floor(scaleClamped(frequency,freqMin,freqMax,0,colors.length-1)); //randomIntFromInterval(randMin,randMax);
+	console.log("Color:" +colnr+" "+miclevel);
+
+
+	var col=new THREE.Color( colors[colnr]);
+	// no more random!
+	//var col=new THREE.Color( 0x26539D);
+    var vel = scaleClamped(frequency,freqMin,freqMax,windVelocityMin,windVelocityMax);//randomIntFromInterval(windVelocityMin,windVelocityMax);
+    // random rotation factor
+ 	
+ 	//var rand=4;//scale(miclevel,minVolume,maxVolume,4,15*4); //randomIntFromInterval(randMin,randMax);
+	let rand=scaleClamped(frequency,freqMin,freqMax,4,15*4); //randomIntFromInterval(randMin,randMax);
+
+	var mult=1;
+	//if(Math.random()>0.5)mult=-1;
+	var angle=rand*(Math.PI/4)*mult;
+    var dur=rotationDurationMax;//scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
+    //    var dur=scale(rand,30,80,3000,8000);
+
+    // delay in starting wave, not implemented yet
+    var wait=0;
+    // get start time
+	var millis=getMilliseconds(clock);
+
+	console.log("Make Wind:" +miclevel+" volume "+angle+" angle "+vel+" velocity ");
+
+	if(isloaded){
+		var imagedata = getImageData(imagesData[imageIndex]);
+		if(debugLog)console.log("data "+imagedata);
+		winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+	}
+}
+
+
+
+
+
+
+
+
 
 function makeWindFromLocation(xPos,yPos,isMasked){
   	
@@ -557,7 +684,7 @@ function makeWindFromLocation(xPos,yPos,isMasked){
 	var mult=1;
 	//if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
-    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
+    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
     //    var dur=scale(rand,30,80,3000,8000);
 
     // delay in starting wave, not implemented yet
