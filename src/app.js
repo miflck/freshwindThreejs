@@ -38,8 +38,8 @@ var randMin=5;
 var randMax=15;
 var rotationDurationMin=1500;
 var rotationDurationMAx=3000;
-var windVelocityMin=8;
-var windVelocityMax=13;
+var windVelocityMin=10;
+var windVelocityMax=30;
 
 // wind timer
 var bIsTimed=true;
@@ -51,16 +51,16 @@ var eraseWaveIntervalMax=3000;
 
 var waveInitTime;
 var waveTimerDuration;
-var waveIntervalMin=1500;
-var waveIntervalMax=3000;
+var waveIntervalMin=100;
+var waveIntervalMax=20000;
 
 var waveIntervalContentMin=3000;
 var waveIntervalContentMax=8000;
 
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
-var cycleWaveIntervalMin=3000;
-var cycleWaveIntervalMax=5000;
+var cycleWaveIntervalMin=100;
+var cycleWaveIntervalMax=20000;
 
 
 // VANES
@@ -68,7 +68,7 @@ var numberOfVanes;
 var vanes = [];
 var vanegeometry = new THREE.BufferGeometry();
 vanegeometry.dynamic = true;
-var diameter=13;
+var diameter=15;//13
 var lineGeometry;
 var lineMaterial;
 var thickline;
