@@ -1,3 +1,5 @@
 .DS_Store
 /Freshwind_Threejs.sublime-workspace
 /.DS_Store
+/src/audioInput.js
+/monitor.css
