@@ -23,11 +23,13 @@ let far= 100;
 let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
 
 //Vane Settings
-var diameter=25;
+var diameter=15;
 //oldcolors
 const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
 
 let darkBlueColor=new THREE.Color(0x26539D);
+//let darkBlueColor=new THREE.Color(0x0000FF);
+
 let dynamicColor=false;
 let lineWidth=1.5;
 
