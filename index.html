@@ -13,9 +13,9 @@
 		<script src='src/threejs/lines/LineSegments2.js'></script>
 
 		<!-- Import wind sources -->
-		<script src="src/helper.js?v=0.3"></script>
-		<script src="src/WindVane.js?v=0.3"></script>
-		<script src="src/Wind.js?v=0.4"></script>
+		<!--	<script src="src/helper.js?v=0.3"></script>
+	<script src="src/WindVane.js?v=0.3"></script>
+		<script src="src/Wind.js?v=0.4"></script>-->
 		<script src="src/app.js?v=1.0"></script>
 
 
@@ -87,35 +87,9 @@
 	  <div style="clear: both;"></div> 
 
 </div>
-    <!-- container for the threejs action -->
-
-
-	<!--
-<div class="windcontainer">4</div>
-<div class="windcontainer">5</div>
-<div class="windcontainer">6</div>
-<div class="windcontainer">7</div>
-<div class="text">
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
-</div>
-
-<div class="windcontainer">8</div>
-<div class="windcontainer">9</div>
-<div class="windcontainer">10</div>
-<div class="windcontainer">11</div>
-	 -->
+  
 	<script>
-	 	/* the application wants some background images*/ 
-	    var files = ['images/1x/01.png','images/1x/02.png','images/1x/03.png','images/1x/04.png','images/1x/05.png','images/1x/06.png','images/1x/07.png','images/1x/08.png','images/1x/09.png','images/1x/10.png','images/1x/11.png','images/1x/12.png',];
-
-	    //var files = ['images/2/1.png','images/2/2.png','images/2/3.png','images/2/4.png','images/2/5.png','images/2/6.png'];
-	   	//var files = ['images/2/1.png'];
-
-	    /* load the backgroundimages*/
-		loadBackgroundImages(files);
-
-
-
+	 	
 		// stop automatic wind
 		bIsTimed=true;
 
@@ -140,19 +114,10 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula 
 
 
 
-
-		/* MOUSE LISTENER könnten auch ins app.js, mache ich aber jetzt im Index für bessere Kontrolle*/
-
-	document.addEventListener("mousedown", function(event) {
-		//makeRandomWind(0);
-	},false);
-
 	document.addEventListener('mousemove', debounce(function (event) {
 
   		directionX = event.movementX || event.mozMovementX || event.webkitMovementX || 0;
   		directionY = event.movementY || event.mozMovementY || event.webkitMovementY || 0;
-		//console.log("Debounced move "+directionX);
-
 		scenes.forEach( function ( scene ) {
 
 						var rect = scene.userData.view.getBoundingClientRect();

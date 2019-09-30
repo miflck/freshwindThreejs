@@ -1,6 +1,5 @@
 
 // Threejs
-
 // create a Scene
 const scene = new THREE.Scene();
 var scenes = [], views, t, canvas, renderer;
@@ -8,29 +7,14 @@ var scenes = [], views, t, canvas, renderer;
 var clock = new THREE.Clock({autoStart:true});
 
 // Window and Pixel Vars
-let windowWidth=300;
-let windowHeight=300;
+let windowWidth=30;
+let windowHeight=30;
 let pixelScaleFact=1;
 let windowHalfY = windowHeight / 2
 
-// Create a Camera
-let left = -windowWidth/2; 
-let right = windowWidth/2;
-let topB =	windowHeight/2;
-let bottom = -windowHeight/2;
-let near= 0;
-let far= 100;
-let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
-
 //Vane Settings
 var diameter=15;
-//oldcolors
-const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
-
-let darkBlueColor=new THREE.Color(0x26539D);
-//let darkBlueColor=new THREE.Color(0x0000FF);
-
-let dynamicColor=false;
+let darkBlueColor=new THREE.Color(0x0000FF);
 let lineWidth=1.5;
 
 // Winds
@@ -44,48 +28,6 @@ var rotationDurationMAx=3000;
 var windVelocityMin=10;
 var windVelocityMax=18;
 
-// wind timer
-var bIsTimed=true;
-
-var eraseWaveInitTime;
-var eraseWaveTimerDuration;
-var eraseWaveIntervalMin=1500;
-var eraseWaveIntervalMax=3000;
-
-var waveInitTime;
-var waveTimerDuration;
-var waveIntervalMin=1500;
-var waveIntervalMax=3000;
-
-var waveIntervalContentMin=3000;
-var waveIntervalContentMax=8000;
-
-var cycleWaveInitTime;
-var cycleWaveTimerDuration;
-var cycleWaveIntervalMin=3000;
-var cycleWaveIntervalMax=5000;
-
-// Background images
-var isloaded=false;
-var imagesData=[];
-var imageIndex=0;
-
-// STATE
-var state;
-let oldstate;
-const WIND =0;
-const CONTENT=1;
-
-var zeroStartX=windowWidth-50;
-var zeroStartY=0;
-
-var debugLog=false;
-
-let contentRectX=300;
-let contentRectY=180;
-let contentRectW=600;
-let contentRectH=windowHeight-contentRectY;
-
 let bCreated=false;
 
 function init() {
@@ -96,9 +38,7 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	renderer.autoClearColor = true;
 	views = document.querySelectorAll( '.windcontainer');
-	if(debugLog)console.log("views "+views.length)
 	
-
 	for ( var n = 0; n < views.length; n ++ ) {
 		var scene = new THREE.Scene();
 		scene.userData.view = views[ n ];
@@ -123,12 +63,6 @@ function init() {
   		makeRandomWind(scene,false);
 		scenes.push( scene );
 		}
-
-	scenes.forEach( function ( scene ) {
-		if(debugLog)console.log("scene")
-		if(debugLog)console.log(scene.userData.vanes[0].position);
-	});
-
 	t = 0;
 	animate();
 }
@@ -161,10 +95,8 @@ function recalculateVanes(){
 
 function animate(time) {
 
-
 var millis=getMilliseconds(clock);
 scenes.forEach( function ( scene ) {
-
 	// update Wind	
 		scene.userData.winds.map((wind,i) =>{
 			wind.move(scene,millis);
@@ -198,7 +130,6 @@ scenes.forEach( function ( scene ) {
 
 
 function render() {			
-
 
 	updateWindowSize();
 	renderer.setScissorTest( false );
@@ -237,14 +168,6 @@ function render() {
 	});
 }
 
-function loadBackgroundImages(files){
-	loadImages(files,function(data){
-		imagesData=data;
-		if(debugLog)console.log("loaded ");
-		isloaded=true;
-		if(debugLog)console.log(imagesData);
-	});
-}
 
 function updateGeometry(scene){
 	if(!bCreated)return;
@@ -252,7 +175,6 @@ function updateGeometry(scene){
 	var axis = new THREE.Vector3( 0, 0, 1 );
 	var vanel=diameter;
 	var p = scene.userData.vanegeometry.attributes.position.array;
-	if(dynamicColor)var color = scene.userData.vanegeometry.attributes.color.array;
 	var vector = new THREE.Vector3( vanel, 0, 0 );
 	var millis=getMilliseconds(clock);
 
@@ -270,7 +192,6 @@ function updateGeometry(scene){
   		vane.update(millis);
 
 		var angle=vane.getCurrentAngle;
-		if(dynamicColor)var col=vane.getStrokeColor;
 		vector.x=vanel;
 		vector.y=0;
 
@@ -284,20 +205,9 @@ function updateGeometry(scene){
 		p[i*6+3]=vertex.x+x;
 		p[i*6+4]=vertex.y+y;
 		p[i*6+5]=vane.zPos
-
-		if(dynamicColor){
-			color[i*6]=col.r;
-			color[i*6+1]=col.g;
-			color[i*6+2]=col.b;
-
-			color[i*6+3]=col.r;
-			color[i*6+4]=col.g;
-			color[i*6+5]=col.b;
-		}
 	}
 	scene.userData.lineGeometry.setPositions( scene.userData.vanegeometry.attributes.position.array);
 	scene.userData.lineGeometry.attributes.position.needsUpdate = true;
-	if(dynamicColor)scene.userData.lineGeometry.setColors( scene.userData.vanegeometry.attributes.color.array);
 
 }
 
@@ -330,108 +240,44 @@ function createGeometry(vanes) {
 		colors.push(darkBlueColor.g);
 		colors.push(darkBlueColor.b);
 	})
-
 	geometry.addAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 	geometry.addAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
 	bCreated=true;
-
 	return geometry;
 }
+
+function createVanes(scene, diameter){
+    var rect = scene.userData.view.getBoundingClientRect();
+    var vanes = [];
+    var countX = Math.ceil(rect.width/diameter);
+    var countY = Math.ceil(rect.height/diameter);
+    var xpos=-rect.width/2
+    var ypos=rect.height/2
+    var opX=0
+    var opY=0
+    for (var j = 0; j < countY; j++) {
+        for (var i = 0; i < countX; i++) {
+            vanes.push( new WindVane((diameter*i)-rect.width/2, (diameter*j)-rect.height/2  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
+        }
+    };
+    var numberOfVanes=vanes.length;
+    scene.userData.vanes=vanes;
+    scene.userData.numberOfVanes=numberOfVanes;
+    return vanes;
+}
+
 
 function setActive(vane,wind,millis){
 	var angle=wind.angle
 	var duration=wind.duration
-	var dilitationTime=	-500;
-	var dilitationAngle=Math.PI/4;
-	vane.setEasingType(wind.easingType);
-	var col=wind.color;
-	var maskColor;
-        maskColor=wind.color;
-
-  	switch(state){
-        case WIND:
-
-        	var color = getPixel( wind.imageData, vane.ox*pixelScaleFact,vane.oy*pixelScaleFact);
-			if(color.a==255){
-				vane.isOnMask=true;		
-			}else{
-				vane.isOnMask=false;
-			}
-          	vane.zPos=0;
-        break;
-
-        case CONTENT:
-          let isInside=checkIsInside(vane.ox*pixelScaleFact,vane.oy*pixelScaleFact,contentRectX,contentRectY,contentRectW,contentRectH);
-          	// check if inside rect
-			if(isInside){
-				vane.isOnMask=true;
-			}else{
-				vane.isOnMask=false;
-			}
-
-        	if(vane.isOnMask){
-          		vane.zPos=500;
-      		}else{
-      			vane.zPos=0;
-      		}
-        break;
-        }
-        
-
-    if(wind.isMasked){
-		if(vane.isOnMask){
-			vane.setColor(maskColor)
-	    	vane.setDuration(duration+dilitationTime);
-        	vane.setTargetAngle((angle+dilitationAngle),millis); 
-		}else{
-			vane.setColor(wind.color);
-			vane.setDuration(duration);
-			vane.setTargetAngle(angle,millis); 
-		}
-	}else{
-		vane.setDuration(duration);
-		vane.setTargetAngle(angle,millis); 
-		vane.setColor(wind.color);
-	}
-}
-
-
-
-function setState(newState){
-	oldstate=state;
-	state=newState;
-
-	switch(state){
-        case WIND:
-        winds=[];
-        imageIndex=0;
-        waveInitTime=getMilliseconds(clock);
-		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
-
-		cycleWaveInitTime=getMilliseconds(clock);
-		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
-
-        makeWindFromLocation(windowWidth-50,0,0);
-        break;
-
-        case CONTENT:
-        winds=[];
-        makeWindFromLocation(windowWidth-50,0,1);
-       	waveInitTime=getMilliseconds(clock);
-		waveTimerDuration=randomIntFromInterval(waveIntervalContentMin,waveIntervalContentMax);
-        break;
-      }
-
+	vane.setDuration(duration);
+	vane.setTargetAngle(angle,millis); 
 }
 
 
 function makeRandomWind(scene,isMasked){
-  	
   	if(scene.userData.winds.length > 1) return;
-
 	var rect = scene.userData.view.getBoundingClientRect();
-
-
 	// make startposition
   	var center= new THREE.Vector3( rect.width/2,rect.height/2,0);
   	var pos=new THREE.Vector3(-(rect.width/3)*2,0,0);
@@ -441,103 +287,44 @@ function makeRandomWind(scene,isMasked){
 	pos.applyAxisAngle( axis, angle );
 	pos.add(center);
 
-	// get random color from array
-	var randNr=Math.floor(Math.random()*colors.length);
-	var col=new THREE.Color( colors[randNr]);
-	// no more random!
-	//var col=new THREE.Color( 0x26539D);
+	var col=darkBlueColor;
     var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
     // random rotation factor
  	var rand=randomIntFromInterval(randMin,randMax);
 	var mult=1;
-	//if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
     var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
-    // delay in starting wave, not implemented yet
-    var wait=0;
     // get start time
 	var millis=getMilliseconds(clock);
-	if(isloaded){
-		var imagedata = getImageData(imagesData[imageIndex]);
-		if(debugLog)console.log("data "+imagedata);
-		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,millis,col));
 		var mywind=scene.userData.winds[scene.userData.winds.length -1];
 		mywind.setMaxRadius(rect.width*5);
-	}
 }
 
-
-
-
-function makeRandomWindWithForce(scene,isMasked,force){
+/*function makeRandomWindWithForce(scene,isMasked,force){
 	var rect = scene.userData.view.getBoundingClientRect();
 	// make startposition
   	var center= new THREE.Vector3( rect.width/2,rect.height/2,0);
   	var pos=new THREE.Vector3(-(rect.width/3)*2,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1);
-	//var angle = randomFloatFromInterval(0,2*Math.PI);
 	var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
 	pos.applyAxisAngle( axis, angle );
 	pos.add(center);
-	// get random color from array
-	var randNr=Math.floor(Math.random()*colors.length);
-	var col=new THREE.Color( colors[randNr]);
-	// no more random!
-	//var col=new THREE.Color( 0x26539D);
+	var col=darkBlueColor;
     var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
     // random rotation factor
  	var rand=randomIntFromInterval(randMin,randMax);
 	var mult=1;
 	//if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
-    var dur=1000//scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
-    // delay in starting wave, not implemented yet
-    var wait=0;
+    var dur=1000;
+
     // get start time
 	var millis=getMilliseconds(clock);
 	if(isloaded){
-		var imagedata = getImageData(imagesData[imageIndex]);
-		if(debugLog)console.log("data "+imagedata);
-		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+		scene.userData.winds.push(new Wind(scene,pos.x,pos.y,vel,angle,dur,millis,col));
 	}
-}
-
-function makeWindFromLocation(xPos,yPos,isMasked){
-  	
-	// get random color from array
-	var randNr=Math.floor(Math.random()*colors.length);
-	var col=new THREE.Color( colors[randNr]);
-	if(debugLog)console.log("color "+randNr+' #' + col.getHex().toString(16));
-
-    var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
-    // random rotation factor
- 	var rand=randomIntFromInterval(randMin,randMax);
-	var mult=1;
-	//if(Math.random()>0.5)mult=-1;
-	var angle=rand*(Math.PI/4)*mult;
-    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMAx);
-    //    var dur=scale(rand,30,80,3000,8000);
-    // delay in starting wave, not implemented yet
-    var wait=0;
-    // get start time
-	var millis=getMilliseconds(clock);
-	if(isloaded){
-		var imagedata = getImageData(imagesData[imageIndex]);
-		if(debugLog)console.log("data "+imagedata);
-		winds.push(new Wind(scene,xPos,yPos,vel,angle,dur,wait,millis,col,isMasked,imagedata));
-	}
-}
-
-
-
-
-function setContentRect(_contentRectX,_contentRectY,_contentRectW,_contentRectH){
-	contentRectX=_contentRectX;
-	contentRectY=_contentRectY;
-	contentRectW=_contentRectW;
-	contentRectH=_contentRectH;
-}
-
+}*/
 
 
 function updateWindowSize() {
@@ -549,75 +336,187 @@ function updateWindowSize() {
 	}
 }
 
-
-
-
 window.addEventListener( 'resize', onWindowResize, false );
-		
 function onWindowResize() {
 	scenes.forEach( function ( scene ) {
 	var vanes=createVanes(scene, diameter);
 		resetScene(scene,lineWidth);
 	});
-
 }
 
 
 
 
+function resetScene(scene,linewidth){
+    var rect = scene.userData.view.getBoundingClientRect();
+    // remove old stuff
+    scene.remove(scene.userData.vanegeometry);
+    scene.remove(scene.userData.lineGeometry);
+    scene.remove(scene.userData.thickline );
+    createVanes(scene,diameter);
 
+    // set up geometry
+    var vanegeometry = createGeometry(scene.userData.vanes);
+     vanegeometry.computeBoundingSphere();
+    scene.userData.vanegeometry=vanegeometry;
 
+    var lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+    lineGeometry.setColors( vanegeometry.attributes.color.array);
+    scene.userData.lineGeometry=lineGeometry;
 
-
-
-/*
-// INPUT EVENTS
-
-function onMouseDown(event) {
-	makeRandomWind(1);
+    // set up material
+    var lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: linewidth} );
+     lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
+    lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
+    var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+     scene.add( thickline );
+     scene.userData.thickline=thickline;
+    // reset angle
+    scene.userData.latestAngle=0;
 }
 
-// movement
-function onDocumentKeyDown(event) {
-    var keyCode = event.which;
-    // w
-    if (keyCode == 87) { 
-       	//makeRandomWind(1);
 
-       	setSize(randomIntFromInterval(1000,2500),randomIntFromInterval(500,1200),window.devicePixelRatio);
 
-        //Q
-    } else if (keyCode == 81) {
-       makeRandomWind(1);
-       cycleImages();
+function removeEntity(scene,object) {
+    var selectedObject = scene.getObjectById(object.name);
+    scene.remove( selectedObject );
+}
 
-        // left
-    } else if (keyCode == 65) {
-       
-        // right
-    } else if (keyCode == 68) {
+
+
+
+// WIND 
+class Wind {
+  	constructor(scene,iX,iY,velocity,angle,dur,initTime,color) {
+		this.x = iX-windowWidth/2;
+		this.y =-iY+windowHeight/2;
+		this.radius = 0;
+		this.velocity=velocity;
+		this.maxRadius=10000;
+		this.innerradius=300;
+		this.currentInnerRadius=0;
+		this.color=color;
+
+		this.deleteMe=false;
+		this.rand=randomIntFromInterval(5,20);
+		this.randDur=randomIntFromInterval(1,5);
+		this.angle=scene.userData.latestAngle+angle;
+		scene.userData.latestAngle=this.angle;
+		this.duration=dur;
+		this.initTime=initTime;
+
+  }
+
+  move(scene,millis){
+  	if(millis>this.initTime){
+    	this.radius+=this.velocity;
+    	if(this.radius>this.maxRadius)this.deleteMe=true;
+    	this.currentInnerRadius=this.radius-this.innerradius;
+    	if(this.currentInnerRadius<0)this.currentInnerRadius=0;
+	}
+  }
+
+  display(){
+  }
+
+  getDeleteMe(){
+    return this.deleteMe;
+  }
+
+  setMaxRadius(maxrad){
+  	this.maxRadius=maxrad;
+  }
+
+}
+
+
+// VANES
+class WindVane {
+	constructor(iX,iY,diameter,clock,opX,opY){
+		this.x = iX;
+    	this.y =iY;
+      this.ox = opX;
+      this.oy =opY;
+    	this.diameter = diameter;
+    	this.pos= new THREE.Vector3( this.x, this.y,0);
+    	this.alpha=255;
+    	this.startAngle = 0;
+    	this.currentAngle = 0;
+    	this.targetAngle = 0;
+    	this.thetaAngle = this.targetAngle-this.currentAngle;
+  		this.duration=0;
+   		this.endAnimation=getMilliseconds(clock)+this.duration;
+    	this.startAnimation=getMilliseconds(clock);
+      this.isActive=false;
+      this.isOnMask=false;
+      this.zPos=0;
+      this.lerpFact=1;
+
+	}
+
+
+	 update(millis){
+      if(this.isActive){
+        	this.currentAngle=easeOutQuad(millis-this.startAnimation,this.startAngle,this.thetaAngle,this.duration);
+		  }
+        if(millis>this.endAnimation){
+          this.currentAngle=this.targetAngle;
+          this.isActive=false;
+        }
+	}
+
+	get getCurrentAngle(){
+		return this.currentAngle;
+	}
+
+	setDuration(duration){
+    	this.duration=duration;
+  	}
+
+  	setTargetAngle(angle,millis){
+    	if(angle!=this.targetAngle){
+    		this.startAngle=this.currentAngle;
+    		this.targetAngle=angle;
+    		this.thetaAngle= this.targetAngle-this.startAngle;
+   			this.endAnimation=millis+this.duration;
+    		this.startAnimation=millis;
+        this.isActive=true;
+    	}
+  	}
+
+}
+
+// HELPERS
+// random number interval
+
+function randomIntFromInterval(min, max){
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
         
-        // space
-    } else if (keyCode == 32) {
-        makeRandomWind(false)
+function randomFloatFromInterval(min, max){
+      return (Math.random()*(max-min+1)+min);
+}
+// mapping
+const scale = (num, in_min, in_max, out_min, out_max) => {
+     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+function check_a_point(a, b, x, y, r) {
+    var dist_points = (a - x) * (a - x) + (b - y) * (b - y);
+    r *= r;
+    if (dist_points < r ) {
+        return true;
     }
+    return false;
+}
+
+// quadratic easing out - decelerating to zero velocity
+function easeOutQuad (t, b, c, d) {
+    return -c *(t/=d)*(t-2) + b;
 };
 
-function onWindowResize() {
-		//windowHalfY = window.innerHeight / 2;
-		//camera.aspect = window.innerWidth / window.innerHeight;
-		//camera.updateProjectionMatrix();
-		//renderer.setSize( window.innerWidth, window.innerHeight );
+
+//THREEjs clock
+function getMilliseconds(clock){
+    return Math.floor(clock.getElapsedTime()*1000);
 }
-
-function onTouchStart(event) {
-   	makeRandomWind(1);
-    if(Math.random()>0.7){
-       	cycleImages();
-    }
-}
-
-
-*/
-
-		
