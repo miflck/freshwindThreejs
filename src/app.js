@@ -10,9 +10,10 @@ const scene = new THREE.Scene();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true  });
 renderer.autoClearColor = false;
 
-var  stats;
 // create a clock for animations
 var clock = new THREE.Clock({autoStart:true});
+
+
 
 // Window and Pixel Vars
 let windowWidth=window.innerWidth; //1280;
@@ -27,7 +28,7 @@ let right = windowWidth/2;
 let topB =	windowHeight/2;
 let bottom = -windowHeight/2;
 let near= 0;
-let far= 100;
+let far= 1000;
 let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
 
 // Winds
@@ -38,8 +39,8 @@ var randMin=5;
 var randMax=15;
 var rotationDurationMin=1500;
 var rotationDurationMax=3000;
-var windVelocityMin=8;
-var windVelocityMax=13;
+var windVelocityMin=10;
+var windVelocityMax=30;
 
 // wind timer
 var bIsTimed=false;
@@ -158,23 +159,20 @@ let bCreated=false;
 
 function init() {
 
- 	container= document.querySelector( '#scene-container' );
+ 	container= document.querySelector( '#playground-content' );
+
 
 	// create all the vanes
 	createVanes(diameter);
 
 	// set up geometry
 	vanegeometry = createGeometry();
-		console.log("created? "+bCreated);
 
 	vanegeometry.computeBoundingSphere();
-	console.log("1");
 
  	lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
- 		console.log("2");
 
  	lineGeometry.setColors( vanegeometry.attributes.color.array);
-	console.log("3");
 
 
 
@@ -205,12 +203,13 @@ function init() {
 	renderer.setPixelRatio( window.devicePixelRatio );
 	//renderer.setPixelRatio( 1);
 	renderer.setSize( windowWidth, windowHeight );
-	renderer.setClearColor( 0xFFFF00, 0);
+	//renderer.setClearColor( 0xFFFF00, 0);
 	// add the automatically created <canvas> element to the page
 	container.appendChild( renderer.domElement );
 
-	stats = new Stats();
-	container.appendChild( stats.dom );
+	render();
+
+
 }
 
 
@@ -280,7 +279,6 @@ function animate() {
 	updateGeometry();
 	requestAnimationFrame( animate );
 	render();
-	stats.update();
 }
 
 
@@ -309,14 +307,8 @@ function render() {
 function loadBackgroundImages(files){
 	loadImages(files,function(data){
 		imagesData=data;
-		console.log("loaded ");
 		isloaded=true;
-
-
-
-
-		  console.log(imagesData);
-		//setMask(imagesData[0]);
+		makeRandomWind(0);
 	});
 }
 
@@ -567,7 +559,7 @@ function setState(newState){
 
 
 function makeRandomWind(isMasked){
-
+console.log("wind");
   	//if(winds.length>1)return;
 	// make startposition
   	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
@@ -606,64 +598,6 @@ function makeRandomWind(isMasked){
 
 
 
-function makeRandomWindFromSound(isMasked,frequency,miclevel){
-	idleMicroTimer=millis;
-  	//if(winds.length>1)return;
-	// make startposition
-  	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
-	//var axis = new THREE.Vector3( 0, 0, 1);
-	//var angle = randomFloatFromInterval(0,2*Math.PI);
-	//var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
-	//pos.applyAxisAngle( axis, angle );
-
-	let x=scaleClamped(frequency,freqMin,freqMax,0,windowWidth); //randomIntFromInterval(randMin,randMax);
-	let y=scaleClamped(miclevel,minVolume,maxVolume,0,windowHeight); //randomIntFromInterval(randMin,randMax);
-
-
-  	var pos=new THREE.Vector3(x,y,0);
-
-	//pos.add(center);
-
-
-
-
-	// get random color from array
-	//var randNr=Math.floor(Math.random()*colors.length);
-	//let x=scaleClamped(frequency,freqMin,freqMax,0,windowWidth); //randomIntFromInterval(randMin,randMax);
-
- 	var colnr=Math.floor(scaleClamped(miclevel,minVolume,maxVolume,0,colors.length-1)); //randomIntFromInterval(randMin,randMax);
- 	//var colnr=Math.floor(scaleClamped(frequency,freqMin,freqMax,0,colors.length-1)); //randomIntFromInterval(randMin,randMax);
-	console.log("Color:" +colnr+" "+miclevel);
-
-
-	var col=new THREE.Color( colors[colnr]);
-	// no more random!
-	//var col=new THREE.Color( 0x26539D);
-    var vel = scaleClamped(frequency,freqMin,freqMax,windVelocityMin,windVelocityMax);//randomIntFromInterval(windVelocityMin,windVelocityMax);
-    // random rotation factor
- 	
- 	//var rand=4;//scale(miclevel,minVolume,maxVolume,4,15*4); //randomIntFromInterval(randMin,randMax);
-	let rand=scaleClamped(frequency,freqMin,freqMax,4,15*4); //randomIntFromInterval(randMin,randMax);
-
-	var mult=1;
-	//if(Math.random()>0.5)mult=-1;
-	var angle=rand*(Math.PI/4)*mult;
-    var dur=rotationDurationMax;//scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
-    //    var dur=scale(rand,30,80,3000,8000);
-
-    // delay in starting wave, not implemented yet
-    var wait=0;
-    // get start time
-	var millis=getMilliseconds(clock);
-
-	console.log("Make Wind:" +miclevel+" volume "+angle+" angle "+vel+" velocity ");
-
-	if(isloaded){
-		var imagedata = getImageData(imagesData[imageIndex]);
-		if(debugLog)console.log("data "+imagedata);
-		winds.push(new Wind(pos.x ,pos.y,vel,angle,dur,wait,millis,col,isMasked,imagedata));
-	}
-}
 
 
 
@@ -708,7 +642,6 @@ function makeWindFromLocationWithForce(xPos,yPos,isMasked,force){
   	if(winds.length>3)return;
 var windforce=scaleClamped(force,0,windowWidth,3,40);
 
-  	console.log("Force "+force+" clamped "+windforce);
 
 	// get random color from array
 	var randNr=Math.floor(Math.random()*colors.length);
@@ -723,7 +656,6 @@ var windforce=scaleClamped(force,0,windowWidth,3,40);
  	var rand=randomIntFromInterval(randMin,randMax);
 
  	rand=scaleClamped(force,50,300,4,20);
-  	console.log("Rand "+rand);
 
 
 
@@ -759,6 +691,73 @@ function setContentRect(_contentRectX,_contentRectY,_contentRectW,_contentRectH)
 	contentRectW=_contentRectW;
 	contentRectH=_contentRectH;
 }
+
+
+
+//function onWindowResize() {
+//	resetScene();
+//}
+
+
+
+
+
+
+
+
+function resetScene(scene,linewidth){
+
+	windowWidth=container.innerWidth;
+	windowHeight=container.innerHeight;
+	windowHalfY = container.innerHeight / 2;
+
+
+	setSize(windowWidth,windowHeight,window.devicePixelRatio);
+	
+
+/*// Create a Camera
+ left = -windowWidth/2; 
+ right = windowWidth/2;
+ topB =	windowHeight/2;
+ bottom = -windowHeight/2;
+ near= 0;
+ far= 100;
+ camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far );
+*/
+
+	/*camera.aspect = windowWidth / windowHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( windowWidth,windowHeight);
+
+    var rect = scene.userData.view.getBoundingClientRect();
+    // remove old stuff
+    scene.remove(scene.userData.vanegeometry);
+    scene.remove(scene.userData.lineGeometry);
+    scene.remove(scene.userData.thickline );
+    createVanes(scene,diameter);
+/*
+    // set up geometry
+    var vanegeometry = createGeometry(scene.userData.vanes);
+     vanegeometry.computeBoundingSphere();
+    scene.userData.vanegeometry=vanegeometry;
+
+    var lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+    lineGeometry.setColors( vanegeometry.attributes.color.array);
+    scene.userData.lineGeometry=lineGeometry;
+
+    // set up material
+    var lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: linewidth} );
+     lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
+    lineMaterial.resolution.set( rect.width,rect.height); // important, for now...
+    var thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+     scene.add( thickline );
+     scene.userData.thickline=thickline;
+    // reset angle
+    scene.userData.latestAngle=0;*/
+}
+
+
+
 
 
 /*

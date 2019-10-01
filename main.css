@@ -1,5 +1,5 @@
 body {
-	/*overflow	: hidden;*/
+	overflow	: hidden;
 	padding		: 0;
 	margin		: 0;
 
@@ -7,17 +7,9 @@ body {
 
 
 
-nav{
-	display: block;
-	position: absolute;
-	top:20px;
-	right:20px;
-	z-index: 30;
 
-}
 
-#scene-container{
+#playground-content{
 	position: absolute;
 	z-index:-1;
-	border:solid thin green;
 }

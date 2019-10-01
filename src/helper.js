@@ -124,24 +124,51 @@ function setSize(width,height,resolution){
     scene.remove( thickline );
     scene.remove( plane );
 
-    createVanes(diameter);
 
     // set up geometry
-    vanegeometry = createGeometry();
+ /*   vanegeometry = createGeometry();
     vanegeometry.computeBoundingSphere();
     lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
     lineGeometry.setColors( vanegeometry.attributes.color.array);
     // set up material
     lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 4.5} );
     lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
-     thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+    thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
   //  scene.add( thickline );
 
     plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( { transparent: true, opacity: 0.25 } ) );
     //scene.add(plane);
-
+*/
         
-    renderer.setPixelRatio( resolution );
+   
+
+
+
+    // create all the vanes
+    createVanes(diameter);
+
+    // set up geometry
+    vanegeometry = createGeometry();
+
+    vanegeometry.computeBoundingSphere();
+
+    lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
+
+    lineGeometry.setColors( vanegeometry.attributes.color.array);
+
+
+
+    // set up material
+    lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 3.5} );
+    lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
+    thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
+    scene.add( thickline );
+    // background plane
+    plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.3 } ) );
+    plane.position.z = -10;
+    scene.add( plane );
+
+ renderer.setPixelRatio( resolution );
     renderer.setSize( width,height );
 
 }
@@ -152,15 +179,17 @@ function setSize(width,height,resolution){
 
 function createVanes(vaneDiameter){
   vanes =[];
-   var countX = Math.ceil(windowWidth/vaneDiameter);
-   var countY = Math.ceil(windowHeight/vaneDiameter);
-    var xpos=-windowWidth/2
-    var ypos=windowHeight/2
+   var countX = Math.floor(windowWidth/vaneDiameter)+1;
+   var countY = Math.floor(windowHeight/vaneDiameter)+3;
+   var offset=windowHeight-((countY-2)*diameter);
+
     var opX=0
     var opY=0
     for (var j = 0; j < countY; j++) {
         for (var i = 0; i < countX; i++) {
-            vanes.push( new WindVane((vaneDiameter*i)-windowWidth/2, (vaneDiameter*j)-windowHeight/2  ,vaneDiameter,clock,vaneDiameter*i,-vaneDiameter*j+windowHeight ));
+            //vanes.push( new WindVane((vaneDiameter*i)-windowWidth/2, (vaneDiameter*j)-windowHeight/2,vaneDiameter,clock,vaneDiameter*i,-vaneDiameter*j+windowHeight));
+            vanes.push( new WindVane((vaneDiameter*i)-windowWidth/2,(vaneDiameter*j)-windowHeight/2+offset,vaneDiameter,clock,vaneDiameter*i,-vaneDiameter*j+windowHeight));
+
         }
     };
   numberOfVanes=vanes.length;
@@ -191,17 +220,12 @@ function loadImages(imageurls,successCallback){
     };*/
 
      loadManager.onLoad = function () {
-        console.log( 'Loading complete!');
 
-        data.map(datap => console.log(datap))
-
-        data.sort(function(a, b) {
-            return a.src.localeCompare(b.src);
+        //data.sort(function(a, b) {
+         //   return a.src.localeCompare(b.src);
              // return imageurls.indexOf(a) - imageurls.indexOf(b);
+        //});
 
-        });
-
-        data.map(datap => console.log(datap))
 
         successCallback(data)
     };
