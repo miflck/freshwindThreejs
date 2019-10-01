@@ -249,15 +249,18 @@ function createGeometry(vanes) {
 function createVanes(scene, diameter){
     var rect = scene.userData.view.getBoundingClientRect();
     var vanes = [];
-    var countX = Math.ceil(rect.width/diameter);
-    var countY = Math.ceil(rect.height/diameter);
+    
+    var countX = Math.ceil(rect.width/diameter)+1;
+    var countY = Math.ceil(rect.height/diameter)+1;
+
+
     var xpos=-rect.width/2
     var ypos=rect.height/2
     var opX=0
     var opY=0
     for (var j = 0; j < countY; j++) {
         for (var i = 0; i < countX; i++) {
-            vanes.push( new WindVane((diameter*i)-rect.width/2, (diameter*j)-rect.height/2  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
+            vanes.push( new WindVane((diameter*i)-rect.width/2-1, (diameter*j)-rect.height/2+1  ,diameter,clock,diameter*i,-diameter*j+rect.height ));
         }
     };
     var numberOfVanes=vanes.length;
