@@ -145,6 +145,21 @@
 
 
 
+
+window.addEventListener( 'resize', onWindowResize, false );
+function onWindowResize() {
+	windowWidth=window.innerWidth;
+	windowHeigth=window.innerHeight;
+		windowHalfY = window.innerHeight / 2;
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+}
+
+
+
 		/*document.addEventListener('mousemove', throttle(function (event) {
 
 		  let directionX = 0, directionY = 0, diffX = 0, diffY = 0;
