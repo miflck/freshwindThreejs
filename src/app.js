@@ -177,12 +177,12 @@ function init() {
 
 
 	// set up material
- 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 3.5} );
+ 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 1.5} );
 	lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
 	thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 	scene.add( thickline );
 	// background plane
-	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.3 } ) );
+	plane = new THREE.Mesh( new THREE.PlaneGeometry( windowWidth, windowHeight ), new THREE.MeshBasicMaterial( {  transparent: true, opacity: 0.6	 } ) );
 	plane.position.z = -10;
 	scene.add( plane );
 
