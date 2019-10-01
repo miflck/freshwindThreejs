@@ -58,6 +58,10 @@
 	
 	 
 	<script>
+
+ let oldX = 0, oldY = 0;
+
+
 	 	/* the application wants some background images*/ 
 	    var files = ['images/1x/01.png','images/1x/02.png','images/1x/03.png','images/1x/04.png','images/1x/05.png','images/1x/06.png','images/1x/07.png','images/1x/08.png','images/1x/09.png','images/1x/10.png','images/1x/11.png','images/1x/12.png',];
 
@@ -100,12 +104,15 @@
 
 			// c to show content
     		if (event.keyCode == 67) {
+
+			cycleImages();
+
     			// fade In content
-    			var element = document.getElementById("content");
-    			element.classList.remove("fadeOut");
- 				element.classList.add("fadeIn");
+    			//var element = document.getElementById("content");
+    			//element.classList.remove("fadeOut");
+ 				//element.classList.add("fadeIn");
  				// set contentstate for app
-				setState(CONTENT);
+				//setState(CONTENT);
 
    			}
    			// x to show wave
@@ -119,6 +126,91 @@
    			}
 
 		}, false);
+
+
+
+
+		document.addEventListener('click', function (event) {
+		
+		
+			if(Math.random()<0.7){
+				if(Math.random()<0.7){
+				cycleImages();
+			}
+				makeRandomWind(1);	
+			}else{
+				makeRandomWind(0);	
+			}
+		});
+
+
+
+		/*document.addEventListener('mousemove', throttle(function (event) {
+
+		  let directionX = 0, directionY = 0, diffX = 0, diffY = 0;
+		      if (event.pageX < oldX) {
+		          directionX = "left"
+		          diffX = oldX - event.pageX;
+		      } else if (event.pageX > oldX) {
+		          directionX = "right"
+		          diffX = event.pageX - oldX;
+		      }
+
+		      if (event.pageY < oldY) {
+		          directionY = "top"
+		          diffY = oldY - event.pageY;
+		      } else if (event.pageY > oldY) {
+		          directionY = "bottom";
+		          diffY = event.pageY - oldY;
+		      }
+
+		      oldX = event.pageX;
+		      oldY = event.pageY;
+
+		     // console.log(diffX);
+
+		      if(directionX=="left"){
+		      	makeWindFromLocationWithForce(windowWidth+100,event.pageY,1,diffX);
+
+		      }
+		      else if (directionX=="right"){
+		    	makeWindFromLocationWithForce(-100,event.pageY,1,diffX);
+		      }
+		//makeWindFromLocation();
+	
+
+			
+		
+	},500));*/
+
+
+function debounce(fn, delay) {
+	var timer = null;
+	return function () {
+		var context = this, args = arguments;
+		clearTimeout(timer);
+    	timer = setTimeout(function () {
+			fn.apply(context, args);
+    	}, delay);
+  	};
+}
+
+
+// as long as it continues to be invoked, raise on every interval
+function throttle (func, interval) {
+  var timeout;
+  return function() {
+    var context = this, args = arguments;
+    var later = function () {
+      timeout = false;
+    };
+    if (!timeout) {
+      func.apply(context, args)
+      timeout = true;
+      setTimeout(later, interval)
+    }
+  }
+}
 
 
 	</script>

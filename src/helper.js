@@ -218,15 +218,15 @@ function getImageData( image ) {
     var canvas = document.createElement( 'canvas' );
     //canvas.width = image.width;
     //canvas.height = image.height;
-canvas.width=windowWidth;
-canvas.height=windowHeight;
+canvas.width=windowWidth-100;
+canvas.height=windowHeight-100;
 
 
 
     var context = canvas.getContext( '2d' );
     //context.drawImage( image, 0, 0 );
 
-    drawImageProp(context, image, 0, 0, windowWidth, windowHeight,100);
+    drawImageProp(context, image, 0, 0, windowWidth, windowHeight,0.3);
 
     return context.getImageData( 0, 0, windowWidth, windowHeight );
      //   return context.getImageData( 0, 0, image.width, image.height );

@@ -78,7 +78,7 @@ var thickline;
 var plane;
 
 //oldcolors
-//const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
+const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
 //const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D];
 let darkBlueColor=new THREE.Color(0x26539D);
 let dynamicColor=true;
@@ -87,7 +87,7 @@ let dynamicColor=true;
 //const colors=[0xF8485E,0xD0006F,0x702082,0xFF8200,0xFFCD00,0x5FE0B7,0x7A9A01,0x85B09A,0x88DBDF]
 
 //const colors =[0xFF1919,0xff7300,0xffaa00,0xffff00,0xb3ff1a,0x79d28b,0x66b5c1];
-const colors =[0x66b5c1,0x79d28b,0xb3ff1a,0xffff00,0xffaa00,0xff7300,0xFF1919];
+//const colors =[0x66b5c1,0x79d28b,0xb3ff1a,0xffff00,0xffaa00,0xff7300,0xFF1919];
 
 
 
@@ -573,8 +573,8 @@ function makeRandomWind(isMasked){
   	var center= new THREE.Vector3( windowWidth/2,windowHeight/2,0);
   	var pos=new THREE.Vector3(-(windowWidth/3)*2,0,0);
 	var axis = new THREE.Vector3( 0, 0, 1);
-	//var angle = randomFloatFromInterval(0,2*Math.PI);
-	var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
+	var angle = randomFloatFromInterval(0,2*Math.PI);
+	//var angle = randomFloatFromInterval(-Math.PI/4,Math.PI/4);
 	pos.applyAxisAngle( axis, angle );
 	pos.add(center);
 
@@ -700,6 +700,55 @@ function makeWindFromLocation(xPos,yPos,isMasked){
 		winds.push(new Wind(xPos,yPos,vel,angle,dur,wait,millis,col,isMasked,imagedata));
 	}
 }
+
+
+function makeWindFromLocationWithForce(xPos,yPos,isMasked,force){
+
+  	if(force<50)return;
+  	if(winds.length>3)return;
+var windforce=scaleClamped(force,0,windowWidth,3,40);
+
+  	console.log("Force "+force+" clamped "+windforce);
+
+	// get random color from array
+	var randNr=Math.floor(Math.random()*colors.length);
+	var col=new THREE.Color( colors[randNr]);
+	if(debugLog)console.log("color "+randNr+' #' + col.getHex().toString(16));
+
+
+    var vel = randomIntFromInterval(windVelocityMin,windVelocityMax);
+    vel=windforce;
+    vel=10;
+    // random rotation factor
+ 	var rand=randomIntFromInterval(randMin,randMax);
+
+ 	rand=scaleClamped(force,50,300,4,20);
+  	console.log("Rand "+rand);
+
+
+
+
+	var mult=1;
+	//if(Math.random()>0.5)mult=-1;
+	var angle=rand*(Math.PI/4)*mult;
+    var dur=scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
+     dur=scaleClamped(force,50,300,500,4000);
+     dur=5000;
+
+    //    var dur=scale(rand,30,80,3000,8000);
+
+    // delay in starting wave, not implemented yet
+    var wait=0;
+    // get start time
+	var millis=getMilliseconds(clock);
+	if(isloaded){
+		var imagedata = getImageData(imagesData[imageIndex]);
+		if(debugLog)console.log("data "+imagedata);
+		winds.push(new Wind(xPos,yPos,vel,angle,dur,wait,millis,col,isMasked,imagedata));
+	}
+}
+
+
 
 
 
