@@ -216,15 +216,89 @@ function loadImages(imageurls,successCallback){
 
 function getImageData( image ) {
     var canvas = document.createElement( 'canvas' );
-    canvas.width = image.width;
-    canvas.height = image.height;
+    //canvas.width = image.width;
+    //canvas.height = image.height;
+canvas.width=windowWidth;
+canvas.height=windowHeight;
+
+
+
     var context = canvas.getContext( '2d' );
-    context.drawImage( image, 0, 0 );
-    return context.getImageData( 0, 0, image.width, image.height );
+    //context.drawImage( image, 0, 0 );
+
+    drawImageProp(context, image, 0, 0, windowWidth, windowHeight,100);
+
+    return context.getImageData( 0, 0, windowWidth, windowHeight );
+     //   return context.getImageData( 0, 0, image.width, image.height );
+
 }
 
+
+
+/**
+ * By Ken Fyrstenberg Nilsen
+ *
+ * drawImageProp(context, image [, x, y, width, height [,offsetX, offsetY]])
+ *
+ * If image and context are only arguments rectangle will equal canvas
+*/
+function drawImageProp(ctx, img, x, y, w, h, offsetX, offsetY) {
+
+    if (arguments.length === 2) {
+        x = y = 0;
+        w = ctx.canvas.width;
+        h = ctx.canvas.height;
+    }
+
+    // default offset is center
+    offsetX = typeof offsetX === "number" ? offsetX : 0.5;
+    offsetY = typeof offsetY === "number" ? offsetY : 0.5;
+
+    // keep bounds [0.0, 1.0]
+    if (offsetX < 0) offsetX = 0;
+    if (offsetY < 0) offsetY = 0;
+    if (offsetX > 1) offsetX = 1;
+    if (offsetY > 1) offsetY = 1;
+
+    var iw = img.width,
+        ih = img.height,
+        r = Math.min(w / iw, h / ih),
+        nw = iw * r,   // new prop. width
+        nh = ih * r,   // new prop. height
+        cx, cy, cw, ch, ar = 1;
+
+    // decide which gap to fill    
+    if (nw < w) ar = w / nw;                             
+    if (Math.abs(ar - 1) < 1e-14 && nh < h) ar = h / nh;  // updated
+    nw *= ar;
+    nh *= ar;
+
+    // calc source rectangle
+    cw = iw / (nw / w);
+    ch = ih / (nh / h);
+
+    cx = (iw - cw) * offsetX;
+    cy = (ih - ch) * offsetY;
+
+    // make sure source rectangle is valid
+    if (cx < 0) cx = 0;
+    if (cy < 0) cy = 0;
+    if (cw > iw) cw = iw;
+    if (ch > ih) ch = ih;
+
+    // fill image in dest. rectangle
+    ctx.drawImage(img, cx, cy, cw, ch,  x, y, w, h);
+}
+
+
+
+
+
+
 function getPixel( imagedata, x, y ) {
-    var position = ( x + imagedata.width * y ) * 4, data = imagedata.data;
+
+    var position = (( x + imagedata.width * y ) * 4);
+    var data = imagedata.data;
     return { r: data[ position ], g: data[ position + 1 ], b: data[ position + 2 ], a: data[ position + 3 ] };
 
 }
