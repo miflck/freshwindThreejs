@@ -43,8 +43,8 @@ var windVelocityMax=13;
 
 // wind timer
 var bIsTimed=false;
-var idleMicroTimer;
-var maxMicroIdleTime=3000;
+var idleMicroTimer=1000;
+var maxMicroIdleTime=1000;
 
 
 var eraseWaveInitTime;
@@ -231,9 +231,11 @@ function animate() {
 	
 
 // check if switch back to Wind Waves
-	if(millis>idleMicroTimer+maxMicroIdleTime){
+//console.log(millis+ " "+idleMicroTimer+" "+maxMicroIdleTime);
+	if(millis>idleMicroTimer+maxMicroIdleTime && getState() != WIND){
 		setState(WIND);
 	}
+
 
   	
   	switch(state){
@@ -607,6 +609,8 @@ function makeRandomWind(isMasked){
 
 
 function makeRandomWindFromSound(isMasked,frequency,miclevel){
+		var millis=getMilliseconds(clock);
+
 	idleMicroTimer=millis;
   	//if(winds.length>1)return;
 	// make startposition
