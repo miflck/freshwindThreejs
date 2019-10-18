@@ -177,7 +177,7 @@ function init() {
 
 
 	// set up material
- 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 1.5} );
+ 	lineMaterial = new THREE.LineMaterial( { vertexColors: THREE.VertexColors, linewidth: 1.8} );
 	lineMaterial.resolution.set( windowWidth,windowHeight); // important, for now...
 	thickline = new THREE.LineSegments2( lineGeometry, lineMaterial );
 	scene.add( thickline );
