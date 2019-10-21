@@ -151,6 +151,7 @@ function setSize(width,height,resolution){
 
 
 function createVanes(vaneDiameter){
+
   vanes =[];
    var countX = Math.ceil(windowWidth/vaneDiameter)+1;
    var countY = Math.ceil(windowHeight/vaneDiameter)+1;

@@ -27,7 +27,7 @@ let =1000;
 var bNormalize = true;
 var centerClip = false;
 
-var debug=true;
+var audiodebug=false;
 var lerpedFrequency=0;
 var lerpedMicLevel=0;
 
@@ -110,28 +110,6 @@ function draw() {
     var hl = map(lerpedMicLevel, 0, 1, 0, height);
 
 
-    var spectrum = fft.analyze();
-
-  noStroke();
-  fill(0,255,0,100); // spectrum is green
-  for (var i = 0; i< spectrum.length; i++){
-    var x = map(i, 0, spectrum.length, 0, width);
-    var h = -height + map(spectrum[i], 0, 255, height, 0);
-    rect(x, height, width / spectrum.length-2, h )
-  }
-
-  var waveform = fft.waveform();
-  noFill();
-  beginShape();
-  stroke(255,0,0); // waveform is red
-  strokeWeight(1);
-  for (var i = 0; i< waveform.length; i++){
-    var x = map(i, 0, waveform.length, 0, width);
-    var y = map( waveform[i], -1, 1, 0, height);
-    vertex(x,y);
-  }
-  endShape();
-
 
       if(micLevel>maxVolumeToRandomWave){
         fill(0);
@@ -146,7 +124,40 @@ function draw() {
 
     }
 
-    fill(0,0,255);
+
+
+if(audiodebug){
+
+    var spectrum = fft.analyze();
+
+  noStroke();
+  fill(0,255,0,100); // spectrum is green
+  for (var i = 0; i< spectrum.length; i++){
+    var x = map(i, 0, spectrum.length, 0, width);
+    var h = -height + map(spectrum[i], 0, 255, height, 0);
+    rect(x, height, width / spectrum.length-2, h )
+  }
+
+
+
+
+
+  var waveform = fft.waveform();
+  noFill();
+  beginShape();
+  stroke(255,0,0); // waveform is red
+  strokeWeight(1);
+  for (var i = 0; i< waveform.length; i++){
+    var x = map(i, 0, waveform.length, 0, width);
+    var y = map( waveform[i], -1, 1, 0, height);
+    vertex(x,y);
+  }
+  endShape();
+
+
+
+
+ fill(0,0,255);
      micLevel = mic.getLevel();
     lerpedMicLevel=lerp(lerpedMicLevel,micLevel,0.01);
 
@@ -162,7 +173,6 @@ function draw() {
       fill(255,0,0);
     }
 */
-    if(debug){
       var corrBuff = autoCorrelate(waveform);
       var freq = findFrequency(corrBuff);
       lerpedFrequency=lerp(lerpedFrequency,freq,0.0001);

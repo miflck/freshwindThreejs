@@ -63,7 +63,7 @@ var waveIntervalContentMax=8000;
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
 var cycleWaveIntervalMin=3000;
-var cycleWaveIntervalMax=5000;
+var cycleWaveIntervalMax=15000;
 
 
 // VANES
@@ -165,16 +165,12 @@ function init() {
 
 	// set up geometry
 	vanegeometry = createGeometry();
-		console.log("created? "+bCreated);
 
 	vanegeometry.computeBoundingSphere();
-	console.log("1");
 
  	lineGeometry = new THREE.LineSegmentsGeometry().setPositions( vanegeometry.attributes.position.array);
- 		console.log("2");
 
  	lineGeometry.setColors( vanegeometry.attributes.color.array);
-	console.log("3");
 
 
 
@@ -210,7 +206,9 @@ function init() {
 	container.appendChild( renderer.domElement );
 
 	stats = new Stats();
-	container.appendChild( stats.dom );
+//	container.appendChild( stats.dom );	
+	makeRandomWind(true);
+
 }
 
 
@@ -236,7 +234,7 @@ function animate() {
 		setState(WIND);
 	}
 
-
+console.log("state");
   	
   	switch(state){
         case WIND:
@@ -246,6 +244,7 @@ function animate() {
     			waveInitTime=millis;
    				waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
   				}*/
+				console.log(millis+ " "+cycleWaveInitTime+" "+cycleWaveTimerDuration+" "+cycleWaveInitTime+cycleWaveTimerDuration);
 
 	 			if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
 	   			cycleImages();

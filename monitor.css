@@ -5,6 +5,7 @@
 	z-index:30;
 	left:50px;
 	top:50px;
+	visibility: hidden;
 }
 
 #recordbutton{

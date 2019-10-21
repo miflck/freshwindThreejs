@@ -6,7 +6,7 @@
 				this.y =-iY+windowHeight/2;
 				this.radius = 0;
 				this.velocity=velocity;//randomIntFromInterval(8,20);
-				this.maxRadius=Math.sqrt((windowWidth * windowWidth) + (windowHeight * windowHeight));
+				this.maxRadius=Math.sqrt((windowWidth * windowWidth) + (windowHeight * windowHeight))+100;
 				this.innerradius=300;
 				this.currentInnerRadius=0;
 				this.isMasked=isMasked;
