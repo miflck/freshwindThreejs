@@ -34,12 +34,23 @@ let camera = new THREE.OrthographicCamera( left, right, topB, bottom, near, far 
 var winds=[];
 let latestAngle=0;
 // rotation fact
-var randMin=5;
+/*var randMin=5;
 var randMax=15;
 var rotationDurationMin=1500;
 var rotationDurationMax=3000;
 var windVelocityMin=8;
 var windVelocityMax=13;
+*/
+
+
+// rotation fact
+var randMin=5;
+var randMax=15;
+var rotationDurationMin=900;
+var rotationDurationMax=3000;//3000;
+var windVelocityMin=8;
+var windVelocityMax=50;
+
 
 // wind timer
 var bIsTimed=false;
@@ -48,22 +59,22 @@ var maxMicroIdleTime=1000;
 
 
 var eraseWaveInitTime;
-var eraseWaveTimerDuration;
-var eraseWaveIntervalMin=1500;
-var eraseWaveIntervalMax=8000;
+var eraseWaveTimerDuration=10000;
+var eraseWaveIntervalMin=10000;
+var eraseWaveIntervalMax=20000;
 
 var waveInitTime;
 var waveTimerDuration;
-var waveIntervalMin=1500;
-var waveIntervalMax=8000;
+var waveIntervalMin=5000;
+var waveIntervalMax=10000;
 
-var waveIntervalContentMin=3000;
+var waveIntervalContentMin=5000;
 var waveIntervalContentMax=8000;
 
 var cycleWaveInitTime;
 var cycleWaveTimerDuration;
-var cycleWaveIntervalMin=3000;
-var cycleWaveIntervalMax=15000;
+var cycleWaveIntervalMin=5000;
+var cycleWaveIntervalMax=30000;
 
 
 // VANES
@@ -80,7 +91,7 @@ var plane;
 //oldcolors
 //const colors=[0x005597, 0x000C78,0x0017E6,0x0012B0,0xA7C6ED,0x307FE2,0x13294B,0xC7DBF4,0xA7A8AA,0x000000] //(meine)
 //const colors=[0xCAE4F6,0xAAD4EB,0x61AEE5,0x4E71B4,0x26539D];
-let darkBlueColor=new THREE.Color(0x26539D);
+let darkBlueColor=new THREE.Color(0x0000FF);
 let dynamicColor=true;
 
 // music color
@@ -159,7 +170,6 @@ let bCreated=false;
 function init() {
 
  	container= document.querySelector( '#scene-container' );
-
 	// create all the vanes
 	createVanes(diameter);
 
@@ -196,6 +206,8 @@ function init() {
 	cycleWaveInitTime=getMilliseconds(clock);
 	cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
 
+
+eraseWaveInitTime=getMilliseconds(clock);
 
 	camera.position.z = 1;	
 	renderer.setPixelRatio( window.devicePixelRatio );
@@ -240,11 +252,11 @@ console.log("state");
         case WIND:
         	if(bIsTimed){
 
-				/*if(millis>eraseWaveInitTime+eraseWaveTimerDuration){
+				if(millis>eraseWaveInitTime+eraseWaveTimerDuration){
    				makeRandomWind(false);
     			eraseWaveInitTime=millis;
    				eraseWaveTimerDuration=randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
-  				}*/
+  				}
 
 
 				if(millis>waveInitTime+waveTimerDuration){
@@ -259,7 +271,7 @@ console.log("state");
 	   			makeRandomWind(true);
 	    		cycleWaveInitTime=millis;
 	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
-	    		    			waveInitTime=millis;
+	    		 waveInitTime=millis;
 
 	    	//	waveInitTime=millis;
 	    		//waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
@@ -657,10 +669,12 @@ function makeRandomWindFromSound(isMasked,frequency,miclevel){
  	
  	//var rand=4;//scale(miclevel,minVolume,maxVolume,4,15*4); //randomIntFromInterval(randMin,randMax);
 	let rand=scaleClamped(frequency,freqMin,freqMax,4,15*4); //randomIntFromInterval(randMin,randMax);
+ 	 rand=Math.floor(rand);
 
 	var mult=1;
 	//if(Math.random()>0.5)mult=-1;
 	var angle=rand*(Math.PI/4)*mult;
+
     var dur=rotationDurationMax;//scale(rand,randMin,randMax,rotationDurationMin,rotationDurationMax);
     //    var dur=scale(rand,30,80,3000,8000);
 
