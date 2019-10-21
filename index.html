@@ -147,6 +147,23 @@
 		});
 
 
+document.addEventListener("touchstart", function(event){
+
+if(Math.random()<0.7){
+				if(Math.random()<0.7){
+				cycleImages();
+			}
+				//makeRandomWind(1);	
+				makeWindFromLocation(event.pageX,event.pageY,1);
+
+			}else{
+				makeWindFromLocation(event.pageX,event.pageY,0);
+			}
+	
+});
+
+
+
 
 
 window.addEventListener( 'resize', onWindowResize, false );
@@ -154,6 +171,11 @@ function onWindowResize() {
 	resetScene();
 
 }
+
+
+
+
+
 
 
 
