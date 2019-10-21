@@ -50,12 +50,12 @@ var maxMicroIdleTime=1000;
 var eraseWaveInitTime;
 var eraseWaveTimerDuration;
 var eraseWaveIntervalMin=1500;
-var eraseWaveIntervalMax=3000;
+var eraseWaveIntervalMax=8000;
 
 var waveInitTime;
 var waveTimerDuration;
 var waveIntervalMin=1500;
-var waveIntervalMax=3000;
+var waveIntervalMax=8000;
 
 var waveIntervalContentMin=3000;
 var waveIntervalContentMax=8000;
@@ -239,20 +239,30 @@ console.log("state");
   	switch(state){
         case WIND:
         	if(bIsTimed){
-				/*if(millis>waveInitTime+waveTimerDuration){
+
+				/*if(millis>eraseWaveInitTime+eraseWaveTimerDuration){
+   				makeRandomWind(false);
+    			eraseWaveInitTime=millis;
+   				eraseWaveTimerDuration=randomIntFromInterval(eraseWaveIntervalMin,eraseWaveIntervalMax);
+  				}*/
+
+
+				if(millis>waveInitTime+waveTimerDuration){
    				makeRandomWind(true);
     			waveInitTime=millis;
    				waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
-  				}*/
-				console.log(millis+ " "+cycleWaveInitTime+" "+cycleWaveTimerDuration+" "+cycleWaveInitTime+cycleWaveTimerDuration);
+  				}
+				//console.log(millis+ " "+cycleWaveInitTime+" "+cycleWaveTimerDuration+" "+cycleWaveInitTime+cycleWaveTimerDuration);
 
 	 			if(millis>cycleWaveInitTime+cycleWaveTimerDuration){
 	   			cycleImages();
 	   			makeRandomWind(true);
 	    		cycleWaveInitTime=millis;
 	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
-	    		waveInitTime=millis;
-	    		waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
+	    		    			waveInitTime=millis;
+
+	    	//	waveInitTime=millis;
+	    		//waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
   				}
 			}
         break;
