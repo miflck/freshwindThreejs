@@ -62,6 +62,9 @@ var cycleWaveTimerDuration;
 var cycleWaveIntervalMin=100;
 var cycleWaveIntervalMax=15000;
 
+var cycleWaveIntervalMinArray=[500,1000,5000,8000];
+var cycleWaveIntervalMaxArray=[3000,5000,10000,30000];
+var timerarrayCounter=0;
 
 // VANES
 var numberOfVanes;
@@ -173,6 +176,10 @@ function init() {
 	cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
 
 
+	//cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMinArray[timerarrayCounter%cycleWaveIntervalMinArray.length],cycleWaveIntervalMaxArray[timerarrayCounter%cycleWaveIntervalMaxArray.length]);
+	//console.log(cycleWaveTimerDuration);
+
+
 	camera.position.z = 1;	
 	renderer.setPixelRatio( window.devicePixelRatio );
 	//renderer.setPixelRatio( 1);
@@ -215,7 +222,11 @@ function animate() {
 	   			cycleImages();
 	   			makeRandomWind(true);
 	    		cycleWaveInitTime=millis;
-	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMin,cycleWaveIntervalMax);
+
+	    		timerarrayCounter++;
+
+	    		cycleWaveTimerDuration=randomIntFromInterval(cycleWaveIntervalMinArray[timerarrayCounter%cycleWaveIntervalMinArray.length],cycleWaveIntervalMaxArray[timerarrayCounter%cycleWaveIntervalMaxArray.length]);
+	    		console.log(cycleWaveTimerDuration);
 	    		waveInitTime=millis;
 	    		waveTimerDuration=randomIntFromInterval(waveIntervalMin,waveIntervalMax);
   				}
